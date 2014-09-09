@@ -11,6 +11,7 @@
 package hanto;
 
 import hanto.common.*;
+import hanto.studentJnaYy.alpha.AlphaHantoGame;
 
 /**
  * This is a singleton class that provides a factory to create an instance of any version
@@ -59,7 +60,10 @@ public class HantoGameFactory
 	public HantoGame makeHantoGame(HantoGameID gameId, HantoPlayerColor movesFirst) {
 		HantoGame game = null;
 		switch (gameId) {
-			// to be filled in
+			case ALPHA_HANTO: 
+				game = new AlphaHantoGame();
+				break;
+		
 		}
 		return game;
 	}
