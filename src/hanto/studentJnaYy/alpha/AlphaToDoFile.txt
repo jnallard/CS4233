@@ -4,14 +4,16 @@ To do:
 
 Tests:
 X Create a new game
-Make sure Blue goes first for a Blue game
-Make sure Red goes first for a red game
-Place the first butterfly
-First butterfly is at (0,0);
+X Make sure Blue goes first for a Blue game
+X Make sure Red goes first for a red game
+X Place the first butterfly
+X First butterfly is at (0,0);
 Place the second butterfly adjacent to (0,0)
 Check invalid cooridinates for second
-Second butter is adjacent.
-First move is ok
-Second move is Draw
-Game ends
+X Second butter is adjacent.
+X First move is ok
+X Second move is Draw
+X Game ends
+Piece is Butterfly
+Piece is not anything but Butterfly
 

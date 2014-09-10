@@ -10,19 +10,37 @@
 
 package hanto.studentJnaYy.alpha;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import hanto.common.*;
+import hanto.studentJnaYy.common.ButterflyPiece;
+import hanto.studentJnaYy.common.GameCoordinate;
 
 
 /**
- * The HantoGame interface is the primary interface between the student's code and any
- * external (non-student written) code. Every version of Hanto will have a realization of
- * the HantoGame interface.
+ * This is the implementation of the AlphaHantoGame, where only two Butterfly pieces can be placed
+ * adjacently on a board, before the game is over.
  * 
- * @author gpollice
- * @version Jan 12, 2013
+ * @author Joshua and Yan
  */
 public class AlphaHantoGame implements HantoGame
 {
+	private HantoPlayerColor currentColor;
+	private int moveCount = 0;
+	Map<HantoCoordinate, HantoPiece> board = new HashMap<HantoCoordinate, HantoPiece>();
+	private String exceptionMessage;
+	
+	/**
+	 * Creates a AlphaHanto Game instance
+	 * @param movesFirst the color of the first piece to be played.
+	 */
+	public AlphaHantoGame(HantoPlayerColor movesFirst){
+		currentColor = movesFirst;
+	}
+	
 	/**
 	 * This method executes a move in the game. It is called for every move that must be
 	 * made.
@@ -43,22 +61,144 @@ public class AlphaHantoGame implements HantoGame
 	 */
 	public MoveResult makeMove(HantoPieceType pieceType, HantoCoordinate from,
 			HantoCoordinate to) throws HantoException{
-		return null;
+		
+		if(!isValidPiece(pieceType) || !isMoveValid(to) || isGameOver()){
+			throw new HantoException(exceptionMessage);
+		}
+		
+		MoveResult moveResult = MoveResult.OK;
+		if(moveCount == 1){
+			moveResult = MoveResult.DRAW;
+		}
+			
+		finalizeMove(to);
+		return moveResult;
+	}
+
+	/**
+	 * finishes the verified move - put the piece and coordinate onto the board, 
+	 * increments the move count, and switches the current color.
+	 * @param toCoordinate The coordinate to place the butterfly at
+	 */
+	private void finalizeMove(HantoCoordinate toCoordinate) {
+		board.put(toCoordinate, new ButterflyPiece(currentColor));
+		moveCount++;
+		switchCurrentColor();
 	}
 	
+	/**
+	 * Checks to see if the given piece is valid for the game.
+	 * @param pieceType the type to check for
+	 * @return true if the piece type is BUTTERFLY
+	 */
+	private boolean isValidPiece(HantoPieceType pieceType) {
+		
+		boolean isValid = pieceType == HantoPieceType.BUTTERFLY;
+		
+		if(!isValid){
+			exceptionMessage = "The particular piece (" + pieceType + ") is not valid.";
+		}
+		return isValid;
+	}
+
+	/**
+	 * Checks to see if the move is valid 
+	 * A move is considered valid if the first piece is placed at (0,0)
+	 * And if the next piece is adjacent to it.
+	 * @param to The location the piece is trying to move to.
+	 * @return true if the move is valid
+	 */
+	private boolean isMoveValid(HantoCoordinate to) {
+		boolean isValid;
+		if(moveCount == 0){
+			isValid = to.equals(new GameCoordinate(0, 0));
+		}
+		else{
+			isValid = isAdjacent(new GameCoordinate(0, 0), to);
+		}
+		
+		if(!isValid){
+			exceptionMessage = "The move was not valid - please try again.";
+		}
+			
+		return isValid;
+	}
+
+	private boolean isGameOver(){
+		boolean isOver = moveCount > 1;
+		if(isOver){
+			exceptionMessage = "The game is over - moves are no longer allowed.";
+		}
+		return isOver;
+	}
+	/**
+	 * Checks to see if the two pieces are adjacent on a hexagonal board, using this
+	 * implementation "http://www.vbforums.com/showthread.php?663283-Hexagonal-coordinate-system"
+	 * @param firstCoordinate the first coordinate to check for
+	 * @param secondCoordinate the second coordinate to check for
+	 * @return true if the second piece is considered adjacent to the first piece.
+	 */
+	private boolean isAdjacent(GameCoordinate firstCoordinate, HantoCoordinate secondCoordinate) {
+		boolean areCoordsAdjacent;
+		int xDifference = firstCoordinate.getX() - secondCoordinate.getX();
+		int yDifference = firstCoordinate.getY() - secondCoordinate.getY();
+		switch(xDifference){
+			case 0:
+				areCoordsAdjacent = Math.abs(yDifference) == 1;
+				break;
+			case 1:
+				areCoordsAdjacent = yDifference == 0 || yDifference == -1;
+				break;
+			case -1:
+				areCoordsAdjacent = yDifference == 0 || yDifference == 1;
+				break;
+			default:
+				areCoordsAdjacent = false;
+				break;
+		}
+		return areCoordsAdjacent;
+	}
+
+	/**
+	 * Switches the current player color to the next available one.
+	 */
+	private void switchCurrentColor() {
+		switch(currentColor){
+			case BLUE: 
+				currentColor = HantoPlayerColor.RED;
+				break;
+			case RED: 
+				currentColor = HantoPlayerColor.BLUE;
+				break;
+		}
+	}
+
 	/**
 	 * @param where the coordinate to query
 	 * @return the piece at the specified coordinate or null if there is no 
 	 * 	piece at that position
 	 */
 	public HantoPiece getPieceAt(HantoCoordinate where){
-		return null;
+		return board.get(where);
 	}
 
 	/**
+	 * Returns the board in this format: 
+	 * "(x1, y1) Color1 Piece1
+	 * (x2, y2) Color2 Piece2"
+	 * (There is no particular order when printing)
 	 * @return a printable representation of the board.
 	 */
 	public String getPrintableBoard(){
-		return null;
+		String printedBoard = "";
+		Iterator<Entry<HantoCoordinate, HantoPiece>> it = board.entrySet().iterator();
+		while(it.hasNext()){
+			Entry<HantoCoordinate, HantoPiece> entry = it.next();
+			HantoCoordinate coord = entry.getKey();
+			HantoPiece piece = entry.getValue();
+			printedBoard += "(" + coord.getX() + "," + coord.getY() + ") " 
+					+ piece.getColor() + " " + piece.getType() + "\n";
+		}
+		return printedBoard;
 	}
 }
