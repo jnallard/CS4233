@@ -35,7 +35,7 @@ public class TestHantoGameFactory {
 	}
 
 	@Test
-	public void testMakeAlpahHantoGameHantoGameID() {
+	public void testMakeAlphaHantoGameHantoGameID() {
 		HantoGame game = factory.makeHantoGame(HantoGameID.ALPHA_HANTO);
 		assertNotNull(game);
 	}
@@ -43,6 +43,18 @@ public class TestHantoGameFactory {
 	@Test
 	public void testMakeAlphaHantoGameHantoGameIDHantoPlayerColor() {
 		HantoGame game = factory.makeHantoGame(HantoGameID.ALPHA_HANTO, HantoPlayerColor.RED);
+		assertNotNull(game);
+	}
+
+	@Test
+	public void testMakeBetaHantoGameHantoGameID() {
+		HantoGame game = factory.makeHantoGame(HantoGameID.BETA_HANTO);
+		assertNotNull(game);
+	}
+
+	@Test
+	public void testMakeBetaHantoGameHantoGameIDHantoPlayerColor() {
+		HantoGame game = factory.makeHantoGame(HantoGameID.BETA_HANTO, HantoPlayerColor.RED);
 		assertNotNull(game);
 	}
 

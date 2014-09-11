@@ -1,0 +1,17 @@
+To do:
+
+
+
+Tests:
+x Create a new game
+x Make sure Blue goes first for a Blue game
+x Make sure Red goes first for a red game
+Can only place one butterfly
+Can only place five sparrows
+Butterfly must be placed before or during the player's 4th turn
+First move is ok
+Game ends in draw after 6 turns
+Game ends in victory when one butterfly is surrounded
+x Piece is Butterfly, Sparrow
+x Piece is not anything but Butterfly, Sparrow
+
