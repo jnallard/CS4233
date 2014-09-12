@@ -21,6 +21,8 @@ import java.util.Map.Entry;
 import hanto.common.*;
 import hanto.studentJnaYy.common.ButterflyPiece;
 import hanto.studentJnaYy.common.GameCoordinate;
+import hanto.studentJnaYy.common.PieceAvailabilityCounter;
+import hanto.studentJnaYy.common.PieceFactory;
 
 
 /**
@@ -31,19 +33,17 @@ import hanto.studentJnaYy.common.GameCoordinate;
  */
 public class BetaHantoGame implements HantoGame
 {
+	private static final int MaxMoveCount = 12;
 	private final int MaxButterflyCount = 1;
 	private final int MaxSparrowCount = 5;
 	
-	private Map<HantoPieceType, Integer> redPiecesCount = new HashMap<HantoPieceType, Integer>();
-	private Map<HantoPieceType, Integer> bluePiecesCount = new HashMap<HantoPieceType, Integer>();
-
+	private PieceFactory pieceFactory = PieceFactory.getInstance();
+	private PieceAvailabilityCounter pieceCounter = new PieceAvailabilityCounter();
+	
 	private HantoPlayerColor currentColor;
 	private int moveCount = 0;
 	Map<HantoCoordinate, HantoPiece> board = new HashMap<HantoCoordinate, HantoPiece>();
 	private String exceptionMessage;
-	private List<HantoPieceType> validPieces = new ArrayList<HantoPieceType>(
-		Arrays.asList(HantoPieceType.BUTTERFLY, HantoPieceType.SPARROW)
-	);
 	
 	
 	/**
@@ -85,7 +85,7 @@ public class BetaHantoGame implements HantoGame
 			moveResult = MoveResult.DRAW;
 		}
 			
-		finalizeMove(to);
+		finalizeMove(pieceType, to);
 		return moveResult;
 	}
 
@@ -95,31 +95,20 @@ public class BetaHantoGame implements HantoGame
 	 * @return
 	 */
 	private boolean checkMoveValidity(HantoPieceType pieceType, HantoCoordinate toCoordinate) {
-		return !isMoveValid(toCoordinate) || isGameOver() || !isPieceAvailable(pieceType);
-	}
-
-	private boolean isPieceAvailable(HantoPieceType pieceType) {
-		boolean isValid = isValidPiece(pieceType);
-		int availablePieces;
-		if(isValid){
-			switch(currentColor){
-				case RED:
-					isValid = redPiecesCount.get(pieceType) > 0;
-					break;
-				case BLUE:
-					isValid = bluePiecesCount.get(pieceType) > 0;
-					break;			
-			}
-			
+		boolean isPieceAvailable = pieceCounter.isPieceAvailable(pieceType, currentColor);
+		if(isPieceAvailable){
+			exceptionMessage = "The " + pieceType + " is not currently available.";
 		}
-		return isValid;
+		
+		return !isMoveValid(toCoordinate) || isGameOver() || !isPieceAvailable;
 	}
 	
+	/**
+	 * Initializes the amount of pieces that each player can place.
+	 */
 	private void initializePieceCounts(){
-		redPiecesCount.put(HantoPieceType.BUTTERFLY, MaxButterflyCount);
-		redPiecesCount.put(HantoPieceType.SPARROW, MaxSparrowCount);
-		bluePiecesCount.put(HantoPieceType.BUTTERFLY, MaxButterflyCount);
-		bluePiecesCount.put(HantoPieceType.SPARROW, MaxSparrowCount);
+		pieceCounter.initializePieceCount(HantoPieceType.BUTTERFLY, MaxButterflyCount);
+		pieceCounter.initializePieceCount(HantoPieceType.SPARROW, MaxSparrowCount);
 	}
 
 	/**
@@ -127,27 +116,12 @@ public class BetaHantoGame implements HantoGame
 	 * increments the move count, and switches the current color.
 	 * @param toCoordinate The coordinate to place the butterfly at
 	 */
-	private void finalizeMove(HantoCoordinate toCoordinate) {
-		board.put(toCoordinate, new ButterflyPiece(currentColor));
+	private void finalizeMove(HantoPieceType type, HantoCoordinate toCoordinate) {
+		board.put(toCoordinate, pieceFactory.makeGamePiece(type, currentColor));
 		moveCount++;
 		switchCurrentColor();
 	}
 	
-	/**
-	 * Checks to see if the given piece is valid for the game.
-	 * @param pieceType the type to check for
-	 * @return true if the piece type is BUTTERFLY
-	 */
-	private boolean isValidPiece(HantoPieceType pieceType) {
-		
-		boolean isValid = validPieces.contains(pieceType);
-		
-		if(!isValid){
-			exceptionMessage = "The particular piece (" + pieceType + ") is not valid.";
-		}
-		return isValid;
-	}
-
 	/**
 	 * Checks to see if the move is valid 
 	 * A move is considered valid if the first piece is placed at (0,0)
@@ -172,7 +146,7 @@ public class BetaHantoGame implements HantoGame
 	}
 
 	private boolean isGameOver(){
-		boolean isOver = moveCount > 1;
+		boolean isOver = moveCount >= MaxMoveCount;
 		if(isOver){
 			exceptionMessage = "The game is over - moves are no longer allowed.";
 		}

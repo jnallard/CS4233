@@ -28,6 +28,8 @@ import hanto.studentJnaYy.common.GameCoordinate;
  */
 public class AlphaHantoGame implements HantoGame
 {
+	private static final GameCoordinate GAME_ORIGIN_COORDINATE = new GameCoordinate(0, 0);
+	private static final int MaxMoveCount = 2;
 	private HantoPlayerColor currentColor;
 	private int moveCount = 0;
 	Map<HantoCoordinate, HantoPiece> board = new HashMap<HantoCoordinate, HantoPiece>();
@@ -67,7 +69,7 @@ public class AlphaHantoGame implements HantoGame
 		}
 		
 		MoveResult moveResult = MoveResult.OK;
-		if(moveCount == 1){
+		if(moveCount == MaxMoveCount - 1){
 			moveResult = MoveResult.DRAW;
 		}
 			
@@ -111,10 +113,10 @@ public class AlphaHantoGame implements HantoGame
 	private boolean isMoveValid(HantoCoordinate to) {
 		boolean isValid;
 		if(moveCount == 0){
-			isValid = to.equals(new GameCoordinate(0, 0));
+			isValid = to.equals(GAME_ORIGIN_COORDINATE);
 		}
 		else{
-			isValid = isAdjacent(new GameCoordinate(0, 0), to);
+			isValid = isAdjacent(GAME_ORIGIN_COORDINATE, to);
 		}
 		
 		if(!isValid){
@@ -125,7 +127,7 @@ public class AlphaHantoGame implements HantoGame
 	}
 
 	private boolean isGameOver(){
-		boolean isOver = moveCount > 1;
+		boolean isOver = moveCount >= MaxMoveCount;
 		if(isOver){
 			exceptionMessage = "The game is over - moves are no longer allowed.";
 		}

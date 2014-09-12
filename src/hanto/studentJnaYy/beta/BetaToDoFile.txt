@@ -6,6 +6,10 @@ Tests:
 x Create a new game
 x Make sure Blue goes first for a Blue game
 x Make sure Red goes first for a red game
+x Can place sparrow first
+x Can place butterfly first
+x Game can place a piece around the center piece
+Game can place a piece not around the centerpiece, but still connected.
 Can only place one butterfly
 Can only place five sparrows
 Butterfly must be placed before or during the player's 4th turn

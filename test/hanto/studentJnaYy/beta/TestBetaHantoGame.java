@@ -61,7 +61,7 @@ public class TestBetaHantoGame {
 	public void testPlaceFirstSparrowt0_0() throws HantoException{
 		HantoCoordinate firstCoordinate =  new GameCoordinate(0, 0);
 		blueFirstGame.makeMove(HantoPieceType.SPARROW, null, firstCoordinate);
-		assertTrue(blueFirstGame.getPieceAt(firstCoordinate).getType() == HantoPieceType.BUTTERFLY);
+		assertTrue(blueFirstGame.getPieceAt(firstCoordinate).getType() == HantoPieceType.SPARROW);
 	}
 
 	@Test(expected=HantoException.class)
@@ -74,6 +74,55 @@ public class TestBetaHantoGame {
 	public void testPlaceFirstSparrowNotAt0_0() throws HantoException{
 		HantoCoordinate firstCoordinate =  new GameCoordinate(0, 1);
 		blueFirstGame.makeMove(HantoPieceType.SPARROW, null, firstCoordinate);
+	}
+	
+	@Test
+	public void testPlaceSecondPieceAround0_0() throws HantoException{
+		HantoCoordinate firstCoordinate =  new GameCoordinate(0, 0);
+		blueFirstGame.makeMove(HantoPieceType.SPARROW, null, firstCoordinate);
+		HantoCoordinate secondCoordinate =  new GameCoordinate(0, 1);
+		blueFirstGame.makeMove(HantoPieceType.SPARROW, null, secondCoordinate);
+		assertTrue(blueFirstGame.getPieceAt(secondCoordinate).getType() == HantoPieceType.SPARROW);
+	}
+
+	@Test
+	public void testPlaceThirdPieceNotAround0_0() throws HantoException{
+		HantoCoordinate firstCoordinate =  new GameCoordinate(0, 0);
+		blueFirstGame.makeMove(HantoPieceType.SPARROW, null, firstCoordinate);
+		HantoCoordinate secondCoordinate =  new GameCoordinate(0, 1);
+		blueFirstGame.makeMove(HantoPieceType.SPARROW, null, secondCoordinate);
+		HantoCoordinate thirdCoordinate =  new GameCoordinate(1, 1);
+		blueFirstGame.makeMove(HantoPieceType.SPARROW, null, thirdCoordinate);
+		assertTrue(blueFirstGame.getPieceAt(thirdCoordinate).getType() == HantoPieceType.SPARROW);
+	}
+	
+	@Test(expected=HantoException.class)
+	public void testPlaceSecondPieceNotAround0_0() throws HantoException{
+		HantoCoordinate firstCoordinate =  new GameCoordinate(0, 0);
+		blueFirstGame.makeMove(HantoPieceType.SPARROW, null, firstCoordinate);
+		HantoCoordinate secondCoordinate =  new GameCoordinate(5, 1);
+		blueFirstGame.makeMove(HantoPieceType.SPARROW, null, secondCoordinate);
+	}
+	
+	@Test
+	public void testPlaceThirdPieceAround0_0() throws HantoException{
+		HantoCoordinate firstCoordinate =  new GameCoordinate(0, 0);
+		blueFirstGame.makeMove(HantoPieceType.SPARROW, null, firstCoordinate);
+		HantoCoordinate secondCoordinate =  new GameCoordinate(0, 1);
+		blueFirstGame.makeMove(HantoPieceType.SPARROW, null, secondCoordinate);
+		HantoCoordinate thirdCoordinate =  new GameCoordinate(0, -1);
+		blueFirstGame.makeMove(HantoPieceType.SPARROW, null, thirdCoordinate);
+		assertTrue(blueFirstGame.getPieceAt(thirdCoordinate).getType() == HantoPieceType.SPARROW);
+	}
+	
+	@Test(expected=HantoException.class)
+	public void testPlaceThirdPieceNotAdjacentToAnything() throws HantoException{
+		HantoCoordinate firstCoordinate =  new GameCoordinate(0, 0);
+		blueFirstGame.makeMove(HantoPieceType.SPARROW, null, firstCoordinate);
+		HantoCoordinate secondCoordinate =  new GameCoordinate(0, 1);
+		blueFirstGame.makeMove(HantoPieceType.SPARROW, null, secondCoordinate);
+		HantoCoordinate thirdCoordinate =  new GameCoordinate(6, -1);
+		blueFirstGame.makeMove(HantoPieceType.SPARROW, null, thirdCoordinate);
 	}
 
 	@Test
