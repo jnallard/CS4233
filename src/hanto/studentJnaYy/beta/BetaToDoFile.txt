@@ -9,13 +9,14 @@ x Make sure Red goes first for a red game
 x Can place sparrow first
 x Can place butterfly first
 x Game can place a piece around the center piece
-Game can place a piece not around the centerpiece, but still connected.
-Can only place one butterfly
-Can only place five sparrows
-Butterfly must be placed before or during the player's 4th turn
-First move is ok
-Game ends in draw after 6 turns
-Game ends in victory when one butterfly is surrounded
+x Game can place a piece not around the centerpiece, but still connected.
+x Can only place one butterfly
+x Can only place five sparrows
+x Butterfly must be placed before or during the player's 4th turn
+x First move is ok
+x Game ends in draw after 6 turns
+x Game ends in victory when one butterfly is surrounded
 x Piece is Butterfly, Sparrow
 x Piece is not anything but Butterfly, Sparrow
+x Test placing pieces on the same location
 

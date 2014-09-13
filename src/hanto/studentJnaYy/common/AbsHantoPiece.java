@@ -9,30 +9,37 @@
  *******************************************************************************/
 package hanto.studentJnaYy.common;
 
+import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 
 /**
  * @author Joshua and Yan
- * This class is the implementation of Sparrow Hanto Piece.
+ * This class is the implementation of a Hanto Piece.
  *
  */
-public class SparrowPiece extends AbsHantoPiece {
+public abstract class AbsHantoPiece implements HantoPiece {
+
+	private HantoPlayerColor pieceColor;
 	
 	/**
-	 * Creates a Sparrow object, with the given player color.
+	 * Creates a hanto piece object, with the given player color.
 	 * @param pieceColor the color of the piece's player
 	 */
-	public SparrowPiece(HantoPlayerColor pieceColor){
-		super(pieceColor);
+	protected AbsHantoPiece(HantoPlayerColor pieceColor){
+		this.pieceColor = pieceColor;
 	}
-	
 	
 	/**
-	 * Returns the type of the piece, i.e. Sparrow
+	 * Returns the Color of the piece
 	 */
-	public HantoPieceType getType() {
-		return HantoPieceType.SPARROW;
+	public HantoPlayerColor getColor() {
+		return pieceColor;
 	}
+
+	/**
+	 * Returns the type of the piece, i.e. Sparrow, Butterfly, etc.
+	 */
+	public abstract HantoPieceType getType();
 
 }

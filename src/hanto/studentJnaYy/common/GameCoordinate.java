@@ -8,6 +8,9 @@
 
 package hanto.studentJnaYy.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hanto.common.HantoCoordinate;
 
 /**
@@ -32,6 +35,16 @@ public class GameCoordinate implements HantoCoordinate {
 	}
 	
 	/**
+	 * Creates the game coordinate instance
+	 * @param x the x coordinate
+	 * @param y the y coordinate
+	 */
+	public GameCoordinate(HantoCoordinate copy){
+		xCoordinate = copy.getX();
+		yCoordinate = copy.getY();
+	}
+	
+	/**
 	 * Returns the X Coordinate
 	 */
 	public int getX() {
@@ -44,7 +57,46 @@ public class GameCoordinate implements HantoCoordinate {
 	public int getY() {
 		return yCoordinate;
 	}
+	
+	/**
+	 * Checks to see if the two pieces are adjacent on a hexagonal board, using this
+	 * implementation "http://www.vbforums.com/showthread.php?663283-Hexagonal-coordinate-system"
+	 * @param firstCoordinate the first coordinate to check for
+	 * @param secondCoordinate the second coordinate to check for
+	 * @return true if the second piece is considered adjacent to the first piece.
+	 */
+	public boolean isAdjacent(HantoCoordinate secondCoordinate) {
+		boolean areCoordsAdjacent;
+		int xDifference = this.getX() - secondCoordinate.getX();
+		int yDifference = this.getY() - secondCoordinate.getY();
+		switch(xDifference){
+			case 0:
+				areCoordsAdjacent = Math.abs(yDifference) == 1;
+				break;
+			case 1:
+				areCoordsAdjacent = yDifference == 0 || yDifference == -1;
+				break;
+			case -1:
+				areCoordsAdjacent = yDifference == 0 || yDifference == 1;
+				break;
+			default:
+				areCoordsAdjacent = false;
+				break;
+		}
+		return areCoordsAdjacent;
+	}
 
+	public List<GameCoordinate> getAdjacentCoordinates(){
+		List<GameCoordinate> adjacentCoords = new ArrayList<GameCoordinate>();
+		adjacentCoords.add(new GameCoordinate(xCoordinate + 1, yCoordinate));
+		adjacentCoords.add(new GameCoordinate(xCoordinate + 1, yCoordinate - 1));
+		adjacentCoords.add(new GameCoordinate(xCoordinate - 1, yCoordinate));
+		adjacentCoords.add(new GameCoordinate(xCoordinate - 1, yCoordinate + 1));
+		adjacentCoords.add(new GameCoordinate(xCoordinate, yCoordinate + 1));
+		adjacentCoords.add(new GameCoordinate(xCoordinate, yCoordinate - 1));
+		return adjacentCoords;
+	}
+	
 	/**
 	 * Overrides the equals method, so that the only thing used to 
 	 * determine if coordinates are equal are the x and y coordinates.
@@ -63,6 +115,9 @@ public class GameCoordinate implements HantoCoordinate {
 	 */
 	@Override
 	public int hashCode(){
-		return super.hashCode();
+		int hash = 0;
+		hash = hash | (this.xCoordinate << 4);
+		hash = hash | (this.yCoordinate & 0x00FF);
+		return hash;
 	}
 }

@@ -25,6 +25,7 @@ public class PieceAvailabilityCounter {
 
 	private Map<HantoPieceType, Integer> redPiecesCount = new HashMap<HantoPieceType, Integer>();
 	private Map<HantoPieceType, Integer> bluePiecesCount = new HashMap<HantoPieceType, Integer>();
+	private String exceptionMessage = "";
 
 	
 	/**
@@ -53,17 +54,22 @@ public class PieceAvailabilityCounter {
 	public boolean isPieceAvailable(HantoPieceType pieceType, HantoPlayerColor color) {
 		boolean isValid = isValidPiece(pieceType);
 		if(isValid){
-			switch(color){
-				case RED:
-					isValid = redPiecesCount.get(pieceType) > 0;
-					break;
-				case BLUE:
-					isValid = bluePiecesCount.get(pieceType) > 0;
-					break;			
-			}
-			
+			isValid = getPieceCounterByColor(color).get(pieceType) > 0;
+		}
+		else{
+			exceptionMessage = "A " + color + " " + pieceType + " is not available";
 		}
 		return isValid;
+	}
+	
+	/**
+	 * Subtracts one piece of the particular type from the piece counter.
+	 * @param type - the type to change the count for
+	 * @param color - the player to change the count for
+	 */
+	public void utilizePiece(HantoPieceType type, HantoPlayerColor color){
+		 int value = getPieceCounterByColor(color).get(type);
+		 getPieceCounterByColor(color).put(type, --value);
 	}
 	
 	/**
@@ -73,7 +79,34 @@ public class PieceAvailabilityCounter {
 	 */
 	private boolean isValidPiece(HantoPieceType pieceType) {
 		
-		return redPiecesCount.containsKey(pieceType);
+		boolean isValid = redPiecesCount.containsKey(pieceType);
+		if(!isValid){
+			exceptionMessage = pieceType + " is not a valid piece type for the game.";
+		}
+		
+		return isValid;
+	}
+	
+	/**
+	 * Returns the respective counter for each color
+	 * @param color - the color associated with the wanted counter
+	 * @return the color's piece counter
+	 */
+	private Map<HantoPieceType, Integer> getPieceCounterByColor(HantoPlayerColor color){
+		Map<HantoPieceType, Integer> counter = null;
+		switch(color){
+			case RED:
+				counter = redPiecesCount;
+				break;
+			case BLUE:
+				counter = bluePiecesCount;
+				break;
+		}
+		return counter;
+	}
+
+	public String getErrorMessage() {
+		return exceptionMessage;
 	}
 
 }

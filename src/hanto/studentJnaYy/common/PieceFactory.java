@@ -35,6 +35,12 @@ public class PieceFactory {
 		return instance;
 	}
 	
+	/**
+	 * Creates a HantoPiece from the given type and color
+	 * @param type - the HantoPieceType wanted
+	 * @param color - the HantoPlayerColor wanted
+	 * @return the wanted HantoPiece
+	 */
 	public HantoPiece makeGamePiece(HantoPieceType type, HantoPlayerColor color){
 		HantoPiece piece;
 		switch(type){

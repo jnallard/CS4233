@@ -30,17 +30,16 @@ public class AlphaHantoGame implements HantoGame
 {
 	private static final GameCoordinate GAME_ORIGIN_COORDINATE = new GameCoordinate(0, 0);
 	private static final int MaxMoveCount = 2;
-	private HantoPlayerColor currentColor;
+	private HantoPlayerColor currentColor = HantoPlayerColor.BLUE;
 	private int moveCount = 0;
-	Map<HantoCoordinate, HantoPiece> board = new HashMap<HantoCoordinate, HantoPiece>();
+	Map<GameCoordinate, HantoPiece> board = new HashMap<GameCoordinate, HantoPiece>();
 	private String exceptionMessage;
 	
 	/**
 	 * Creates a AlphaHanto Game instance
 	 * @param movesFirst the color of the first piece to be played.
 	 */
-	public AlphaHantoGame(HantoPlayerColor movesFirst){
-		currentColor = movesFirst;
+	public AlphaHantoGame(){
 	}
 	
 	/**
@@ -64,7 +63,14 @@ public class AlphaHantoGame implements HantoGame
 	public MoveResult makeMove(HantoPieceType pieceType, HantoCoordinate from,
 			HantoCoordinate to) throws HantoException{
 		
-		if(!isValidPiece(pieceType) || !isMoveValid(to) || isGameOver()){
+		if(from != null){
+			exceptionMessage = "Movement of pieces is not supported.";
+			throw new HantoException(exceptionMessage);
+		}
+		
+		GameCoordinate ourToCoordinate = new GameCoordinate(to);
+		
+		if(!isValidPiece(pieceType) || !isMoveValid(ourToCoordinate) || isGameOver()){
 			throw new HantoException(exceptionMessage);
 		}
 		
@@ -73,7 +79,7 @@ public class AlphaHantoGame implements HantoGame
 			moveResult = MoveResult.DRAW;
 		}
 			
-		finalizeMove(to);
+		finalizeMove(ourToCoordinate);
 		return moveResult;
 	}
 
@@ -82,7 +88,7 @@ public class AlphaHantoGame implements HantoGame
 	 * increments the move count, and switches the current color.
 	 * @param toCoordinate The coordinate to place the butterfly at
 	 */
-	private void finalizeMove(HantoCoordinate toCoordinate) {
+	private void finalizeMove(GameCoordinate toCoordinate) {
 		board.put(toCoordinate, new ButterflyPiece(currentColor));
 		moveCount++;
 		switchCurrentColor();
@@ -110,13 +116,13 @@ public class AlphaHantoGame implements HantoGame
 	 * @param to The location the piece is trying to move to.
 	 * @return true if the move is valid
 	 */
-	private boolean isMoveValid(HantoCoordinate to) {
+	private boolean isMoveValid(GameCoordinate to) {
 		boolean isValid;
 		if(moveCount == 0){
-			isValid = to.equals(GAME_ORIGIN_COORDINATE);
+			isValid = GAME_ORIGIN_COORDINATE.equals(to);
 		}
 		else{
-			isValid = isAdjacent(GAME_ORIGIN_COORDINATE, to);
+			isValid = GAME_ORIGIN_COORDINATE.isAdjacent(to);
 		}
 		
 		if(!isValid){
@@ -126,39 +132,16 @@ public class AlphaHantoGame implements HantoGame
 		return isValid;
 	}
 
+	/**
+	 * Checks to see if the game is over (max move count is passed)
+	 * @return true if the game has ended.
+	 */
 	private boolean isGameOver(){
 		boolean isOver = moveCount >= MaxMoveCount;
 		if(isOver){
 			exceptionMessage = "The game is over - moves are no longer allowed.";
 		}
 		return isOver;
-	}
-	/**
-	 * Checks to see if the two pieces are adjacent on a hexagonal board, using this
-	 * implementation "http://www.vbforums.com/showthread.php?663283-Hexagonal-coordinate-system"
-	 * @param firstCoordinate the first coordinate to check for
-	 * @param secondCoordinate the second coordinate to check for
-	 * @return true if the second piece is considered adjacent to the first piece.
-	 */
-	private boolean isAdjacent(GameCoordinate firstCoordinate, HantoCoordinate secondCoordinate) {
-		boolean areCoordsAdjacent;
-		int xDifference = firstCoordinate.getX() - secondCoordinate.getX();
-		int yDifference = firstCoordinate.getY() - secondCoordinate.getY();
-		switch(xDifference){
-			case 0:
-				areCoordsAdjacent = Math.abs(yDifference) == 1;
-				break;
-			case 1:
-				areCoordsAdjacent = yDifference == 0 || yDifference == -1;
-				break;
-			case -1:
-				areCoordsAdjacent = yDifference == 0 || yDifference == 1;
-				break;
-			default:
-				areCoordsAdjacent = false;
-				break;
-		}
-		return areCoordsAdjacent;
 	}
 
 	/**
@@ -181,7 +164,8 @@ public class AlphaHantoGame implements HantoGame
 	 * 	piece at that position
 	 */
 	public HantoPiece getPieceAt(HantoCoordinate where){
-		return board.get(where);
+		GameCoordinate newWhere = new GameCoordinate(where);
+		return board.get(newWhere);
 	}
 
 	/**
@@ -193,10 +177,10 @@ public class AlphaHantoGame implements HantoGame
 	 */
 	public String getPrintableBoard(){
 		String printedBoard = "";
-		Iterator<Entry<HantoCoordinate, HantoPiece>> it = board.entrySet().iterator();
+		Iterator<Entry<GameCoordinate, HantoPiece>> it = board.entrySet().iterator();
 		while(it.hasNext()){
-			Entry<HantoCoordinate, HantoPiece> entry = it.next();
-			HantoCoordinate coord = entry.getKey();
+			Entry<GameCoordinate, HantoPiece> entry = it.next();
+			GameCoordinate coord = entry.getKey();
 			HantoPiece piece = entry.getValue();
 			printedBoard += "(" + coord.getX() + "," + coord.getY() + ") " 
 					+ piece.getColor() + " " + piece.getType() + "\n";

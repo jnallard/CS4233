@@ -9,7 +9,6 @@
  *******************************************************************************/
 package hanto.studentJnaYy.common;
 
-import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 
@@ -18,25 +17,16 @@ import hanto.common.HantoPlayerColor;
  * This class is the implementation of Butterfly Hanto Piece.
  *
  */
-public class ButterflyPiece implements HantoPiece {
-
-	private HantoPlayerColor pieceColor;
+public class ButterflyPiece extends AbsHantoPiece {
 	
 	/**
 	 * Creates a ButterFly object, with the given player color.
 	 * @param pieceColor the color of the piece's player
 	 */
 	public ButterflyPiece(HantoPlayerColor pieceColor){
-		this.pieceColor = pieceColor;
+		super(pieceColor);
 	}
 	
-	/**
-	 * Returns the Color of the piece
-	 */
-	public HantoPlayerColor getColor() {
-		return pieceColor;
-	}
-
 	/**
 	 * Returns the type of the piece, i.e. Butterfly
 	 */
