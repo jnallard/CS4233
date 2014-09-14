@@ -35,9 +35,8 @@ public class GameCoordinate implements HantoCoordinate {
 	}
 	
 	/**
-	 * Creates the game coordinate instance
-	 * @param x the x coordinate
-	 * @param y the y coordinate
+	 * Copies the HantoCoordinate and returns a GameCoordinate
+	 * @param copy the coordinate to copy
 	 */
 	public GameCoordinate(HantoCoordinate copy){
 		xCoordinate = copy.getX();
@@ -61,7 +60,6 @@ public class GameCoordinate implements HantoCoordinate {
 	/**
 	 * Checks to see if the two pieces are adjacent on a hexagonal board, using this
 	 * implementation "http://www.vbforums.com/showthread.php?663283-Hexagonal-coordinate-system"
-	 * @param firstCoordinate the first coordinate to check for
 	 * @param secondCoordinate the second coordinate to check for
 	 * @return true if the second piece is considered adjacent to the first piece.
 	 */
@@ -86,6 +84,10 @@ public class GameCoordinate implements HantoCoordinate {
 		return areCoordsAdjacent;
 	}
 
+	/**
+	 * This is used to return all of the current coordinate's neighbors.
+	 * @return The list of adjacent coordinates
+	 */
 	public List<GameCoordinate> getAdjacentCoordinates(){
 		List<GameCoordinate> adjacentCoords = new ArrayList<GameCoordinate>();
 		adjacentCoords.add(new GameCoordinate(xCoordinate + 1, yCoordinate));
@@ -116,8 +118,8 @@ public class GameCoordinate implements HantoCoordinate {
 	@Override
 	public int hashCode(){
 		int hash = 0;
-		hash = hash | (this.xCoordinate << 4);
-		hash = hash | (this.yCoordinate & 0x00FF);
+		hash |= (xCoordinate << 16);
+		hash |= (yCoordinate & 0x0000FFFF);
 		return hash;
 	}
 }

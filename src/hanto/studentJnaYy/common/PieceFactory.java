@@ -20,7 +20,7 @@ import hanto.common.HantoPlayerColor;
  */
 public class PieceFactory {
 
-	private static final PieceFactory instance = new PieceFactory();
+	private static final PieceFactory INSTANCE = new PieceFactory();
 	
 	/**
 	 * Creates the piece Factory instance.
@@ -32,7 +32,7 @@ public class PieceFactory {
 	 * @return the PieceFactory instance
 	 */
 	public static PieceFactory getInstance(){
-		return instance;
+		return INSTANCE;
 	}
 	
 	/**

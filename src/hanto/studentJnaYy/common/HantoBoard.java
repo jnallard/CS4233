@@ -19,6 +19,8 @@ import java.util.Map.Entry;
 
 
 
+
+import hanto.common.HantoException;
 import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
@@ -42,10 +44,12 @@ public class HantoBoard {
 
 	/**
 	 * Creates the board
+	 * @param maxMoveCount the number of moves (turns * 2) that the board may handle.
+	 * @param butterflyOptionalMoves the number of moves where a butterfly isn't forced to be placed.
 	 */
-	public HantoBoard(int maxMoveCount, int butterflyOptionalTurns){
+	public HantoBoard(int maxMoveCount, int butterflyOptionalMoves){
 		this.maxMoveCount = maxMoveCount;
-		this.butterflyOptionalMoves = butterflyOptionalTurns;
+		this.butterflyOptionalMoves = butterflyOptionalMoves;
 	}
 	
 	/**
@@ -53,6 +57,8 @@ public class HantoBoard {
 	 * A move is considered valid if the first piece is placed at (0,0)
 	 * And if the next piece is adjacent to it.
 	 * @param to The location the piece is trying to move to.
+	 * @param type the piece type to validate
+	 * @param color the piece color to validate
 	 * @return true if the move is valid
 	 */
 	public boolean isMoveValid(GameCoordinate to, HantoPieceType type, HantoPlayerColor color) {
@@ -125,11 +131,18 @@ public class HantoBoard {
 	 * Add a piece to the board
 	 * @param coordinate the coordinate of the new piece
 	 * @param piece the type of the piece
+	 * @throws HantoException 
+	 * @return Will return the MoveResult that occurs after the move
 	 */
-	public MoveResult addPiece(GameCoordinate coordinate, HantoPiece piece){
+	public MoveResult addPiece(GameCoordinate coordinate, HantoPiece piece) throws HantoException{
+		if(!isMoveValid(coordinate, piece.getType(), piece.getColor())){
+			throw new HantoException(exceptionMessage);
+		}
+		
 		if(piece.getType() == HantoPieceType.BUTTERFLY){
 			assignButterflyCoord(coordinate, piece.getColor());
 		}
+		
 		board.put(coordinate, piece);
 		moveCount++;
 		return getGameStatus();
@@ -225,6 +238,10 @@ public class HantoBoard {
 		return printedBoard;
 	}
 
+	/**
+	 * Returns the message that corresponds to why a move is invalid
+	 * @return the string error message
+	 */
 	public String getErrorMessage() {
 		return exceptionMessage;
 	}

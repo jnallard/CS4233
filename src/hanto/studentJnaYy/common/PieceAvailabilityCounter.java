@@ -12,6 +12,7 @@ package hanto.studentJnaYy.common;
 import java.util.HashMap;
 import java.util.Map;
 
+import hanto.common.HantoException;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 
@@ -27,14 +28,6 @@ public class PieceAvailabilityCounter {
 	private Map<HantoPieceType, Integer> bluePiecesCount = new HashMap<HantoPieceType, Integer>();
 	private String exceptionMessage = "";
 
-	
-	/**
-	 * Creates a PieceAvailabilityCounter instance.
-	 */
-	public PieceAvailabilityCounter(){
-		
-	}
-	
 	/**
 	 * This initializes the max count for the type given.
 	 * @param type the type to initialize
@@ -54,9 +47,22 @@ public class PieceAvailabilityCounter {
 	public boolean isPieceAvailable(HantoPieceType pieceType, HantoPlayerColor color) {
 		boolean isValid = isValidPiece(pieceType);
 		if(isValid){
-			isValid = getPieceCounterByColor(color).get(pieceType) > 0;
+			isValid = isPieceCountNotZero(pieceType, color);
 		}
-		else{
+		
+		return isValid;
+	}
+
+	/**
+	 * Checks to see if the type has a count above zero
+	 * @param pieceType the type to check for
+	 * @param color the player to check for
+	 * @return true if there is at least one piece left
+	 */
+	private boolean isPieceCountNotZero(HantoPieceType pieceType, HantoPlayerColor color) {
+		boolean isValid;
+		isValid = getPieceCounterByColor(color).get(pieceType) > 0;
+		if(!isValid){
 			exceptionMessage = "A " + color + " " + pieceType + " is not available";
 		}
 		return isValid;
@@ -66,10 +72,14 @@ public class PieceAvailabilityCounter {
 	 * Subtracts one piece of the particular type from the piece counter.
 	 * @param type - the type to change the count for
 	 * @param color - the player to change the count for
+	 * @throws HantoException - if the piece fails validation, an exception is thrown.
 	 */
-	public void utilizePiece(HantoPieceType type, HantoPlayerColor color){
-		 int value = getPieceCounterByColor(color).get(type);
-		 getPieceCounterByColor(color).put(type, --value);
+	public void utilizePiece(HantoPieceType type, HantoPlayerColor color) throws HantoException{
+		if(!isPieceAvailable(type, color)){
+			throw new HantoException(exceptionMessage);
+		}
+		int value = getPieceCounterByColor(color).get(type);
+		getPieceCounterByColor(color).put(type, --value);
 	}
 	
 	/**
@@ -105,6 +115,10 @@ public class PieceAvailabilityCounter {
 		return counter;
 	}
 
+	/**
+	 * Returns the message that corresponds to why a move is invalid
+	 * @return the string error message
+	 */
 	public String getErrorMessage() {
 		return exceptionMessage;
 	}

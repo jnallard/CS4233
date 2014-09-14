@@ -9,6 +9,9 @@ package hanto.studentJnaYy.common;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,37 +23,92 @@ import org.junit.Test;
  */
 public class TestGameCoordinate {
 
-	private GameCoordinate coordinate;
+	private GameCoordinate coordinateOrigin;
+	private GameCoordinate coordinate2;
+	private List<GameCoordinate> expectedNeighborsForOrigin;
 	
 	@Before
 	public void setUp() {
-		coordinate = new GameCoordinate(0, 0);
+		coordinateOrigin = new GameCoordinate(0, 0);
+		coordinate2 = new GameCoordinate(1, -2);
+
+		expectedNeighborsForOrigin = new ArrayList<GameCoordinate>();
+		expectedNeighborsForOrigin.add(new GameCoordinate(1, 0));
+		expectedNeighborsForOrigin.add(new GameCoordinate(-1, 0));
+		expectedNeighborsForOrigin.add(new GameCoordinate(0, 1));
+		expectedNeighborsForOrigin.add(new GameCoordinate(0, -1));
+		expectedNeighborsForOrigin.add(new GameCoordinate(1, -1));
+		expectedNeighborsForOrigin.add(new GameCoordinate(-1, 1));
 	}
 
 	@Test
 	public void testGetX() {
-		assertEquals(0, coordinate.getX());
+		assertEquals(0, coordinateOrigin.getX());
 	}
 
 	@Test
 	public void testGetY() {
-		assertEquals(0, coordinate.getY());
+		assertEquals(0, coordinateOrigin.getY());
 	}
 
 	@Test
 	public void testEqualsTrue() {
-		assertTrue(coordinate.equals(new GameCoordinate(0, 0)));
+		assertTrue(coordinateOrigin.equals(new GameCoordinate(0, 0)));
 	}
 	
 
 	@Test
 	public void testEqualsDifferentCoord() {
-		assertFalse(coordinate.equals(new GameCoordinate(1, 0)));
+		assertFalse(coordinateOrigin.equals(new GameCoordinate(1, 0)));
 	}
 	
 	@Test
 	public void testEqualsDifferentObject() {
-		assertFalse(coordinate.equals(1));
+		assertFalse(coordinateOrigin.equals(1));
+	}
+	
+	@Test
+	public void testHashCodeOrigin() {
+		
+		assertEquals(0, coordinateOrigin.hashCode());
+	}
+	
+	@Test
+	public void testHashCodeNotOrigin() {
+		
+		assertEquals(131070, coordinate2.hashCode());
+	}
+	
+	@Test
+	public void testAreAdjacent() {
+		boolean areAdjacent = true;
+		for(int i = 0; i < 6; i++){
+			areAdjacent &= expectedNeighborsForOrigin.get(i).isAdjacent(coordinateOrigin);
+		}
+		
+		assertTrue(areAdjacent);
+	}
+	
+
+	
+	@Test
+	public void testIsAdjacentFalse() {
+		
+		assertFalse(coordinateOrigin.isAdjacent(new GameCoordinate(5, 5)));
+	}
+	
+	
+	@Test
+	public void testGetAdjacentCoords() {
+		List<GameCoordinate> neighbors = coordinateOrigin.getAdjacentCoordinates();
+		
+		assertTrue(expectedNeighborsForOrigin.containsAll(neighbors));
+	}
+	
+	@Test
+	public void testCopy() {
+		GameCoordinate copy = new GameCoordinate(coordinateOrigin);
+		assertEquals(coordinateOrigin, copy);
 	}
 
 }

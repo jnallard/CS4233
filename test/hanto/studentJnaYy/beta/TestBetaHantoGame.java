@@ -23,7 +23,7 @@ import org.junit.Test;
 
 /**
  * @author Joshua and Yan
- * This class tests all of the aspects considered with an BetaHantoGame.
+ * This class tests all of the aspects considered with a BetaHantoGame.
  *
  */
 public class TestBetaHantoGame {

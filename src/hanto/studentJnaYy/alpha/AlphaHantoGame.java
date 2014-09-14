@@ -29,18 +29,11 @@ import hanto.studentJnaYy.common.GameCoordinate;
 public class AlphaHantoGame implements HantoGame
 {
 	private static final GameCoordinate GAME_ORIGIN_COORDINATE = new GameCoordinate(0, 0);
-	private static final int MaxMoveCount = 2;
+	private static final int MAX_MOVE_COUNT = 2;
 	private HantoPlayerColor currentColor = HantoPlayerColor.BLUE;
 	private int moveCount = 0;
 	Map<GameCoordinate, HantoPiece> board = new HashMap<GameCoordinate, HantoPiece>();
 	private String exceptionMessage;
-	
-	/**
-	 * Creates a AlphaHanto Game instance
-	 * @param movesFirst the color of the first piece to be played.
-	 */
-	public AlphaHantoGame(){
-	}
 	
 	/**
 	 * This method executes a move in the game. It is called for every move that must be
@@ -75,7 +68,7 @@ public class AlphaHantoGame implements HantoGame
 		}
 		
 		MoveResult moveResult = MoveResult.OK;
-		if(moveCount == MaxMoveCount - 1){
+		if(moveCount + 1 == MAX_MOVE_COUNT){
 			moveResult = MoveResult.DRAW;
 		}
 			
@@ -137,7 +130,7 @@ public class AlphaHantoGame implements HantoGame
 	 * @return true if the game has ended.
 	 */
 	private boolean isGameOver(){
-		boolean isOver = moveCount >= MaxMoveCount;
+		boolean isOver = moveCount >= MAX_MOVE_COUNT;
 		if(isOver){
 			exceptionMessage = "The game is over - moves are no longer allowed.";
 		}

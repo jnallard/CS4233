@@ -11,7 +11,6 @@
 package hanto.studentJnaYy.beta;
 
 import hanto.common.*;
-import hanto.studentJnaYy.common.ButterflyPiece;
 import hanto.studentJnaYy.common.GameCoordinate;
 import hanto.studentJnaYy.common.HantoBoard;
 import hanto.studentJnaYy.common.PieceAvailabilityCounter;
@@ -121,8 +120,10 @@ public class BetaHantoGame implements HantoGame
 	 * increments the move count, and switches the current color.
 	 * @param toCoordinate The coordinate to place the butterfly at
 	 */
-	private MoveResult finalizeMove(HantoPieceType type, GameCoordinate toCoordinate) throws HantoException {
-		MoveResult result = board.addPiece(toCoordinate, pieceFactory.makeGamePiece(type, currentColor));
+	private MoveResult finalizeMove(HantoPieceType type, GameCoordinate toCoordinate) 
+			throws HantoException {
+		MoveResult result = board.addPiece(toCoordinate, 
+				pieceFactory.makeGamePiece(type, currentColor));
 		pieceCounter.utilizePiece(type, currentColor);
 		switchCurrentColor();
 		return result;
