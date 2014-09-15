@@ -298,6 +298,33 @@ public class TestBetaHantoGame {
 	}
 	
 	@Test
+	public void testDrawyBySurrounding2Butterflies() throws HantoException{
+		GameCoordinate firstCoordinate = GAME_COORDINATE_ORIGIN;
+		GameCoordinate secondCoordinate = new GameCoordinate(0, 1);
+		GameCoordinate thirdCoordinate = new GameCoordinate(1, 0);
+		GameCoordinate fourthCoordinate = new GameCoordinate(1, 1);
+		GameCoordinate fifthCoordinate = new GameCoordinate(0, 2);
+		GameCoordinate sixthCoordinate = new GameCoordinate(-1, 2);
+		GameCoordinate seventhCoordinate = new GameCoordinate(-1, 0);
+		GameCoordinate eighthCoordinate = new GameCoordinate(0, -1);
+		GameCoordinate ninthCoordinate = new GameCoordinate(1, -1);
+		GameCoordinate tenthCoordinate = new GameCoordinate(-1, 1);
+
+		blueFirstGame.makeMove(BUTTERFLY, null, firstCoordinate);
+		blueFirstGame.makeMove(BUTTERFLY, null, secondCoordinate);
+		blueFirstGame.makeMove(SPARROW, null, thirdCoordinate);
+		blueFirstGame.makeMove(SPARROW, null, fourthCoordinate);
+		blueFirstGame.makeMove(SPARROW, null, fifthCoordinate);
+		blueFirstGame.makeMove(SPARROW, null, sixthCoordinate);
+		blueFirstGame.makeMove(SPARROW, null, seventhCoordinate);
+		blueFirstGame.makeMove(SPARROW, null, eighthCoordinate);
+		blueFirstGame.makeMove(SPARROW, null, ninthCoordinate);
+
+		MoveResult result = blueFirstGame.makeMove(SPARROW, null, tenthCoordinate);
+		assertEquals(MoveResult.DRAW, result);
+	}
+	
+	@Test
 	public void testDraw() throws HantoException{
 		GameCoordinate secondCoordinate = new GameCoordinate(1, 0);
 		previousLinearCoord = secondCoordinate;

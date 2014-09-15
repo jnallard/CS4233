@@ -135,7 +135,7 @@ public class HantoBoard {
 
 	/**
 	 * Add a piece to the board
-	 * @param coordinate the coordinate of the new piece
+	 * @param to the coordinate of the new piece
 	 * @param piece the type of the piece
 	 * @throws HantoException 
 	 * @return Will return the MoveResult that occurs after the move
@@ -206,7 +206,7 @@ public class HantoBoard {
 		
 		boolean hasNNeighbors = numberOfOccupiedNeighbors >= numAdajcentTo;
 		if(!hasNNeighbors){
-			exceptionMessage = coordinate + " is not adjacent to " + numAdajcentTo +" piece(s).";
+			exceptionMessage = coordinate + " is not adjacent to " + numAdajcentTo + " piece(s).";
 		}
 		return numberOfOccupiedNeighbors >= numAdajcentTo;
 	}

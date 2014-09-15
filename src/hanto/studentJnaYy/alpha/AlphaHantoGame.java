@@ -10,14 +10,9 @@
 
 package hanto.studentJnaYy.alpha;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import hanto.common.*;
 import hanto.studentJnaYy.common.ButterflyPiece;
-import hanto.studentJnaYy.common.GameCoordinate;
+import hanto.studentJnaYy.common.HantoBoard;
 
 
 /**
@@ -28,11 +23,10 @@ import hanto.studentJnaYy.common.GameCoordinate;
  */
 public class AlphaHantoGame implements HantoGame
 {
-	private static final GameCoordinate GAME_ORIGIN_COORDINATE = new GameCoordinate(0, 0);
 	private static final int MAX_MOVE_COUNT = 2;
+	private static final int OPTIONAL_BUTTERFLY_MOVES = 0;
 	private HantoPlayerColor currentColor = HantoPlayerColor.BLUE;
-	private int moveCount = 0;
-	Map<GameCoordinate, HantoPiece> board = new HashMap<GameCoordinate, HantoPiece>();
+	HantoBoard board = new HantoBoard(MAX_MOVE_COUNT, OPTIONAL_BUTTERFLY_MOVES);
 	private String exceptionMessage;
 	
 	/**
@@ -61,30 +55,42 @@ public class AlphaHantoGame implements HantoGame
 			throw new HantoException(exceptionMessage);
 		}
 		
-		GameCoordinate ourToCoordinate = new GameCoordinate(to);
-		
-		if(!isValidPiece(pieceType) || !isMoveValid(ourToCoordinate) || isGameOver()){
+		if(!checkValidity(pieceType, to)){
 			throw new HantoException(exceptionMessage);
 		}
-		
-		MoveResult moveResult = MoveResult.OK;
-		if(moveCount + 1 == MAX_MOVE_COUNT){
-			moveResult = MoveResult.DRAW;
-		}
 			
-		finalizeMove(ourToCoordinate);
+		MoveResult moveResult = finalizeMove(to);
 		return moveResult;
+	}
+
+	/**
+	 * Checks to see if the piece and move are valid
+	 * @param pieceType the piece to check for
+	 * @param to the coordinate to check for
+	 * @return true if the piece and move are valid, false otherwise
+	 */
+	private boolean checkValidity(HantoPieceType pieceType, HantoCoordinate to) {
+		
+		boolean isValidPiece = isValidPiece(pieceType);
+		boolean isValidMove = board.isMoveValid(to, pieceType, currentColor);
+		
+		if(!isValidMove){
+			exceptionMessage = board.getErrorMessage();
+		}
+		
+		return isValidMove && isValidPiece;
 	}
 
 	/**
 	 * finishes the verified move - put the piece and coordinate onto the board, 
 	 * increments the move count, and switches the current color.
 	 * @param toCoordinate The coordinate to place the butterfly at
+	 * @throws HantoException 
 	 */
-	private void finalizeMove(GameCoordinate toCoordinate) {
-		board.put(toCoordinate, new ButterflyPiece(currentColor));
-		moveCount++;
+	private MoveResult finalizeMove(HantoCoordinate toCoordinate) throws HantoException {
+		MoveResult result = board.addPiece(toCoordinate, new ButterflyPiece(currentColor));
 		switchCurrentColor();
+		return result;
 	}
 	
 	/**
@@ -100,41 +106,6 @@ public class AlphaHantoGame implements HantoGame
 			exceptionMessage = "The particular piece (" + pieceType + ") is not valid.";
 		}
 		return isValid;
-	}
-
-	/**
-	 * Checks to see if the move is valid 
-	 * A move is considered valid if the first piece is placed at (0,0)
-	 * And if the next piece is adjacent to it.
-	 * @param to The location the piece is trying to move to.
-	 * @return true if the move is valid
-	 */
-	private boolean isMoveValid(GameCoordinate to) {
-		boolean isValid;
-		if(moveCount == 0){
-			isValid = GAME_ORIGIN_COORDINATE.equals(to);
-		}
-		else{
-			isValid = GAME_ORIGIN_COORDINATE.isAdjacent(to);
-		}
-		
-		if(!isValid){
-			exceptionMessage = "The move was not valid - please try again.";
-		}
-			
-		return isValid;
-	}
-
-	/**
-	 * Checks to see if the game is over (max move count is passed)
-	 * @return true if the game has ended.
-	 */
-	private boolean isGameOver(){
-		boolean isOver = moveCount >= MAX_MOVE_COUNT;
-		if(isOver){
-			exceptionMessage = "The game is over - moves are no longer allowed.";
-		}
-		return isOver;
 	}
 
 	/**
@@ -157,8 +128,7 @@ public class AlphaHantoGame implements HantoGame
 	 * 	piece at that position
 	 */
 	public HantoPiece getPieceAt(HantoCoordinate where){
-		GameCoordinate newWhere = new GameCoordinate(where);
-		return board.get(newWhere);
+		return board.getPieceAt(where);
 	}
 
 	/**
@@ -169,15 +139,6 @@ public class AlphaHantoGame implements HantoGame
 	 * @return a printable representation of the board.
 	 */
 	public String getPrintableBoard(){
-		String printedBoard = "";
-		Iterator<Entry<GameCoordinate, HantoPiece>> it = board.entrySet().iterator();
-		while(it.hasNext()){
-			Entry<GameCoordinate, HantoPiece> entry = it.next();
-			GameCoordinate coord = entry.getKey();
-			HantoPiece piece = entry.getValue();
-			printedBoard += "(" + coord.getX() + "," + coord.getY() + ") " 
-					+ piece.getColor() + " " + piece.getType() + "\n";
-		}
-		return printedBoard;
+		return board.getPrintableBoard();
 	}
 }
