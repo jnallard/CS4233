@@ -11,7 +11,6 @@
 package hanto.studentJnaYy.beta;
 
 import hanto.common.*;
-import hanto.studentJnaYy.common.GameCoordinate;
 import hanto.studentJnaYy.common.HantoBoard;
 import hanto.studentJnaYy.common.PieceAvailabilityCounter;
 import hanto.studentJnaYy.common.PieceFactory;
@@ -77,13 +76,11 @@ public class BetaHantoGame implements HantoGame
 			throw new HantoException(exceptionMessage);
 		}
 		
-		GameCoordinate ourToCoordinate = new GameCoordinate(to);
-		
-		if(!checkMoveValidity(pieceType, ourToCoordinate)){
+		if(!checkMoveValidity(pieceType, to)){
 			throw new HantoException(exceptionMessage);
 		}
 		
-		return finalizeMove(pieceType, ourToCoordinate);
+		return finalizeMove(pieceType, to);
 	}
 
 	/**
@@ -92,7 +89,7 @@ public class BetaHantoGame implements HantoGame
 	 * @param toCoordinate - the desired HantoCoordinate for the given piece.
 	 * @return true if the move can be done
 	 */
-	private boolean checkMoveValidity(HantoPieceType pieceType, GameCoordinate toCoordinate) {
+	private boolean checkMoveValidity(HantoPieceType pieceType, HantoCoordinate toCoordinate) {
 		
 		boolean isPieceAvailable = pieceCounter.isPieceAvailable(pieceType, currentColor);
 		if(isPieceAvailable){
@@ -120,7 +117,7 @@ public class BetaHantoGame implements HantoGame
 	 * increments the move count, and switches the current color.
 	 * @param toCoordinate The coordinate to place the butterfly at
 	 */
-	private MoveResult finalizeMove(HantoPieceType type, GameCoordinate toCoordinate) 
+	private MoveResult finalizeMove(HantoPieceType type, HantoCoordinate toCoordinate) 
 			throws HantoException {
 		MoveResult result = board.addPiece(toCoordinate, 
 				pieceFactory.makeGamePiece(type, currentColor));
@@ -149,8 +146,7 @@ public class BetaHantoGame implements HantoGame
 	 * 	piece at that position
 	 */
 	public HantoPiece getPieceAt(HantoCoordinate where){
-		GameCoordinate newWhere = new GameCoordinate(where);
-		return board.getPieceAt(newWhere);
+		return board.getPieceAt(where);
 	}
 
 	/**

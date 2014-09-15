@@ -8,12 +8,12 @@ X Make sure Blue goes first for a Blue game
 X Make sure Red goes first for a red game
 X Place the first butterfly
 X First butterfly is at (0,0);
-Place the second butterfly adjacent to (0,0)
-Check invalid cooridinates for second
+x Place the second butterfly adjacent to (0,0)
+x Check invalid cooridinates for second
 X Second butter is adjacent.
 X First move is ok
 X Second move is Draw
 X Game ends
-Piece is Butterfly
-Piece is not anything but Butterfly
+x Piece is Butterfly
+x Piece is not anything but Butterfly
 

@@ -21,6 +21,8 @@ import hanto.common.HantoCoordinate;
  */
 public class GameCoordinate implements HantoCoordinate {
 
+	private static final int HASH_CODE_BIT_MASK = 0x0000FFFF;
+	private static final int HASH_CODE_BIT_SHIFT = 16;
 	private int xCoordinate;
 	private int yCoordinate;
 	
@@ -109,7 +111,7 @@ public class GameCoordinate implements HantoCoordinate {
 			return false;
 		}
 		HantoCoordinate coor = (HantoCoordinate) other;
-		return xCoordinate == coor.getX() && (yCoordinate == coor.getY());
+		return (xCoordinate == coor.getX()) && (yCoordinate == coor.getY());
 	}
 	
 	/**
@@ -118,8 +120,8 @@ public class GameCoordinate implements HantoCoordinate {
 	@Override
 	public int hashCode(){
 		int hash = 0;
-		hash |= (xCoordinate << 16);
-		hash |= (yCoordinate & 0x0000FFFF);
+		hash |= (xCoordinate << HASH_CODE_BIT_SHIFT);
+		hash |= (yCoordinate & HASH_CODE_BIT_MASK);
 		return hash;
 	}
 }
