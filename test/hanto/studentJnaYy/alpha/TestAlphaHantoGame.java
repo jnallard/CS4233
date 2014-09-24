@@ -7,8 +7,10 @@
  *******************************************************************************/
 package hanto.studentJnaYy.alpha;
 
-import static org.junit.Assert.*;
-import hanto.HantoGameFactory;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import hanto.common.HantoCoordinate;
 import hanto.common.HantoException;
 import hanto.common.HantoGame;
@@ -16,7 +18,7 @@ import hanto.common.HantoGameID;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.common.MoveResult;
-import hanto.studentJnaYy.alpha.PolliceAlphaTest.TestHantoCoordinate;
+import hanto.studentJnaYy.HantoGameFactory;
 import hanto.studentJnaYy.common.GameCoordinate;
 
 import org.junit.Before;

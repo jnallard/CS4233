@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 import hanto.common.HantoGame;
 import hanto.common.HantoGameID;
 import hanto.common.HantoPlayerColor;
+import hanto.studentJnaYy.HantoGameFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +21,7 @@ import org.junit.Test;
  * This class tests creating different games with the HantoGameFactory
  *
  */
-public class TestHantoGameFactory {
+public class TestTheHantoGameFactory {
 
 	private HantoGameFactory factory;
 	

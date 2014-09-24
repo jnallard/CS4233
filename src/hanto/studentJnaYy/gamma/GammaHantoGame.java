@@ -8,7 +8,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
 
-package hanto.studentJnaYy.beta;
+package hanto.studentJnaYy.gamma;
 
 import hanto.common.HantoCoordinate;
 import hanto.common.HantoPieceType;
@@ -22,12 +22,12 @@ import hanto.studentJnaYy.common.BaseHantoGame;
  * 
  * @author Joshua and Yan
  */
-public class BetaHantoGame extends BaseHantoGame
+public class GammaHantoGame extends BaseHantoGame
 {
-	private final static int MaxTurnCount = 6;
+	protected final static int MaxTurnCount = 20;
 	
 	// Moves where the butterfly doesn't have to be placed on the board.
-	private final static int OptionalButterflyTurns = 3;
+	protected final static int OptionalButterflyTurns = 3;
 	
 	private final int MaxButterflyCount = 1;
 	private final int MaxSparrowCount = 5;
@@ -37,7 +37,7 @@ public class BetaHantoGame extends BaseHantoGame
 	 * Creates a BetaHanto Game instance
 	 * @param movesFirst the color of the first piece to be played.
 	 */
-	public BetaHantoGame(HantoPlayerColor movesFirst){
+	public GammaHantoGame(HantoPlayerColor movesFirst){
 		super(movesFirst, MaxTurnCount, OptionalButterflyTurns);
 	}
 

@@ -7,9 +7,7 @@
  *******************************************************************************/
 package hanto.studentJnaYy.common;
 
-import static org.junit.Assert.*;
-import hanto.common.HantoGame;
-import hanto.common.HantoGameID;
+import static org.junit.Assert.assertTrue;
 import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;

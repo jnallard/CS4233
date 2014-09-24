@@ -36,23 +36,25 @@ public class HantoBoard {
 
 	private static final int MIN_ADJACENT_NEIGHBORS = 1;
 	private final GameCoordinate GAME_COORDINATE_ORIGIN = new GameCoordinate(0, 0);
-	private Map<GameCoordinate, HantoPiece> board = new HashMap<GameCoordinate, HantoPiece>();
-	private int moveCount = 0;
+	protected Map<GameCoordinate, HantoPiece> board = new HashMap<GameCoordinate, HantoPiece>();
+	protected int turnCount = 0;
 	private String exceptionMessage = "";
-	private int maxMoveCount;
+	private int maxTurnCount;
 	private GameCoordinate redButterflyCoord = null;
 	private GameCoordinate blueButterflyCoord = null;
-	private int butterflyOptionalMoves;
+	private int butterflyOptionalTurns;
 	private final int MaxNumNeighbors = 6;
+	private HantoPlayerColor movesFirst;
 
 	/**
 	 * Creates the board
-	 * @param maxMoveCount the number of moves (turns * 2) that the board may handle.
-	 * @param butterflyOptionalMoves the number of moves where a butterfly isn't forced to be placed.
+	 * @param maxTurnCount the number of moves (turns * 2) that the board may handle.
+	 * @param butterflyOptionalTurns the number of moves where a butterfly isn't forced to be placed.
 	 */
-	public HantoBoard(int maxMoveCount, int butterflyOptionalMoves){
-		this.maxMoveCount = maxMoveCount;
-		this.butterflyOptionalMoves = butterflyOptionalMoves;
+	public HantoBoard(int maxTurnCount, int butterflyOptionalTurns, HantoPlayerColor movesFirst){
+		this.maxTurnCount = maxTurnCount;
+		this.butterflyOptionalTurns = butterflyOptionalTurns;
+		this.movesFirst = movesFirst;
 	}
 	
 	/**
@@ -69,7 +71,7 @@ public class HantoBoard {
 		
 		exceptionMessage = "";
 		boolean isValid = areButterflyConditionsMet(type, color);
-		if(moveCount == 0){
+		if(turnCount == 0 && color == movesFirst){
 			isValid &= GAME_COORDINATE_ORIGIN.equals(to);
 		}
 		else{
@@ -94,7 +96,7 @@ public class HantoBoard {
 		boolean isPieceButterfly = type.equals(HantoPieceType.BUTTERFLY);
 		
 		boolean areConditionsMet = true;
-		if(moveCount >= butterflyOptionalMoves){
+		if(turnCount >= butterflyOptionalTurns){
 			areConditionsMet = isButterflyCoordSet || isPieceButterfly;
 		}
 		
@@ -153,7 +155,11 @@ public class HantoBoard {
 		}
 		
 		board.put(coordinate, piece);
-		moveCount++;
+		
+		if(piece.getColor() != movesFirst){
+			turnCount++;
+		}
+		
 		return getGameStatus();
 	}
 	
@@ -250,7 +256,7 @@ public class HantoBoard {
 	 * @return true if the game is over
 	 */
 	private boolean areTurnsOver(){
-		boolean isOver = moveCount >= maxMoveCount;
+		boolean isOver = turnCount >= maxTurnCount;
 		if(isOver){
 			exceptionMessage = "The game is over - moves are no longer allowed.";
 		}

@@ -23,10 +23,10 @@ import hanto.studentJnaYy.common.HantoBoard;
  */
 public class AlphaHantoGame implements HantoGame
 {
-	private static final int MAX_MOVE_COUNT = 2;
-	private static final int OPTIONAL_BUTTERFLY_MOVES = 0;
+	private static final int MAX_TURN_COUNT = 1;
+	private static final int OPTIONAL_BUTTERFLY_TURNS = 0;
 	private HantoPlayerColor currentColor = HantoPlayerColor.BLUE;
-	HantoBoard board = new HantoBoard(MAX_MOVE_COUNT, OPTIONAL_BUTTERFLY_MOVES);
+	HantoBoard board = new HantoBoard(MAX_TURN_COUNT, OPTIONAL_BUTTERFLY_TURNS, currentColor);
 	private String exceptionMessage;
 	
 	/**

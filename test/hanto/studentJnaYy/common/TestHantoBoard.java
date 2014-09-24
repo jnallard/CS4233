@@ -7,16 +7,15 @@
  ********************************************************************************/
 package hanto.studentJnaYy.common;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import hanto.common.HantoException;
-import hanto.common.HantoGame;
 import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.common.MoveResult;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -54,7 +53,7 @@ public class TestHantoBoard {
 	
 	@Before
 	public void setUp() {
-		board = new HantoBoard(8, 2);
+		board = new HantoBoard(4, 1, BLUE);
 		blueButterfly = factory.makeGamePiece(BUTTERFLY, BLUE);
 		redButterfly = factory.makeGamePiece(BUTTERFLY, RED);
 		redSparrow = factory.makeGamePiece(SPARROW, RED);
@@ -64,12 +63,12 @@ public class TestHantoBoard {
 
 	@Test
 	public void testPlaceFirstPiece() {
-		boolean result = board.isMoveValid(GAME_COORDINATE_ORIGIN, BUTTERFLY, RED);
+		boolean result = board.isMoveValid(GAME_COORDINATE_ORIGIN, BUTTERFLY, BLUE);
 		assertTrue(result);
 	}
 	@Test
 	public void testPlaceFirstPieceOffOrigin() {
-		boolean result = board.isMoveValid(new GameCoordinate(2, 2), BUTTERFLY, RED);
+		boolean result = board.isMoveValid(new GameCoordinate(2, 2), BUTTERFLY, BLUE);
 		assertFalse(result);
 	}
 	
