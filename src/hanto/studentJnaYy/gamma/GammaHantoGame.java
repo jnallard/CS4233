@@ -49,14 +49,17 @@ public class GammaHantoGame extends BaseHantoGame
 	 */
 	protected boolean checkMoveValidity(HantoPieceType pieceType, HantoCoordinate fromCoordinate, HantoCoordinate toCoordinate) {
 		
-		boolean isFromNull = fromCoordinate == OFF_BOARD_LOCATION;
-		if(!isFromNull){
-			exceptionMessage = "Movement of pieces is not supported.";
-		}
+		boolean isFromOffTheBoard = fromCoordinate == OFF_BOARD_LOCATION;
+		boolean isPieceValid = true;
 		
-		boolean isPieceAvailable = pieceCounter.isPieceAvailable(pieceType, currentColor);
-		if(isPieceAvailable){
-			exceptionMessage = pieceCounter.getErrorMessage();
+		if(isFromOffTheBoard){
+			isPieceValid = isAddedPieceValid(toCoordinate, pieceType);
+		}
+		else{
+			isPieceValid = board.isPieceHere(fromCoordinate, pieceType, currentColor);
+			if(!isPieceValid){
+				exceptionMessage = board.getErrorMessage();
+			}
 		}
 		
 		boolean isMoveValid = board.isMoveValid(toCoordinate, pieceType, currentColor);
@@ -64,7 +67,25 @@ public class GammaHantoGame extends BaseHantoGame
 			exceptionMessage = board.getErrorMessage();
 		}
 		
-		return isMoveValid && isPieceAvailable && isFromNull;
+		return isMoveValid && isPieceValid;
+	}
+
+	/**
+	 * @param pieceType
+	 * @return
+	 */
+	private boolean isAddedPieceValid(HantoCoordinate to, HantoPieceType pieceType) {
+		boolean isPieceValid;
+		isPieceValid = pieceCounter.isPieceAvailable(pieceType, currentColor);
+		boolean isPieceOnlyNextToItsColor = board.isPieceAddedNextToOwnColorRule(to, currentColor, 1);
+		if(!isPieceValid){
+			exceptionMessage = pieceCounter.getErrorMessage();
+		}
+		if(!isPieceOnlyNextToItsColor){
+			exceptionMessage = board.getErrorMessage();
+		}
+		isPieceValid &= isPieceOnlyNextToItsColor;
+		return isPieceValid;
 	}
 	
 	/**

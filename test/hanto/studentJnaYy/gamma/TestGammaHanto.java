@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import common.HantoTestGame;
+import common.HantoTestGame.PieceLocationPair;
 import common.HantoTestGameFactory;
 
 public class TestGammaHanto {
@@ -125,18 +126,29 @@ public class TestGammaHanto {
 	
 	@Test(expected=HantoException.class)
 	public void testPlaceBlueSparrowNextToRed() throws HantoException{
-		HantoCoordinate firstCoordinate =  GAME_COORDINATE_ORIGIN;
-		HantoCoordinate secondCoordinate =  new GameCoordinate(0, 5);
-		redFirstGame.makeMove(BUTTERFLY, null, firstCoordinate);
-		redFirstGame.makeMove(HantoPieceType.SPARROW, null, secondCoordinate);
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(BLUE, BUTTERFLY, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(RED, BUTTERFLY, new GameCoordinate(0, 1)),
+		};
+		
+		blueFirstGame.initializeBoard(pieces);
+		blueFirstGame.setTurnNumber(1);
+		blueFirstGame.setPlayerMoving(BLUE);
+		blueFirstGame.makeMove(SPARROW, null, new GameCoordinate(0, 2));
 	}
 	
 	@Test(expected=HantoException.class)
-	public void testPlaceRedButterflyNextToBue() throws HantoException{
-		HantoCoordinate firstCoordinate =  GAME_COORDINATE_ORIGIN;
-		HantoCoordinate secondCoordinate =  new GameCoordinate(0, 5);
-		redFirstGame.makeMove(BUTTERFLY, null, firstCoordinate);
-		redFirstGame.makeMove(HantoPieceType.BUTTERFLY, null, secondCoordinate);
+	public void testPlaceRedButterflyNextToBlue() throws HantoException{
+
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(RED, SPARROW, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
+		};
+		
+		blueFirstGame.initializeBoard(pieces);
+		blueFirstGame.setTurnNumber(1);
+		blueFirstGame.setPlayerMoving(RED);
+		blueFirstGame.makeMove(BUTTERFLY, null, new GameCoordinate(0, 2));
 	}
 	
 	@Test
@@ -149,7 +161,7 @@ public class TestGammaHanto {
 	}
 	
 	@Test
-	public void testPlaceRedButterflyNextToBueFirstRound() throws HantoException{
+	public void testPlaceRedButterflyNextToBlueFirstRound() throws HantoException{
 		HantoCoordinate firstCoordinate =  GAME_COORDINATE_ORIGIN;
 		HantoCoordinate secondCoordinate =  new GameCoordinate(0, 1);
 		blueFirstGame.makeMove(BUTTERFLY, null, firstCoordinate);

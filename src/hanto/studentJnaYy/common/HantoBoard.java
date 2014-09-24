@@ -300,6 +300,50 @@ public class HantoBoard {
 	public String getErrorMessage() {
 		return exceptionMessage;
 	}
+
+	/**
+	 * Checks to see if the piece wanted is at the given location.
+	 * @param fromCoordinate the coordinate to check
+	 * @param pieceType the piece type to check for
+	 * @param currentColor the piece color to check for
+	 * @return true if the piece type and color match the piece found, if one was found
+	 */
+	public boolean isPieceHere(HantoCoordinate fromCoordinate,
+			HantoPieceType pieceType, HantoPlayerColor currentColor) {
+		
+		HantoPiece piece = getPieceAt(fromCoordinate);
+		
+		boolean isPieceHereResult = false;
+		if(piece != null){
+			isPieceHereResult = piece.getColor() == currentColor;
+			isPieceHereResult &= piece.getType() == pieceType;
+		}
+		
+		if(!isPieceHereResult){
+			exceptionMessage = "The piece wanted is not at this location.";
+		}
+		
+		return isPieceHereResult;
+	}
+
+	public boolean isPieceAddedNextToOwnColorRule(HantoCoordinate coord, HantoPlayerColor currentColor, int ruleExceptionTurns) {
+		GameCoordinate toCoord = new GameCoordinate(coord);
+		List<GameCoordinate> neighbors = toCoord.getAdjacentCoordinates();
+		boolean isNextToOnlyThisColor = true;
+		
+		for(GameCoordinate neighbor : neighbors){
+			HantoPiece piece = board.get(neighbor);
+			if(piece != null){
+				isNextToOnlyThisColor &= piece.getColor() == currentColor;
+			}
+		}
+		
+		if(!isNextToOnlyThisColor){
+			exceptionMessage = "The given coordinate has at least one piece that does not belong to " + currentColor;
+		}
+		
+		return isNextToOnlyThisColor || turnCount < ruleExceptionTurns ;
+	}
 	
 	
 }
