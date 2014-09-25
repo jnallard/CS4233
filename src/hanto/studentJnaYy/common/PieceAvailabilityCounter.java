@@ -43,14 +43,17 @@ public class PieceAvailabilityCounter {
 	 * @param pieceType - the type to check for 
 	 * @param color - the player to check for
 	 * @return true if there is at least one piece left
+	 * @throws HantoException 
 	 */
-	public boolean isPieceAvailable(HantoPieceType pieceType, HantoPlayerColor color) {
+	public void checkPieceAvailability(HantoPieceType pieceType, HantoPlayerColor color) throws HantoException {
 		boolean isValid = isValidPiece(pieceType);
 		if(isValid){
 			isValid = isPieceCountNotZero(pieceType, color);
 		}
 		
-		return isValid;
+		if(!isValid){
+			throw new HantoException(exceptionMessage);
+		}
 	}
 
 	/**
@@ -75,9 +78,7 @@ public class PieceAvailabilityCounter {
 	 * @throws HantoException - if the piece fails validation, an exception is thrown.
 	 */
 	public void utilizePiece(HantoPieceType type, HantoPlayerColor color) throws HantoException{
-		if(!isPieceAvailable(type, color)){
-			throw new HantoException(exceptionMessage);
-		}
+		checkPieceAvailability(type, color);
 		int value = getPieceCounterByColor(color).get(type);
 		getPieceCounterByColor(color).put(type, --value);
 	}
@@ -113,14 +114,6 @@ public class PieceAvailabilityCounter {
 				break;
 		}
 		return counter;
-	}
-
-	/**
-	 * Returns the message that corresponds to why a move is invalid
-	 * @return the string error message
-	 */
-	public String getErrorMessage() {
-		return exceptionMessage;
 	}
 
 }

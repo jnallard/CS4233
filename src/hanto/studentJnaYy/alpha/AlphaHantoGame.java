@@ -55,9 +55,7 @@ public class AlphaHantoGame implements HantoGame
 			throw new HantoException(exceptionMessage);
 		}
 		
-		if(!checkValidity(pieceType, to)){
-			throw new HantoException(exceptionMessage);
-		}
+		checkValidity(pieceType, to);
 			
 		MoveResult moveResult = finalizeMove(to);
 		return moveResult;
@@ -68,17 +66,12 @@ public class AlphaHantoGame implements HantoGame
 	 * @param pieceType the piece to check for
 	 * @param to the coordinate to check for
 	 * @return true if the piece and move are valid, false otherwise
+	 * @throws HantoException 
 	 */
-	private boolean checkValidity(HantoPieceType pieceType, HantoCoordinate to) {
+	private void checkValidity(HantoPieceType pieceType, HantoCoordinate to) throws HantoException {
 		
-		boolean isValidPiece = isValidPiece(pieceType);
-		boolean isValidMove = board.isMoveValid(to, pieceType, currentColor);
-		
-		if(!isValidMove){
-			exceptionMessage = board.getErrorMessage();
-		}
-		
-		return isValidMove && isValidPiece;
+		checkValidPiece(pieceType);
+		board.checkMoveValidity(to, pieceType, currentColor);
 	}
 
 	/**
@@ -97,15 +90,15 @@ public class AlphaHantoGame implements HantoGame
 	 * Checks to see if the given piece is valid for the game.
 	 * @param pieceType the type to check for
 	 * @return true if the piece type is BUTTERFLY
+	 * @throws HantoException 
 	 */
-	private boolean isValidPiece(HantoPieceType pieceType) {
+	private void checkValidPiece(HantoPieceType pieceType) throws HantoException {
 		
 		boolean isValid = pieceType == HantoPieceType.BUTTERFLY;
 		
 		if(!isValid){
-			exceptionMessage = "The particular piece (" + pieceType + ") is not valid.";
+			throw new HantoException("The particular piece (" + pieceType + ") is not valid.");
 		}
-		return isValid;
 	}
 
 	/**

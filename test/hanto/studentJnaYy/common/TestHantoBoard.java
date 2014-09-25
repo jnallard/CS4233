@@ -8,7 +8,6 @@
 package hanto.studentJnaYy.common;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import hanto.common.HantoException;
@@ -62,35 +61,33 @@ public class TestHantoBoard {
 	}
 
 	@Test
-	public void testPlaceFirstPiece() {
-		boolean result = board.isMoveValid(GAME_COORDINATE_ORIGIN, BUTTERFLY, BLUE);
-		assertTrue(result);
-	}
-	@Test
-	public void testPlaceFirstPieceOffOrigin() {
-		boolean result = board.isMoveValid(new GameCoordinate(2, 2), BUTTERFLY, BLUE);
-		assertFalse(result);
+	public void testPlaceFirstPiece() throws HantoException {
+		board.checkMoveValidity(GAME_COORDINATE_ORIGIN, BUTTERFLY, BLUE);
+		assertTrue(true);
 	}
 	
-	@Test
+	@Test(expected=HantoException.class)
+	public void testPlaceFirstPieceOffOrigin() throws HantoException {
+		board.checkMoveValidity(new GameCoordinate(2, 2), BUTTERFLY, BLUE);
+	}
+	
+	@Test(expected=HantoException.class)
 	public void testPlaceSecondPieceOnOrigin() throws HantoException{
 		board.addPiece(GAME_COORDINATE_ORIGIN, blueButterfly);
-		boolean result = board.isMoveValid(GAME_COORDINATE_ORIGIN, BUTTERFLY, RED);
-		assertFalse(result);
+		board.checkMoveValidity(GAME_COORDINATE_ORIGIN, BUTTERFLY, RED);
 	}
 	
 	@Test
 	public void testPlaceSecondPieceOffOrigin() throws HantoException{
 		board.addPiece(GAME_COORDINATE_ORIGIN, factory.makeGamePiece(BUTTERFLY, BLUE));
-		boolean result = board.isMoveValid(new GameCoordinate(0, 1), BUTTERFLY, RED);
-		assertTrue(result);
+		board.checkMoveValidity(new GameCoordinate(0, 1), BUTTERFLY, RED);
+		assertTrue(true);
 	}
 	
-	@Test
+	@Test(expected=HantoException.class)
 	public void testPlaceSecondPieceOffOriginFail() throws HantoException{
 		board.addPiece(GAME_COORDINATE_ORIGIN, factory.makeGamePiece(BUTTERFLY, BLUE));
-		boolean result = board.isMoveValid(new GameCoordinate(3, 1), BUTTERFLY, RED);
-		assertFalse(result);
+		board.checkMoveValidity(new GameCoordinate(3, 1), BUTTERFLY, RED);
 	}
 	
 	@Test
@@ -128,42 +125,36 @@ public class TestHantoBoard {
 
 	}
 	
-	@Test
+	@Test(expected=HantoException.class)
 	public void testMoveValidNoButterflyBlue() throws HantoException{
-		boolean result;
 		board.addPiece(GAME_COORDINATE_ORIGIN, blueSparrow);
 		createNextLinearCoordAndMakeMove(redButterfly);
-		result = board.isMoveValid(getNextLinearCoord(), SPARROW, BLUE);
-		assertFalse(result);
+		board.checkMoveValidity(getNextLinearCoord(), SPARROW, BLUE);
 	}
 	
-	@Test
+	@Test(expected = HantoException.class)
 	public void testMoveValidNoButterflyRed() throws HantoException{
-		boolean result;
 		board.addPiece(GAME_COORDINATE_ORIGIN, blueButterfly);
 		createNextLinearCoordAndMakeMove(redSparrow);
 		createNextLinearCoordAndMakeMove(blueSparrow);
-		result = board.isMoveValid(getNextLinearCoord(), SPARROW, RED);	
-		assertFalse(result);
+		board.checkMoveValidity(getNextLinearCoord(), SPARROW, RED);	
 	}
 	
 	@Test
 	public void testMoveValidButterflyBlue() throws HantoException{
-		boolean result;
 		board.addPiece(GAME_COORDINATE_ORIGIN, blueSparrow);
 		createNextLinearCoordAndMakeMove(redButterfly);
-		result = board.isMoveValid(getNextLinearCoord(), BUTTERFLY, BLUE);
-		assertTrue(result);
+		board.checkMoveValidity(getNextLinearCoord(), BUTTERFLY, BLUE);
+		assertTrue(true);
 	}
 	
 	@Test
 	public void testMoveValidButterflyRed() throws HantoException{
-		boolean result;
 		board.addPiece(GAME_COORDINATE_ORIGIN, blueButterfly);
 		createNextLinearCoordAndMakeMove(redSparrow);
 		createNextLinearCoordAndMakeMove(blueSparrow);
-		result = board.isMoveValid(getNextLinearCoord(), BUTTERFLY, RED);	
-		assertTrue(result);
+		board.checkMoveValidity(getNextLinearCoord(), BUTTERFLY, RED);	
+		assertTrue(true);
 	}
 	
 	@Test
@@ -178,14 +169,6 @@ public class TestHantoBoard {
 		board.addPiece(GAME_COORDINATE_ORIGIN, blueButterfly);
 		String printableBoard = board.getPrintableBoard();
 		assertNotNull(printableBoard);
-	}
-	
-	@Test
-	public void testGetErrorMessage() throws HantoException{
-		board.addPiece(GAME_COORDINATE_ORIGIN, blueButterfly);
-		board.isMoveValid(GAME_COORDINATE_ORIGIN, BUTTERFLY, RED);
-		String errorMessage = board.getErrorMessage();
-		assertFalse(errorMessage.isEmpty());
 	}
 	
 	@Test(expected=HantoException.class)

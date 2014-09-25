@@ -65,8 +65,9 @@ public class HantoBoard {
 	 * @param type the piece type to validate
 	 * @param color the piece color to validate
 	 * @return true if the move is valid
+	 * @throws HantoException 
 	 */
-	public boolean isMoveValid(HantoCoordinate to, HantoPieceType type, HantoPlayerColor color) {
+	public void checkMoveValidity(HantoCoordinate to, HantoPieceType type, HantoPlayerColor color) throws HantoException {
 		GameCoordinate ourToCoodinate = new GameCoordinate(to);
 		
 		exceptionMessage = "";
@@ -81,7 +82,9 @@ public class HantoBoard {
 		
 		isValid &= getGameStatus() == MoveResult.OK;
 			
-		return isValid;
+		if(!isValid){
+			throw new HantoException(exceptionMessage);
+		}
 	}
 
 	/**
@@ -146,9 +149,7 @@ public class HantoBoard {
 
 		GameCoordinate coordinate = new GameCoordinate(to);
 		
-		if(!isMoveValid(coordinate, piece.getType(), piece.getColor())){
-			throw new HantoException(exceptionMessage);
-		}
+		checkMoveValidity(coordinate, piece.getType(), piece.getColor());
 		
 		if(piece.getType() == HantoPieceType.BUTTERFLY){
 			assignButterflyCoord(coordinate, piece.getColor());
@@ -294,22 +295,15 @@ public class HantoBoard {
 	}
 
 	/**
-	 * Returns the message that corresponds to why a move is invalid
-	 * @return the string error message
-	 */
-	public String getErrorMessage() {
-		return exceptionMessage;
-	}
-
-	/**
 	 * Checks to see if the piece wanted is at the given location.
 	 * @param fromCoordinate the coordinate to check
 	 * @param pieceType the piece type to check for
 	 * @param currentColor the piece color to check for
 	 * @return true if the piece type and color match the piece found, if one was found
+	 * @throws HantoException 
 	 */
-	public boolean isPieceHere(HantoCoordinate fromCoordinate,
-			HantoPieceType pieceType, HantoPlayerColor currentColor) {
+	public void isPieceHere(HantoCoordinate fromCoordinate,
+			HantoPieceType pieceType, HantoPlayerColor currentColor) throws HantoException {
 		
 		HantoPiece piece = getPieceAt(fromCoordinate);
 		
@@ -320,13 +314,11 @@ public class HantoBoard {
 		}
 		
 		if(!isPieceHereResult){
-			exceptionMessage = "The piece wanted is not at this location.";
+			throw new HantoException("The piece wanted is not at this location.");
 		}
-		
-		return isPieceHereResult;
 	}
 
-	public boolean isPieceAddedNextToOwnColorRule(HantoCoordinate coord, HantoPlayerColor currentColor, int ruleExceptionTurns) {
+	public void checkPieceAddedNextToOwnColorRule(HantoCoordinate coord, HantoPlayerColor currentColor, int ruleExceptionTurns) throws HantoException {
 		GameCoordinate toCoord = new GameCoordinate(coord);
 		List<GameCoordinate> neighbors = toCoord.getAdjacentCoordinates();
 		boolean isNextToOnlyThisColor = true;
@@ -338,11 +330,10 @@ public class HantoBoard {
 			}
 		}
 		
-		if(!isNextToOnlyThisColor){
-			exceptionMessage = "The given coordinate has at least one piece that does not belong to " + currentColor;
+		if(!isNextToOnlyThisColor && turnCount >= ruleExceptionTurns){
+			throw new HantoException( "The given coordinate has at least one "
+					+ "piece that does not belong to " + currentColor);
 		}
-		
-		return isNextToOnlyThisColor || turnCount < ruleExceptionTurns ;
 	}
 	
 	

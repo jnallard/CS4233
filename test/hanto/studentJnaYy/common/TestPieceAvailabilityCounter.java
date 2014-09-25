@@ -35,15 +35,15 @@ public class TestPieceAvailabilityCounter {
 		counter.initializePieceCount(SPARROW, 2);
 	}
 
-	@Test
-	public void testNotInitialized () {
-		assertFalse(counter.isPieceAvailable(HantoPieceType.CRAB, BLUE));
+	@Test(expected = HantoException.class)
+	public void testNotInitialized () throws HantoException {
+		counter.checkPieceAvailability(HantoPieceType.CRAB, BLUE);
 	}
 	
-	@Test
+	@Test(expected = HantoException.class)
 	public void testCounterRunsDown () throws HantoException {
 		counter.utilizePiece(BUTTERFLY, BLUE);
-		assertFalse(counter.isPieceAvailable(BUTTERFLY, BLUE));
+		counter.checkPieceAvailability(BUTTERFLY, BLUE);
 	}
 	
 	
@@ -51,14 +51,6 @@ public class TestPieceAvailabilityCounter {
 	public void testUtilizeFails () throws HantoException {
 		counter.utilizePiece(BUTTERFLY, BLUE);
 		counter.utilizePiece(BUTTERFLY, BLUE);
-	}
-	
-	@Test
-	public void testErrorMessage () throws HantoException {
-		counter.utilizePiece(BUTTERFLY, BLUE);
-		counter.isPieceAvailable(BUTTERFLY, BLUE);
-		String errorMessage = counter.getErrorMessage();
-		assertFalse(errorMessage.isEmpty());
 	}
 
 }

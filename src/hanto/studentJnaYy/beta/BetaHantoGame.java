@@ -11,6 +11,7 @@
 package hanto.studentJnaYy.beta;
 
 import hanto.common.HantoCoordinate;
+import hanto.common.HantoException;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.studentJnaYy.common.BaseHantoGame;
@@ -46,25 +47,17 @@ public class BetaHantoGame extends BaseHantoGame
 	 * @param pieceType - the HantoPieceType of the given piece.
 	 * @param toCoordinate - the desired HantoCoordinate for the given piece.
 	 * @return true if the move can be done
+	 * @throws HantoException 
 	 */
-	protected boolean checkMoveValidity(HantoPieceType pieceType, HantoCoordinate fromCoordinate, HantoCoordinate toCoordinate) {
+	@Override
+	protected void checkMoveValidity(HantoPieceType pieceType, HantoCoordinate fromCoordinate, 
+			HantoCoordinate toCoordinate) throws HantoException {
 		
-		boolean isFromNull = fromCoordinate == OFF_BOARD_LOCATION;
-		if(!isFromNull){
-			exceptionMessage = "Movement of pieces is not supported.";
+		if(!isFromOffTheBoard(fromCoordinate)){
+			throw new HantoException("Movement of pieces is not supported.");
 		}
 		
-		boolean isPieceAvailable = pieceCounter.isPieceAvailable(pieceType, currentColor);
-		if(isPieceAvailable){
-			exceptionMessage = pieceCounter.getErrorMessage();
-		}
-		
-		boolean isMoveValid = board.isMoveValid(toCoordinate, pieceType, currentColor);
-		if(isMoveValid){
-			exceptionMessage = board.getErrorMessage();
-		}
-		
-		return isMoveValid && isPieceAvailable && isFromNull;
+		super.checkMoveValidity(pieceType, fromCoordinate, toCoordinate);
 	}
 	
 	/**

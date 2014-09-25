@@ -40,11 +40,30 @@ public abstract class BaseHantoGame implements HantoGame {
 	@Override
 	public MoveResult makeMove(HantoPieceType pieceType, HantoCoordinate from,
 			HantoCoordinate to) throws HantoException {
-		if(!checkMoveValidity(pieceType, from, to)){
-			throw new HantoException(exceptionMessage);
-		}
+		
+		checkMoveValidity(pieceType, from, to);
 		
 		return finalizeMove(pieceType, from, to);
+	}
+	
+
+	/**
+	 * Checks to see if the suggested move is valid.
+	 * @param pieceType - the HantoPieceType of the given piece.
+	 * @param toCoordinate - the desired HantoCoordinate for the given piece.
+	 * @return true if the move can be done
+	 * @throws HantoException 
+	 */
+	protected void checkMoveValidity(HantoPieceType pieceType, HantoCoordinate fromCoordinate, 
+			HantoCoordinate toCoordinate) throws HantoException {
+		if(isFromOffTheBoard(fromCoordinate)){
+			pieceCounter.checkPieceAvailability(pieceType, currentColor);
+		}
+		else{
+			board.isPieceHere(fromCoordinate, pieceType, currentColor);
+		}	
+		
+		board.checkMoveValidity(toCoordinate, pieceType, currentColor);
 	}
 	
 	/**
@@ -55,7 +74,7 @@ public abstract class BaseHantoGame implements HantoGame {
 	protected MoveResult finalizeMove(HantoPieceType type, HantoCoordinate fromCoordinate, HantoCoordinate toCoordinate) 
 			throws HantoException {
 		
-		if(fromCoordinate == OFF_BOARD_LOCATION){
+		if(isFromOffTheBoard(fromCoordinate)){
 
 			pieceCounter.utilizePiece(type, currentColor);
 		}
@@ -68,6 +87,16 @@ public abstract class BaseHantoGame implements HantoGame {
 		
 		switchCurrentColor();
 		return result;
+	}
+
+
+	/**
+	 * Checks to see if the piece given is a new piece (from null)
+	 * @param fromCoordinate - the coordinate of the piece to check
+	 * @return true if the piece is from off the board (null)
+	 */
+	protected boolean isFromOffTheBoard(HantoCoordinate fromCoordinate) {
+		return fromCoordinate == OFF_BOARD_LOCATION;
 	}
 
 	/**
@@ -104,7 +133,10 @@ public abstract class BaseHantoGame implements HantoGame {
 		return board.getPrintableBoard();
 	}
 	
+	/**
+	 * Is used to set the piece counts for each game.
+	 * It is abstract, assuming that each game has a different piece set.
+	 */
 	protected abstract void initializePieceCounts();
-	protected abstract boolean checkMoveValidity(HantoPieceType pieceType, 
-			HantoCoordinate fromCoordinate, HantoCoordinate toCoordinate);
+	
 }

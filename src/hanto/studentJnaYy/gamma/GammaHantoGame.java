@@ -11,6 +11,7 @@
 package hanto.studentJnaYy.gamma;
 
 import hanto.common.HantoCoordinate;
+import hanto.common.HantoException;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.studentJnaYy.common.BaseHantoGame;
@@ -46,47 +47,15 @@ public class GammaHantoGame extends BaseHantoGame
 	 * @param pieceType - the HantoPieceType of the given piece.
 	 * @param toCoordinate - the desired HantoCoordinate for the given piece.
 	 * @return true if the move can be done
+	 * @throws HantoException 
 	 */
-	protected boolean checkMoveValidity(HantoPieceType pieceType, HantoCoordinate fromCoordinate, HantoCoordinate toCoordinate) {
-		
-		boolean isFromOffTheBoard = fromCoordinate == OFF_BOARD_LOCATION;
-		boolean isPieceValid = true;
-		
-		if(isFromOffTheBoard){
-			isPieceValid = isAddedPieceValid(toCoordinate, pieceType);
+	protected void checkMoveValidity(HantoPieceType pieceType, HantoCoordinate fromCoordinate, HantoCoordinate toCoordinate) throws HantoException {
+		if(isFromOffTheBoard(fromCoordinate)){
+			board.checkPieceAddedNextToOwnColorRule(toCoordinate, currentColor, 1);
 		}
-		else{
-			isPieceValid = board.isPieceHere(fromCoordinate, pieceType, currentColor);
-			if(!isPieceValid){
-				exceptionMessage = board.getErrorMessage();
-			}
-		}
-		
-		boolean isMoveValid = board.isMoveValid(toCoordinate, pieceType, currentColor);
-		if(isMoveValid){
-			exceptionMessage = board.getErrorMessage();
-		}
-		
-		return isMoveValid && isPieceValid;
+		super.checkMoveValidity(pieceType, fromCoordinate, toCoordinate);
 	}
 
-	/**
-	 * @param pieceType
-	 * @return
-	 */
-	private boolean isAddedPieceValid(HantoCoordinate to, HantoPieceType pieceType) {
-		boolean isPieceValid;
-		isPieceValid = pieceCounter.isPieceAvailable(pieceType, currentColor);
-		boolean isPieceOnlyNextToItsColor = board.isPieceAddedNextToOwnColorRule(to, currentColor, 1);
-		if(!isPieceValid){
-			exceptionMessage = pieceCounter.getErrorMessage();
-		}
-		if(!isPieceOnlyNextToItsColor){
-			exceptionMessage = board.getErrorMessage();
-		}
-		isPieceValid &= isPieceOnlyNextToItsColor;
-		return isPieceValid;
-	}
 	
 	/**
 	 * Initializes the amount of pieces that each player can place.
