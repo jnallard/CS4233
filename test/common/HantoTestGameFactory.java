@@ -19,7 +19,7 @@ import hanto.studentJnaYy.gamma.GammaHantoTestGame;
  */
 public class HantoTestGameFactory
 {
-	private static final HantoTestGameFactory instance = new HantoTestGameFactory();
+	private static final HantoTestGameFactory INSTANCE = new HantoTestGameFactory();
 	
 	/**
 	 * Default private descriptor.
@@ -34,7 +34,7 @@ public class HantoTestGameFactory
 	 */
 	public static HantoTestGameFactory getInstance()
 	{
-		return instance;
+		return INSTANCE;
 	}
 	
 	/**

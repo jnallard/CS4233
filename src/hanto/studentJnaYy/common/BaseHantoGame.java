@@ -27,6 +27,12 @@ public abstract class BaseHantoGame implements HantoGame {
 	
 	protected static final HantoCoordinate OFF_BOARD_LOCATION = null;
 	
+	/**
+	 * Creates an abstract version of a Hanto Game
+	 * @param movesFirst the player who moves first in the game
+	 * @param maxMoveCount the maximum amount of turns in the game
+	 * @param optionalButterflyMoves the number of moves where placing a butterfly is optional
+	 */
 	protected BaseHantoGame(HantoPlayerColor movesFirst, int maxMoveCount, int optionalButterflyMoves) {
 		currentColor = movesFirst;
 		board = new HantoBoard(maxMoveCount, optionalButterflyMoves, movesFirst);
@@ -34,33 +40,62 @@ public abstract class BaseHantoGame implements HantoGame {
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see hanto.common.HantoGame#makeMove(hanto.common.HantoPieceType, hanto.common.HantoCoordinate, hanto.common.HantoCoordinate)
+	/**
+	 * This method executes a move in the game. It is called for every move that must be
+	 * made.
+	 * 
+	 * @param pieceType
+	 *            the piece type that is being moved
+	 * @param from
+	 *            the coordinate where the piece begins. If the coordinate is null, then
+	 *            the piece begins off the board (that is, it is placed on the board in
+	 *            this move).
+	 * @param to
+	 *            the coordinated where the piece is after the move has been made.
+	 * @return the result of the move
+	 * @throws HantoException
+	 *             if there are any problems in making the move (such as specifying a
+	 *             coordinate that does not have the appropriate piece, or the color of
+	 *             the piece is not the color of the player who is moving.
 	 */
 	@Override
 	public MoveResult makeMove(HantoPieceType pieceType, HantoCoordinate from,
 			HantoCoordinate to) throws HantoException {
 		
-		checkMoveValidity(pieceType, from, to);
+		checkMoveValidityPrior(pieceType, from, to);
 		
-		return finalizeMove(pieceType, from, to);
+		finalizeMove(pieceType, from, to);
+
+		checkMoveValidityAfter();
+		
+		return board.getGameStatus();
 	}
 	
 
 	/**
+	 * Checks the state of the game after a move for any exceptions.
+	 * @throws HantoException
+	 */
+	protected void checkMoveValidityAfter() throws HantoException {
+		board.checkPieceConnectivity();
+	}
+
+
+	/**
 	 * Checks to see if the suggested move is valid.
 	 * @param pieceType - the HantoPieceType of the given piece.
+	 * @param fromCoordinate - the coordinate the piece is moving from
 	 * @param toCoordinate - the desired HantoCoordinate for the given piece.
-	 * @return true if the move can be done
 	 * @throws HantoException 
 	 */
-	protected void checkMoveValidity(HantoPieceType pieceType, HantoCoordinate fromCoordinate, 
+	protected void checkMoveValidityPrior(HantoPieceType pieceType, HantoCoordinate fromCoordinate, 
 			HantoCoordinate toCoordinate) throws HantoException {
 		if(isFromOffTheBoard(fromCoordinate)){
 			pieceCounter.checkPieceAvailability(pieceType, currentColor);
 		}
 		else{
 			board.isPieceHere(fromCoordinate, pieceType, currentColor);
+			board.checkMovement(fromCoordinate, toCoordinate);
 		}	
 		
 		board.checkMoveValidity(toCoordinate, pieceType, currentColor);
@@ -69,9 +104,12 @@ public abstract class BaseHantoGame implements HantoGame {
 	/**
 	 * finishes the verified move - put the piece and coordinate onto the board, 
 	 * increments the move count, and switches the current color.
-	 * @param toCoordinate The coordinate to place the butterfly at
+	 * @param type The Piece type being moved
+	 * @param toCoordinate The coordinate to place the piece at
+	 * @param fromCoordinate the coordinate the piece is moving from (null if from off the board)
+	 * @throws HantoException
 	 */
-	protected MoveResult finalizeMove(HantoPieceType type, HantoCoordinate fromCoordinate, HantoCoordinate toCoordinate) 
+	protected void finalizeMove(HantoPieceType type, HantoCoordinate fromCoordinate, HantoCoordinate toCoordinate) 
 			throws HantoException {
 		
 		if(isFromOffTheBoard(fromCoordinate)){
@@ -79,14 +117,12 @@ public abstract class BaseHantoGame implements HantoGame {
 			pieceCounter.utilizePiece(type, currentColor);
 		}
 		else{
-			
+			board.removePiece(fromCoordinate);
 		}
 			
-		MoveResult result = board.addPiece(toCoordinate, 
-				pieceFactory.makeGamePiece(type, currentColor));
+		board.addPiece(toCoordinate, pieceFactory.makeGamePiece(type, currentColor));
 		
 		switchCurrentColor();
-		return result;
 	}
 
 

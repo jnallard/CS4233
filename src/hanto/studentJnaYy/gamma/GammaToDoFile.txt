@@ -8,18 +8,19 @@ x Make sure Blue goes first for a Blue game
 x Make sure Red goes first for a red game
 x Can place sparrow first
 x Can place butterfly first
-Sparrow can walk
-Butterfly can walk
-Everything needs to be connected after a move
-Game can place a piece around the center piece
-Game can place a piece not around the centerpiece, but still connected with piece of same color
-Game cannot place a piece next to a piece of the opposing color, except for the first and second move
-Can only place one butterfly
-Can only place 5 sparrows
-Butterfly must be placed before or during the player's 4th turn
+x Sparrow can walk
+x Butterfly can walk
+x Walking does not let a piece move if it's blocked in that direction
+x Everything needs to be connected after a move
+x Game can place a piece around the center piece
+x Game can place a piece not around the centerpiece, but still connected with piece of same color
+x Game cannot place a piece next to a piece of the opposing color, except for the first and second move
+x Can only place one butterfly
+x Can only place 5 sparrows
+x Butterfly must be placed before or during the player's 4th turn
 x First move is ok
-Game ends in draw after 20 turns
-Game ends in victory when one butterfly is surrounded
+x Game ends in draw after 20 turns
+x Game ends in victory when one butterfly is surrounded
 x Piece is Butterfly, Sparrow
 x Piece is not anything but Butterfly, Sparrow
 x Test placing pieces on the same location

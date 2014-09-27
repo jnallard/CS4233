@@ -25,13 +25,13 @@ import hanto.studentJnaYy.common.BaseHantoGame;
  */
 public class BetaHantoGame extends BaseHantoGame
 {
-	private final static int MaxTurnCount = 6;
+	private final static int MAX_TURN_COUNT = 6;
 	
 	// Moves where the butterfly doesn't have to be placed on the board.
-	private final static int OptionalButterflyTurns = 3;
+	private final static int OPTIONAL_BUTTERFLY_TURNS = 3;
 	
-	private final int MaxButterflyCount = 1;
-	private final int MaxSparrowCount = 5;
+	private final static int MAX_BUTTERFLY_COUNT = 1;
+	private final static int MAX_SPARROW_COUNT = 5;
 	
 	
 	/**
@@ -39,7 +39,7 @@ public class BetaHantoGame extends BaseHantoGame
 	 * @param movesFirst the color of the first piece to be played.
 	 */
 	public BetaHantoGame(HantoPlayerColor movesFirst){
-		super(movesFirst, MaxTurnCount, OptionalButterflyTurns);
+		super(movesFirst, MAX_TURN_COUNT, OPTIONAL_BUTTERFLY_TURNS);
 	}
 
 	/**
@@ -50,21 +50,21 @@ public class BetaHantoGame extends BaseHantoGame
 	 * @throws HantoException 
 	 */
 	@Override
-	protected void checkMoveValidity(HantoPieceType pieceType, HantoCoordinate fromCoordinate, 
+	protected void checkMoveValidityPrior(HantoPieceType pieceType, HantoCoordinate fromCoordinate, 
 			HantoCoordinate toCoordinate) throws HantoException {
 		
 		if(!isFromOffTheBoard(fromCoordinate)){
 			throw new HantoException("Movement of pieces is not supported.");
 		}
 		
-		super.checkMoveValidity(pieceType, fromCoordinate, toCoordinate);
+		super.checkMoveValidityPrior(pieceType, fromCoordinate, toCoordinate);
 	}
 	
 	/**
 	 * Initializes the amount of pieces that each player can place.
 	 */
 	protected void initializePieceCounts(){
-		pieceCounter.initializePieceCount(HantoPieceType.BUTTERFLY, MaxButterflyCount);
-		pieceCounter.initializePieceCount(HantoPieceType.SPARROW, MaxSparrowCount);
+		pieceCounter.initializePieceCount(HantoPieceType.BUTTERFLY, MAX_BUTTERFLY_COUNT);
+		pieceCounter.initializePieceCount(HantoPieceType.SPARROW, MAX_SPARROW_COUNT);
 	}
 }

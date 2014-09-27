@@ -83,6 +83,8 @@ public class AlphaHantoGame implements HantoGame
 	private MoveResult finalizeMove(HantoCoordinate toCoordinate) throws HantoException {
 		MoveResult result = board.addPiece(toCoordinate, new ButterflyPiece(currentColor));
 		switchCurrentColor();
+
+		board.checkPieceConnectivity();
 		return result;
 	}
 	

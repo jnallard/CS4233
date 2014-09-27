@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * This files was developed for CS4233: Object-Oriented Analysis & Design. The course was
+ * taken at Worcester Polytechnic Institute. All rights reserved. This program and the
+ * accompanying materials are made available under the terms of the Eclipse Public License
+ * v1.0 which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ********************************************************************************/
 package hanto.studentJnaYy.gamma;
 
 import static org.junit.Assert.assertEquals;
@@ -146,7 +153,7 @@ public class TestGammaHanto {
 		};
 		
 		blueFirstGame.initializeBoard(pieces);
-		blueFirstGame.setTurnNumber(1);
+		blueFirstGame.setTurnNumber(2);
 		blueFirstGame.setPlayerMoving(RED);
 		blueFirstGame.makeMove(BUTTERFLY, null, new GameCoordinate(0, 2));
 	}
@@ -168,5 +175,240 @@ public class TestGammaHanto {
 		MoveResult result = blueFirstGame.makeMove(HantoPieceType.BUTTERFLY, null, secondCoordinate);
 		assertEquals(MoveResult.OK, result);
 	}
+	
 
+	
+	@Test(expected=HantoException.class)
+	public void testButterflyPlacedBy4thTurn() throws HantoException{
+
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(RED, SPARROW, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
+				new PieceLocationPair(RED, SPARROW, new GameCoordinate(0, 2)),
+				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(0, 3)),
+				new PieceLocationPair(RED, SPARROW, new GameCoordinate(0, 4)),
+				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(0, 5))
+		};
+		
+		blueFirstGame.initializeBoard(pieces);
+		blueFirstGame.setTurnNumber(4);
+		blueFirstGame.setPlayerMoving(RED);
+		blueFirstGame.makeMove(BUTTERFLY, null, new GameCoordinate(0, 6));
+	}
+	
+	@Test(expected=HantoException.class)
+	public void testOnlyPlace1ButterflyPerPlayer() throws HantoException{
+
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(RED, BUTTERFLY, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
+		};
+		
+		blueFirstGame.initializeBoard(pieces);
+		blueFirstGame.setTurnNumber(2);
+		blueFirstGame.setPlayerMoving(RED);
+		blueFirstGame.makeMove(BUTTERFLY, null, new GameCoordinate(0, -1));
+	}
+	
+	@Test(expected=HantoException.class)
+	public void testPlaceNoMoreThan5SparrowsPerPlayer() throws HantoException{
+
+		PieceLocationPair[] pieces = generateTestGameInALine();
+		
+		blueFirstGame.initializeBoard(pieces);
+		blueFirstGame.setTurnNumber(4);
+		blueFirstGame.setPlayerMoving(RED);
+		blueFirstGame.makeMove(SPARROW, null, new GameCoordinate(0, -6));
+	}
+	
+
+	
+	@Test
+	public void testMoveButterfly1() throws HantoException{
+
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(RED, BUTTERFLY, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
+		};
+		
+		blueFirstGame.initializeBoard(pieces);
+		blueFirstGame.setTurnNumber(2);
+		blueFirstGame.setPlayerMoving(RED);
+		MoveResult result = blueFirstGame.makeMove(BUTTERFLY, 
+				GAME_COORDINATE_ORIGIN, new GameCoordinate(1, 0));
+		assertEquals(MoveResult.OK, result);
+	}
+	
+	@Test(expected = HantoException.class)
+	public void testMoveButterfly2() throws HantoException{
+
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(RED, BUTTERFLY, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
+		};
+		
+		blueFirstGame.initializeBoard(pieces);
+		blueFirstGame.setTurnNumber(2);
+		blueFirstGame.setPlayerMoving(RED);
+		blueFirstGame.makeMove(BUTTERFLY, GAME_COORDINATE_ORIGIN, new GameCoordinate(1, 1));
+	}
+
+	
+	@Test
+	public void testMoveSparrow1() throws HantoException{
+
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(RED, SPARROW, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
+		};
+		
+		blueFirstGame.initializeBoard(pieces);
+		blueFirstGame.setTurnNumber(2);
+		blueFirstGame.setPlayerMoving(RED);
+		MoveResult result = blueFirstGame.makeMove(SPARROW, 
+				GAME_COORDINATE_ORIGIN, new GameCoordinate(1, 0));
+		assertEquals(MoveResult.OK, result);
+	}
+	
+	@Test(expected = HantoException.class)
+	public void testMoveSparrow2() throws HantoException{
+
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(RED, SPARROW, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
+		};
+		
+		blueFirstGame.initializeBoard(pieces);
+		blueFirstGame.setTurnNumber(2);
+		blueFirstGame.setPlayerMoving(RED);
+		blueFirstGame.makeMove(SPARROW, GAME_COORDINATE_ORIGIN, new GameCoordinate(1, 1));
+	}
+	
+
+	
+	@Test(expected = HantoException.class)
+	public void testMoveSparrowFromUnknownLocation() throws HantoException{
+
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(RED, SPARROW, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
+		};
+		
+		blueFirstGame.initializeBoard(pieces);
+		blueFirstGame.setTurnNumber(2);
+		blueFirstGame.setPlayerMoving(RED);
+		blueFirstGame.makeMove(SPARROW, new GameCoordinate(0, 5), new GameCoordinate(0, 6));
+	}
+	
+	@Test(expected = HantoException.class)
+	public void testMoveSparrowAsIfButterfly() throws HantoException{
+
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(RED, SPARROW, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
+		};
+		
+		blueFirstGame.initializeBoard(pieces);
+		blueFirstGame.setTurnNumber(2);
+		blueFirstGame.setPlayerMoving(RED);
+		blueFirstGame.makeMove(BUTTERFLY, GAME_COORDINATE_ORIGIN, new GameCoordinate(1, 0));
+	}
+	
+	@Test(expected = HantoException.class)
+	public void testWalkPieceThatCannotSlide() throws HantoException{
+
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(BLUE, BUTTERFLY, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(RED, BUTTERFLY, new GameCoordinate(0, 1)),
+				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(-1, 0)),
+				new PieceLocationPair(RED, SPARROW, new GameCoordinate(0, 2))
+				
+		};
+		
+		blueFirstGame.initializeBoard(pieces);
+		blueFirstGame.setTurnNumber(3);
+		blueFirstGame.setPlayerMoving(BLUE);
+		blueFirstGame.makeMove(BUTTERFLY, GAME_COORDINATE_ORIGIN, new GameCoordinate(-1, 1));
+	}
+	
+
+	
+	@Test(expected = HantoException.class)
+	public void testPiecesNotConnectedAfterMovement() throws HantoException{
+
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(BLUE, BUTTERFLY, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(RED, BUTTERFLY, new GameCoordinate(0, 1)),
+				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(-1, 0)),
+				new PieceLocationPair(RED, SPARROW, new GameCoordinate(0, 2))
+				
+		};
+		
+		blueFirstGame.initializeBoard(pieces);
+		blueFirstGame.setTurnNumber(3);
+		blueFirstGame.setPlayerMoving(BLUE);
+		blueFirstGame.makeMove(BUTTERFLY, GAME_COORDINATE_ORIGIN, new GameCoordinate(0, -1));
+	}
+	
+
+	@Test
+	public void testGameStillRunningAt19Turns() throws HantoException{
+
+		PieceLocationPair[] pieces = generateTestGameInALine();
+		
+		redFirstGame.initializeBoard(pieces);
+		redFirstGame.setTurnNumber(19);
+		redFirstGame.setPlayerMoving(RED);
+		MoveResult result = redFirstGame.makeMove(SPARROW, new GameCoordinate(0, -5), new GameCoordinate(1, -5));
+		assertEquals(MoveResult.OK, result);
+	}
+	
+	public void testGameDrawAfter20Turns() throws HantoException{
+
+		PieceLocationPair[] pieces = generateTestGameInALine();
+		
+		redFirstGame.initializeBoard(pieces);
+		redFirstGame.setTurnNumber(20);
+		redFirstGame.setPlayerMoving(BLUE);
+		MoveResult result = redFirstGame.makeMove(SPARROW, new GameCoordinate(0, 6), new GameCoordinate(1, 5));
+		assertEquals(MoveResult.DRAW, result);
+	}
+
+	public void testGameButterflySurround() throws HantoException{
+
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(BLUE, BUTTERFLY, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(RED, BUTTERFLY, new GameCoordinate(0, 1)),
+				new PieceLocationPair(RED, SPARROW, new GameCoordinate(-1, 1)),
+				new PieceLocationPair(RED, SPARROW, new GameCoordinate(1, 0)),
+				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(1, -1)),
+				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(0, -1)),
+				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(-1, -1))
+				
+		};
+		
+		redFirstGame.initializeBoard(pieces);
+		redFirstGame.setTurnNumber(10);
+		redFirstGame.setPlayerMoving(BLUE);
+		MoveResult result = redFirstGame.makeMove(SPARROW, new GameCoordinate(-1, -1), new GameCoordinate(-1, 0));
+		assertEquals(MoveResult.RED_WINS, result);
+	}
+	
+	private PieceLocationPair[] generateTestGameInALine() {
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(RED, BUTTERFLY, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
+				new PieceLocationPair(RED, SPARROW, new GameCoordinate(0, -1)),
+				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(0, 2)),
+				new PieceLocationPair(RED, SPARROW, new GameCoordinate(0, -2)),
+				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(0, 3)),
+				new PieceLocationPair(RED, SPARROW, new GameCoordinate(0, -3)),
+				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(0, 4)),
+				new PieceLocationPair(RED, SPARROW, new GameCoordinate(0, -4)),
+				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(0, 5)),
+				new PieceLocationPair(RED, SPARROW, new GameCoordinate(0, -5)),
+				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(0, 6))
+		};
+		return pieces;
+	}
 }

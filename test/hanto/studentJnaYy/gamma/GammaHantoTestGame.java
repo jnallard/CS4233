@@ -3,9 +3,9 @@
  */
 package hanto.studentJnaYy.gamma;
 
+import hanto.common.HantoException;
 import hanto.common.HantoPlayerColor;
 import hanto.studentJnaYy.common.HantoTestBoard;
-
 import common.HantoTestGame;
 
 /**
@@ -17,7 +17,7 @@ public class GammaHantoTestGame extends GammaHantoGame implements HantoTestGame{
 	
 	public GammaHantoTestGame(HantoPlayerColor movesFirst) {
 		super(movesFirst);
-		board = new HantoTestBoard(MaxTurnCount, OptionalButterflyTurns, movesFirst);
+		board = new HantoTestBoard(MAX_TURN_COUNT, OPTIONAL_BUTTERFLY_TURNS, movesFirst);
 	}
 
 	/* (non-Javadoc)
@@ -26,8 +26,14 @@ public class GammaHantoTestGame extends GammaHantoGame implements HantoTestGame{
 	@Override
 	public void initializeBoard(PieceLocationPair[] initialPieces) {
 		for(PieceLocationPair piece : initialPieces){
-			getBoardAsTestBoard().forcePiecePlacement(piece.location, 
-					pieceFactory.makeGamePiece(piece.pieceType, piece.player));
+			try{
+				getBoardAsTestBoard().forcePiecePlacement(piece.location, 
+				pieceFactory.makeGamePiece(piece.pieceType, piece.player));
+				pieceCounter.utilizePiece(piece.pieceType, piece.player);
+			}
+			catch (HantoException e){
+				System.out.println(e.getMessage());
+			}
 		}
 
 	}

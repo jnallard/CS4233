@@ -42,7 +42,6 @@ public class PieceAvailabilityCounter {
 	 * Checks to see if there are still pieces available (count > 0) for the given type and color
 	 * @param pieceType - the type to check for 
 	 * @param color - the player to check for
-	 * @return true if there is at least one piece left
 	 * @throws HantoException 
 	 */
 	public void checkPieceAvailability(HantoPieceType pieceType, HantoPlayerColor color) throws HantoException {

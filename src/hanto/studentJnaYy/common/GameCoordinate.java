@@ -102,6 +102,21 @@ public class GameCoordinate implements HantoCoordinate {
 	}
 	
 	/**
+	 * Returns a list of coordinate adjacent to both coordinates
+	 * @param otherCoord the coordinate to compare this coordinate with
+	 * @return the list of common adjacent coordinates
+	 */
+	public List<GameCoordinate> getCommonAdjacentCoordinates(GameCoordinate otherCoord){
+		List<GameCoordinate> commonNeighbors = new ArrayList<GameCoordinate>();
+		for(GameCoordinate coord : getAdjacentCoordinates()){
+			if(otherCoord.getAdjacentCoordinates().contains(coord)){
+				commonNeighbors.add(coord);
+			}
+		}
+		return commonNeighbors;
+	}
+	
+	/**
 	 * Overrides the equals method, so that the only thing used to 
 	 * determine if coordinates are equal are the x and y coordinates.
 	 */

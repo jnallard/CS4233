@@ -25,13 +25,13 @@ import hanto.studentJnaYy.common.BaseHantoGame;
  */
 public class GammaHantoGame extends BaseHantoGame
 {
-	protected final static int MaxTurnCount = 20;
+	protected final static int MAX_TURN_COUNT = 20;
 	
 	// Moves where the butterfly doesn't have to be placed on the board.
-	protected final static int OptionalButterflyTurns = 3;
+	protected final static int OPTIONAL_BUTTERFLY_TURNS = 3;
 	
-	private final int MaxButterflyCount = 1;
-	private final int MaxSparrowCount = 5;
+	private final static int MAX_BUTTERFLY_COUNT = 1;
+	private final static int MAX_SPARROW_COUNT = 5;
 	
 	
 	/**
@@ -39,7 +39,7 @@ public class GammaHantoGame extends BaseHantoGame
 	 * @param movesFirst the color of the first piece to be played.
 	 */
 	public GammaHantoGame(HantoPlayerColor movesFirst){
-		super(movesFirst, MaxTurnCount, OptionalButterflyTurns);
+		super(movesFirst, MAX_TURN_COUNT, OPTIONAL_BUTTERFLY_TURNS);
 	}
 
 	/**
@@ -49,11 +49,11 @@ public class GammaHantoGame extends BaseHantoGame
 	 * @return true if the move can be done
 	 * @throws HantoException 
 	 */
-	protected void checkMoveValidity(HantoPieceType pieceType, HantoCoordinate fromCoordinate, HantoCoordinate toCoordinate) throws HantoException {
+	protected void checkMoveValidityPrior(HantoPieceType pieceType, HantoCoordinate fromCoordinate, HantoCoordinate toCoordinate) throws HantoException {
 		if(isFromOffTheBoard(fromCoordinate)){
 			board.checkPieceAddedNextToOwnColorRule(toCoordinate, currentColor, 1);
 		}
-		super.checkMoveValidity(pieceType, fromCoordinate, toCoordinate);
+		super.checkMoveValidityPrior(pieceType, fromCoordinate, toCoordinate);
 	}
 
 	
@@ -61,7 +61,7 @@ public class GammaHantoGame extends BaseHantoGame
 	 * Initializes the amount of pieces that each player can place.
 	 */
 	protected void initializePieceCounts(){
-		pieceCounter.initializePieceCount(HantoPieceType.BUTTERFLY, MaxButterflyCount);
-		pieceCounter.initializePieceCount(HantoPieceType.SPARROW, MaxSparrowCount);
+		pieceCounter.initializePieceCount(HantoPieceType.BUTTERFLY, MAX_BUTTERFLY_COUNT);
+		pieceCounter.initializePieceCount(HantoPieceType.SPARROW, MAX_SPARROW_COUNT);
 	}
 }

@@ -41,7 +41,7 @@ public class TestHantoBoard {
 	private static final MoveResult RED_WINS = MoveResult.RED_WINS;
 
 	
-	private static final PieceFactory factory = PieceFactory.getInstance();
+	private static final PieceFactory FACTORY = PieceFactory.getInstance();
 	private static HantoPiece blueButterfly;
 	private static HantoPiece redButterfly;
 	private static HantoPiece redSparrow;
@@ -53,10 +53,10 @@ public class TestHantoBoard {
 	@Before
 	public void setUp() {
 		board = new HantoBoard(4, 1, BLUE);
-		blueButterfly = factory.makeGamePiece(BUTTERFLY, BLUE);
-		redButterfly = factory.makeGamePiece(BUTTERFLY, RED);
-		redSparrow = factory.makeGamePiece(SPARROW, RED);
-		blueSparrow = factory.makeGamePiece(SPARROW, BLUE);
+		blueButterfly = FACTORY.makeGamePiece(BUTTERFLY, BLUE);
+		redButterfly = FACTORY.makeGamePiece(BUTTERFLY, RED);
+		redSparrow = FACTORY.makeGamePiece(SPARROW, RED);
+		blueSparrow = FACTORY.makeGamePiece(SPARROW, BLUE);
 		previousLinearCoord = GAME_COORDINATE_ORIGIN;
 	}
 
@@ -79,15 +79,16 @@ public class TestHantoBoard {
 	
 	@Test
 	public void testPlaceSecondPieceOffOrigin() throws HantoException{
-		board.addPiece(GAME_COORDINATE_ORIGIN, factory.makeGamePiece(BUTTERFLY, BLUE));
+		board.addPiece(GAME_COORDINATE_ORIGIN, FACTORY.makeGamePiece(BUTTERFLY, BLUE));
 		board.checkMoveValidity(new GameCoordinate(0, 1), BUTTERFLY, RED);
 		assertTrue(true);
 	}
 	
 	@Test(expected=HantoException.class)
 	public void testPlaceSecondPieceOffOriginFail() throws HantoException{
-		board.addPiece(GAME_COORDINATE_ORIGIN, factory.makeGamePiece(BUTTERFLY, BLUE));
-		board.checkMoveValidity(new GameCoordinate(3, 1), BUTTERFLY, RED);
+		board.addPiece(GAME_COORDINATE_ORIGIN, FACTORY.makeGamePiece(BUTTERFLY, BLUE));
+		board.addPiece(new GameCoordinate(3, 1),  FACTORY.makeGamePiece(BUTTERFLY, RED));
+		board.checkPieceConnectivity();
 	}
 	
 	@Test
