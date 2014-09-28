@@ -8,7 +8,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
 
-package hanto.studentJnaYy.gamma;
+package hanto.studentJnaYy.delta;
 
 import hanto.common.HantoCoordinate;
 import hanto.common.HantoException;
@@ -23,23 +23,41 @@ import hanto.studentJnaYy.common.BaseHantoGame;
  * 
  * @author Joshua and Yan
  */
-public class GammaHantoGame extends BaseHantoGame
+public class DeltaHantoGame extends BaseHantoGame
 {
-	protected final static int MAX_TURN_COUNT = 20;
+	protected final static int MAX_TURN_COUNT = Integer.MAX_VALUE;
 	
 	// Moves where the butterfly doesn't have to be placed on the board.
 	protected final static int OPTIONAL_BUTTERFLY_TURNS = 3;
 	
 	private final static int MAX_BUTTERFLY_COUNT = 1;
-	private final static int MAX_SPARROW_COUNT = 5;
+	private final static int MAX_SPARROW_COUNT = 4;
+	private final static int MAX_CRAB_COUNT = 4;
 	
 	
 	/**
 	 * Creates a BetaHanto Game instance
 	 * @param movesFirst the color of the first piece to be played.
 	 */
-	public GammaHantoGame(HantoPlayerColor movesFirst){
+	public DeltaHantoGame(HantoPlayerColor movesFirst){
 		super(movesFirst, MAX_TURN_COUNT, OPTIONAL_BUTTERFLY_TURNS);
+	}
+
+	@Override
+	protected boolean checkSpecialConditions(HantoPieceType pieceType, HantoCoordinate from, HantoCoordinate to) {
+		return !isResigned(pieceType, from, to);
+	}
+	
+	private boolean isResigned(HantoPieceType pieceType, HantoCoordinate from,
+			HantoCoordinate to) {
+		boolean isPieceNull = pieceType == null;
+		boolean isFromNull = from == null;
+		boolean isToNull = to == null;
+		boolean isResigning = isPieceNull && isFromNull && isToNull;
+		if(isResigning){
+			board.setResigning(currentColor);
+		}
+		return isResigning;
 	}
 
 	/**
@@ -64,5 +82,8 @@ public class GammaHantoGame extends BaseHantoGame
 	protected void initializePieceCounts(){
 		pieceCounter.initializePieceCount(HantoPieceType.BUTTERFLY, MAX_BUTTERFLY_COUNT);
 		pieceCounter.initializePieceCount(HantoPieceType.SPARROW, MAX_SPARROW_COUNT);
+		pieceCounter.initializePieceCount(HantoPieceType.CRAB, MAX_CRAB_COUNT);
 	}
+	
+	
 }

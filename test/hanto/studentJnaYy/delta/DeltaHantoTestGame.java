@@ -1,7 +1,7 @@
 /**
  * 
  */
-package hanto.studentJnaYy.gamma;
+package hanto.studentJnaYy.delta;
 
 import hanto.common.HantoException;
 import hanto.common.HantoPlayerColor;
@@ -12,10 +12,10 @@ import common.HantoTestGame;
  * @author Joshua
  *
  */
-public class GammaHantoTestGame extends GammaHantoGame implements HantoTestGame{
+public class DeltaHantoTestGame extends DeltaHantoGame implements HantoTestGame{
 
 	
-	public GammaHantoTestGame(HantoPlayerColor movesFirst) {
+	public DeltaHantoTestGame(HantoPlayerColor movesFirst) {
 		super(movesFirst);
 		board = new HantoTestBoard(MAX_TURN_COUNT, OPTIONAL_BUTTERFLY_TURNS, movesFirst, null);
 	}

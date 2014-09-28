@@ -11,6 +11,7 @@
 package common;
 
 import hanto.common.*;
+import hanto.studentJnaYy.delta.DeltaHantoTestGame;
 import hanto.studentJnaYy.gamma.GammaHantoTestGame;
 
 /**
@@ -43,7 +44,7 @@ public class HantoTestGameFactory
 	 * @param gameId the version desired.
 	 * @return the game instance
 	 */
-	public HantoTestGame makeTestHantoGame(HantoGameID gameId)
+	public HantoTestGame makeHantoTestGame(HantoGameID gameId)
 	{
 		return makeHantoTestGame(gameId, HantoPlayerColor.BLUE);
 	}
@@ -59,6 +60,9 @@ public class HantoTestGameFactory
 		switch (gameId) {
 			case GAMMA_HANTO:
 				game = new GammaHantoTestGame(movesFirst);
+				break;
+			case DELTA_HANTO:
+				game = new DeltaHantoTestGame(movesFirst);
 				break;
 		}
 		return game;

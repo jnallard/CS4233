@@ -35,7 +35,7 @@ public abstract class BaseHantoGame implements HantoGame {
 	 */
 	protected BaseHantoGame(HantoPlayerColor movesFirst, int maxMoveCount, int optionalButterflyMoves) {
 		currentColor = movesFirst;
-		board = new HantoBoard(maxMoveCount, optionalButterflyMoves, movesFirst);
+		board = new HantoBoard(maxMoveCount, optionalButterflyMoves, movesFirst, null);
 		initializePieceCounts();
 	}
 	
@@ -62,15 +62,31 @@ public abstract class BaseHantoGame implements HantoGame {
 	public MoveResult makeMove(HantoPieceType pieceType, HantoCoordinate from,
 			HantoCoordinate to) throws HantoException {
 		
-		checkMoveValidityPrior(pieceType, from, to);
-		
-		finalizeMove(pieceType, from, to);
-
-		checkMoveValidityAfter();
+		if(checkSpecialConditions(pieceType, from, to)){
+			checkMoveValidityPrior(pieceType, from, to);
+			
+			finalizeMove(pieceType, from, to);
+	
+			checkMoveValidityAfter();
+		}
 		
 		return board.getGameStatus();
 	}
 	
+
+	/**
+	 * This function is used to dictate any special rules (such as resign) that would 
+	 * modify the use of the template.
+	 * @param pieceType the piece that was played
+	 * @param from the coordinate to move the piece from
+	 * @param to the location to place the piece
+	 * @return true if not overridden, otherwise it will be based upon the special rules
+	 */
+	protected boolean checkSpecialConditions(HantoPieceType pieceType,
+			HantoCoordinate from, HantoCoordinate to) {
+		return true;
+	}
+
 
 	/**
 	 * Checks the state of the game after a move for any exceptions.

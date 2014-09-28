@@ -52,7 +52,7 @@ public class TestHantoBoard {
 	
 	@Before
 	public void setUp() {
-		board = new HantoBoard(4, 1, BLUE);
+		board = new HantoBoard(4, 1, BLUE, null);
 		blueButterfly = FACTORY.makeGamePiece(BUTTERFLY, BLUE);
 		redButterfly = FACTORY.makeGamePiece(BUTTERFLY, RED);
 		redSparrow = FACTORY.makeGamePiece(SPARROW, RED);

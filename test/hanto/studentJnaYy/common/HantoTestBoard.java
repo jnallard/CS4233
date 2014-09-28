@@ -7,6 +7,7 @@ import hanto.common.HantoCoordinate;
 import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
+import hanto.studentJnaYy.common.moveControllers.MoveHandler;
 
 /**
  * @author Joshua
@@ -21,8 +22,8 @@ public class HantoTestBoard extends HantoBoard {
 	 * @param movesFirst the player color for who moves first
 	 */
 	public HantoTestBoard(int maxTurnCount, int butterflyOptionalTurns,
-			HantoPlayerColor movesFirst) {
-		super(maxTurnCount, butterflyOptionalTurns, movesFirst);
+			HantoPlayerColor movesFirst, MoveHandler moveController) {
+		super(maxTurnCount, butterflyOptionalTurns, movesFirst, moveController);
 	}
 	
 	/**

@@ -14,6 +14,7 @@ import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.common.MoveResult;
+import hanto.studentJnaYy.common.moveControllers.MoveHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +39,8 @@ public class HantoBoard {
 	private int butterflyOptionalTurns;
 	private final int MaxNumNeighbors = 6;
 	private HantoPlayerColor movesFirst;
+	private MoveResult previousGameStatus = MoveResult.OK;
+	private MoveHandler moveController;
 
 	/**
 	 * Creates the board
@@ -45,10 +48,11 @@ public class HantoBoard {
 	 * @param butterflyOptionalTurns the number of moves where a butterfly isn't forced to be placed.
 	 * @param movesFirst The player that will move first
 	 */
-	public HantoBoard(int maxTurnCount, int butterflyOptionalTurns, HantoPlayerColor movesFirst){
+	public HantoBoard(int maxTurnCount, int butterflyOptionalTurns, HantoPlayerColor movesFirst, MoveHandler moveController){
 		this.maxTurnCount = maxTurnCount;
 		this.butterflyOptionalTurns = butterflyOptionalTurns;
 		this.movesFirst = movesFirst;
+		this.moveController = moveController;
 	}
 	
 	/**
@@ -160,11 +164,14 @@ public class HantoBoard {
 	 * @return A move result dictating the result of the game, thus far.
 	 */
 	public MoveResult getGameStatus() {
-		MoveResult gameResult = hasAPlayerWon();
-		
-		if(areTurnsOver() && gameResult == MoveResult.OK){
-			gameResult = MoveResult.DRAW;
-		} 
+		MoveResult gameResult = previousGameStatus;
+		if(previousGameStatus == MoveResult.OK){
+			gameResult = hasAPlayerWon();
+			
+			if(areTurnsOver() && gameResult == MoveResult.OK){
+				gameResult = MoveResult.DRAW;
+			} 
+		}
 		
 		return gameResult;
 	}
@@ -392,6 +399,17 @@ public class HantoBoard {
 			HantoCoordinate toCoordinate) throws HantoException {
 		GameCoordinate from = new GameCoordinate(fromCoordinate);
 		GameCoordinate to = new GameCoordinate(toCoordinate);
+		//moveController.makeMove(from, to, board);
+		checkWalking(from, to);
+	}
+
+	/**
+	 * @param from
+	 * @param to
+	 * @throws HantoException
+	 */
+	private void checkWalking(GameCoordinate from, GameCoordinate to)
+			throws HantoException {
 		if(!from.isAdjacent(to)){
 			throw new HantoException("The piece was walking more than one hex.");
 		}
@@ -405,6 +423,15 @@ public class HantoBoard {
 		if(arePiecesInNeigboringCoordinates){
 			throw new HantoException("The piece cannot walk, because slding is prohibited.");
 		}
+	}
+
+	/**
+	 * Sets the current player as the resigning player (as in, the other player wins)
+	 * @param currentColor the player who is resigning
+	 */
+	public void setResigning(HantoPlayerColor currentColor) {
+		MoveResult winning = currentColor == HantoPlayerColor.RED ? MoveResult.BLUE_WINS : MoveResult.RED_WINS;
+		previousGameStatus = winning;
 	}
 	
 }

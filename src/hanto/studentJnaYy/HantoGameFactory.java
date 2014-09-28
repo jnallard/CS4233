@@ -13,6 +13,8 @@ package hanto.studentJnaYy;
 import hanto.common.*;
 import hanto.studentJnaYy.alpha.AlphaHantoGame;
 import hanto.studentJnaYy.beta.BetaHantoGame;
+import hanto.studentJnaYy.delta.DeltaHantoGame;
+import hanto.studentJnaYy.gamma.GammaHantoGame;
 
 /**
  * This is a singleton class that provides a factory to create an instance of any version
@@ -66,6 +68,12 @@ public class HantoGameFactory
 				break;
 			case BETA_HANTO: 
 				game = new BetaHantoGame(movesFirst);
+				break;
+			case GAMMA_HANTO:
+				game = new GammaHantoGame(movesFirst);
+				break;
+			case DELTA_HANTO:
+				game = new DeltaHantoGame(movesFirst);
 				break;
 			default: 
 				game = null;

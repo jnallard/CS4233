@@ -50,6 +50,9 @@ public class PieceFactory {
 			case SPARROW:
 				piece = new SparrowPiece(color);
 				break;
+			case CRAB:
+				piece = new CrabPiece(color);
+				break;
 			default:
 				piece = null;
 				break;
