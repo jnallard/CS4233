@@ -63,7 +63,7 @@ public class BetaHantoGame extends BaseHantoGame
 	/**
 	 * Initializes the amount of pieces that each player can place.
 	 */
-	protected void initializePieceCounts(){
+	protected void initializePieceSet(){
 		pieceCounter.initializePieceCount(HantoPieceType.BUTTERFLY, MAX_BUTTERFLY_COUNT);
 		pieceCounter.initializePieceCount(HantoPieceType.SPARROW, MAX_SPARROW_COUNT);
 	}

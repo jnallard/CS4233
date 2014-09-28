@@ -10,6 +10,8 @@ import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.common.MoveResult;
+import hanto.studentJnaYy.common.moveControllers.MoveHandler;
+import hanto.studentJnaYy.common.pieces.PieceFactory;
 
 /**
  * @author Joshua
@@ -24,6 +26,7 @@ public abstract class BaseHantoGame implements HantoGame {
 	protected String exceptionMessage;
 	
 	protected HantoBoard board;
+	protected MoveHandler moveController = new MoveHandler();
 	
 	protected static final HantoCoordinate OFF_BOARD_LOCATION = null;
 	
@@ -35,8 +38,8 @@ public abstract class BaseHantoGame implements HantoGame {
 	 */
 	protected BaseHantoGame(HantoPlayerColor movesFirst, int maxMoveCount, int optionalButterflyMoves) {
 		currentColor = movesFirst;
-		board = new HantoBoard(maxMoveCount, optionalButterflyMoves, movesFirst, null);
-		initializePieceCounts();
+		board = new HantoBoard(maxMoveCount, optionalButterflyMoves, movesFirst, moveController);
+		initializePieceSet();
 	}
 	
 	
@@ -111,7 +114,7 @@ public abstract class BaseHantoGame implements HantoGame {
 		}
 		else{
 			board.isPieceHere(fromCoordinate, pieceType, currentColor);
-			board.checkMovement(fromCoordinate, toCoordinate);
+			board.checkMovement(fromCoordinate, toCoordinate, pieceType);
 		}	
 		
 		board.checkMoveValidity(toCoordinate, pieceType, currentColor);
@@ -186,9 +189,9 @@ public abstract class BaseHantoGame implements HantoGame {
 	}
 	
 	/**
-	 * Is used to set the piece counts for each game.
+	 * Is used to set the piece counts and movements for each game.
 	 * It is abstract, assuming that each game has a different piece set.
 	 */
-	protected abstract void initializePieceCounts();
+	protected abstract void initializePieceSet();
 	
 }

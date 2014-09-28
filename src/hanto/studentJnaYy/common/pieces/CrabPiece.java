@@ -7,7 +7,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package hanto.studentJnaYy.common;
+package hanto.studentJnaYy.common.pieces;
 
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;

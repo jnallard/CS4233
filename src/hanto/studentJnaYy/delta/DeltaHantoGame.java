@@ -15,6 +15,7 @@ import hanto.common.HantoException;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.studentJnaYy.common.BaseHantoGame;
+import hanto.studentJnaYy.common.moveControllers.MovementType;
 
 
 /**
@@ -79,10 +80,14 @@ public class DeltaHantoGame extends BaseHantoGame
 	/**
 	 * Initializes the amount of pieces that each player can place.
 	 */
-	protected void initializePieceCounts(){
+	protected void initializePieceSet(){
 		pieceCounter.initializePieceCount(HantoPieceType.BUTTERFLY, MAX_BUTTERFLY_COUNT);
 		pieceCounter.initializePieceCount(HantoPieceType.SPARROW, MAX_SPARROW_COUNT);
 		pieceCounter.initializePieceCount(HantoPieceType.CRAB, MAX_CRAB_COUNT);
+
+		moveController.setMovementForType(HantoPieceType.BUTTERFLY, MovementType.WALK);
+		moveController.setMovementForType(HantoPieceType.SPARROW, MovementType.FLY);
+		moveController.setMovementForType(HantoPieceType.CRAB, MovementType.WALK);
 	}
 	
 	

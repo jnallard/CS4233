@@ -11,8 +11,8 @@
 package hanto.studentJnaYy.alpha;
 
 import hanto.common.*;
-import hanto.studentJnaYy.common.ButterflyPiece;
 import hanto.studentJnaYy.common.HantoBoard;
+import hanto.studentJnaYy.common.pieces.ButterflyPiece;
 
 
 /**

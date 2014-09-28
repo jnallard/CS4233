@@ -11,6 +11,8 @@ import static org.junit.Assert.assertTrue;
 import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
+import hanto.studentJnaYy.common.pieces.ButterflyPiece;
+import hanto.studentJnaYy.common.pieces.SparrowPiece;
 
 import org.junit.Before;
 import org.junit.Test;

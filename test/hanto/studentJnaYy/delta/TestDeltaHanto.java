@@ -353,7 +353,28 @@ public class TestDeltaHanto {
 		assertEquals(MoveResult.OK, result);
 	}
 	
+	@Test
+	public void testMoveSparrow3() throws HantoException{
 
+		PieceLocationPair[] pieces = generateTestGameInALine();
+		
+		blueFirstGame.initializeBoard(pieces);
+		blueFirstGame.setTurnNumber(7);
+		blueFirstGame.setPlayerMoving(RED);
+		MoveResult result = blueFirstGame.makeMove(SPARROW, new GameCoordinate(0, -5), new GameCoordinate(0, 7));
+		assertEquals(MoveResult.OK, result);
+	}
+	
+	@Test(expected = HantoException.class)
+	public void testMoveSparrow3Disconnected() throws HantoException{
+
+		PieceLocationPair[] pieces = generateTestGameInALine();
+		
+		blueFirstGame.initializeBoard(pieces);
+		blueFirstGame.setTurnNumber(7);
+		blueFirstGame.setPlayerMoving(RED);
+		blueFirstGame.makeMove(SPARROW, new GameCoordinate(0, -5), new GameCoordinate(0, 8));
+	}
 	
 	@Test(expected = HantoException.class)
 	public void testMoveSparrowFromUnknownLocation() throws HantoException{

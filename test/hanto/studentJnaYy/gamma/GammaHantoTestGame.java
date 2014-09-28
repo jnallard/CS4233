@@ -17,7 +17,7 @@ public class GammaHantoTestGame extends GammaHantoGame implements HantoTestGame{
 	
 	public GammaHantoTestGame(HantoPlayerColor movesFirst) {
 		super(movesFirst);
-		board = new HantoTestBoard(MAX_TURN_COUNT, OPTIONAL_BUTTERFLY_TURNS, movesFirst, null);
+		board = new HantoTestBoard(MAX_TURN_COUNT, OPTIONAL_BUTTERFLY_TURNS, movesFirst, moveController);
 	}
 
 	/* (non-Javadoc)

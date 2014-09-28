@@ -7,31 +7,32 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *******************************************************************************/
-package hanto.studentJnaYy.common;
+package hanto.studentJnaYy.common.pieces;
 
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 
 /**
  * @author Joshua and Yan
- * This class is the implementation of Butterfly Hanto Piece.
+ * This class is the implementation of Sparrow Hanto Piece.
  *
  */
-public class ButterflyPiece extends AbsHantoPiece {
+public class SparrowPiece extends AbsHantoPiece {
 	
 	/**
-	 * Creates a ButterFly object, with the given player color.
+	 * Creates a Sparrow object, with the given player color.
 	 * @param pieceColor the color of the piece's player
 	 */
-	public ButterflyPiece(HantoPlayerColor pieceColor){
+	public SparrowPiece(HantoPlayerColor pieceColor){
 		super(pieceColor);
 	}
 	
+	
 	/**
-	 * Returns the type of the piece, i.e. Butterfly
+	 * Returns the type of the piece, i.e. Sparrow
 	 */
 	public HantoPieceType getType() {
-		return HantoPieceType.BUTTERFLY;
+		return HantoPieceType.SPARROW;
 	}
 
 }

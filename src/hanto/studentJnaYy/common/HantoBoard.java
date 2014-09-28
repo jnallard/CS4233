@@ -15,6 +15,7 @@ import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.common.MoveResult;
 import hanto.studentJnaYy.common.moveControllers.MoveHandler;
+import hanto.studentJnaYy.common.moveControllers.Walking;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -395,35 +396,15 @@ public class HantoBoard {
 	 * @param toCoordinate the coordinate the piece is moving to
 	 * @throws HantoException
 	 */
-	public void checkMovement(HantoCoordinate fromCoordinate,
-			HantoCoordinate toCoordinate) throws HantoException {
+	public void checkMovement(HantoCoordinate fromCoordinate,HantoCoordinate toCoordinate, 
+			HantoPieceType type) throws HantoException {
+		
 		GameCoordinate from = new GameCoordinate(fromCoordinate);
 		GameCoordinate to = new GameCoordinate(toCoordinate);
-		//moveController.makeMove(from, to, board);
-		checkWalking(from, to);
+		moveController.checkMovement(to, from, board, type);
 	}
 
-	/**
-	 * @param from
-	 * @param to
-	 * @throws HantoException
-	 */
-	private void checkWalking(GameCoordinate from, GameCoordinate to)
-			throws HantoException {
-		if(!from.isAdjacent(to)){
-			throw new HantoException("The piece was walking more than one hex.");
-		}
-		
-		boolean arePiecesInNeigboringCoordinates = true;
-		for(GameCoordinate commonNeighbor : from.getCommonAdjacentCoordinates(to)){
-			if(!board.containsKey(commonNeighbor)){
-				arePiecesInNeigboringCoordinates = false;
-			}
-		}
-		if(arePiecesInNeigboringCoordinates){
-			throw new HantoException("The piece cannot walk, because slding is prohibited.");
-		}
-	}
+
 
 	/**
 	 * Sets the current player as the resigning player (as in, the other player wins)
