@@ -16,24 +16,23 @@ import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.studentJnaYy.common.BaseHantoGame;
 import hanto.studentJnaYy.common.moveControllers.MovementType;
-import hanto.studentJnaYy.common.moveControllers.Walking;
 
 
 /**
- * This is the implementation of the BetaHantoGame, where each player 
- * can only place 1 butterfly and 5 sparrows.
+ * This is the implementation of the GammaHantoGame, where each player 
+ * can place 1 butterfly and 5 sparrows, and also move them.
  * 
  * @author Joshua and Yan
  */
 public class GammaHantoGame extends BaseHantoGame
 {
-	protected final static int MAX_TURN_COUNT = 20;
+	protected static final int MAX_TURN_COUNT = 20;
 	
 	// Moves where the butterfly doesn't have to be placed on the board.
-	protected final static int OPTIONAL_BUTTERFLY_TURNS = 3;
+	protected static final int OPTIONAL_BUTTERFLY_TURNS = 3;
 	
-	private final static int MAX_BUTTERFLY_COUNT = 1;
-	private final static int MAX_SPARROW_COUNT = 5;
+	private static final int MAX_BUTTERFLY_COUNT = 1;
+	private static final int MAX_SPARROW_COUNT = 5;
 	
 	
 	/**
@@ -52,7 +51,8 @@ public class GammaHantoGame extends BaseHantoGame
 	 * @throws HantoException 
 	 */
 	@Override
-	protected void checkMoveValidityPrior(HantoPieceType pieceType, HantoCoordinate fromCoordinate, HantoCoordinate toCoordinate) throws HantoException {
+	protected void checkMoveValidityPrior(HantoPieceType pieceType, HantoCoordinate fromCoordinate, 
+			HantoCoordinate toCoordinate) throws HantoException {
 		if(isFromOffTheBoard(fromCoordinate)){
 			board.checkPieceAddedNextToOwnColorRule(toCoordinate, currentColor, 1);
 		}

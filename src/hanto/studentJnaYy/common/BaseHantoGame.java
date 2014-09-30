@@ -14,7 +14,10 @@ import hanto.studentJnaYy.common.moveControllers.MoveHandler;
 import hanto.studentJnaYy.common.pieces.PieceFactory;
 
 /**
- * @author Joshua
+ * This class is the base class for all hanto games Beta+
+ * It initializes the objects for each game, and uses the template method
+ * to make moves (and determine validity)
+ * @author Joshua and Yan
  *
  */
 public abstract class BaseHantoGame implements HantoGame {
@@ -36,7 +39,8 @@ public abstract class BaseHantoGame implements HantoGame {
 	 * @param maxMoveCount the maximum amount of turns in the game
 	 * @param optionalButterflyMoves the number of moves where placing a butterfly is optional
 	 */
-	protected BaseHantoGame(HantoPlayerColor movesFirst, int maxMoveCount, int optionalButterflyMoves) {
+	protected BaseHantoGame(HantoPlayerColor movesFirst, int maxMoveCount, 
+			int optionalButterflyMoves) {
 		currentColor = movesFirst;
 		board = new HantoBoard(maxMoveCount, optionalButterflyMoves, movesFirst, moveController);
 		initializePieceSet();
@@ -113,7 +117,7 @@ public abstract class BaseHantoGame implements HantoGame {
 			pieceCounter.checkPieceAvailability(pieceType, currentColor);
 		}
 		else{
-			board.isPieceHere(fromCoordinate, pieceType, currentColor);
+			board.checkPieceHere(fromCoordinate, pieceType, currentColor);
 			board.checkMovement(fromCoordinate, toCoordinate, pieceType);
 		}	
 		
@@ -128,8 +132,8 @@ public abstract class BaseHantoGame implements HantoGame {
 	 * @param fromCoordinate the coordinate the piece is moving from (null if from off the board)
 	 * @throws HantoException
 	 */
-	protected void finalizeMove(HantoPieceType type, HantoCoordinate fromCoordinate, HantoCoordinate toCoordinate) 
-			throws HantoException {
+	protected void finalizeMove(HantoPieceType type, HantoCoordinate fromCoordinate, 
+			HantoCoordinate toCoordinate) throws HantoException {
 		
 		if(isFromOffTheBoard(fromCoordinate)){
 

@@ -9,11 +9,11 @@ x Make sure Red goes first for a red game
 x Can place sparrow first
 x Can place butterfly first
 x Can place crab first
-Sparrow can fly
+x Sparrow can fly
 x Butterfly can walk
 x Crab can walk
 x Walking does not let a piece move if it's blocked in that direction
-Flying will let a piece move, so long as the pieces are still continuous after
+x Flying will let a piece move, so long as the pieces are still continuous after
 x Everything needs to be connected after a move
 x Game can place a piece around the center piece
 x Game can place a piece not around the centerpiece, but still connected with piece of same color

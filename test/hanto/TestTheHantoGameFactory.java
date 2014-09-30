@@ -82,5 +82,11 @@ public class TestTheHantoGameFactory {
 		HantoGame game = factory.makeHantoGame(HantoGameID.DELTA_HANTO, HantoPlayerColor.RED);
 		assertNotNull(game);
 	}
+	
+	@Test
+	public void testMakeGameNull() {
+		HantoGame game = factory.makeHantoGame(HantoGameID.ZETA_HANTO, HantoPlayerColor.RED);
+		assertNull(game);
+	}
 
 }

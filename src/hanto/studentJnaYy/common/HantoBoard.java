@@ -15,7 +15,6 @@ import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.common.MoveResult;
 import hanto.studentJnaYy.common.moveControllers.MoveHandler;
-import hanto.studentJnaYy.common.moveControllers.Walking;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,8 +47,10 @@ public class HantoBoard {
 	 * @param maxTurnCount the number of moves (turns * 2) that the board may handle.
 	 * @param butterflyOptionalTurns the number of moves where a butterfly isn't forced to be placed.
 	 * @param movesFirst The player that will move first
+	 * @param moveController The object responsible for checking to see if a movement is valid
 	 */
-	public HantoBoard(int maxTurnCount, int butterflyOptionalTurns, HantoPlayerColor movesFirst, MoveHandler moveController){
+	public HantoBoard(int maxTurnCount, int butterflyOptionalTurns, HantoPlayerColor movesFirst, 
+			MoveHandler moveController){
 		this.maxTurnCount = maxTurnCount;
 		this.butterflyOptionalTurns = butterflyOptionalTurns;
 		this.movesFirst = movesFirst;
@@ -65,7 +66,8 @@ public class HantoBoard {
 	 * @param color the piece color to validate
 	 * @throws HantoException 
 	 */
-	public void checkMoveValidity(HantoCoordinate to, HantoPieceType type, HantoPlayerColor color) throws HantoException {
+	public void checkMoveValidity(HantoCoordinate to, HantoPieceType type, 
+			HantoPlayerColor color) throws HantoException {
 		GameCoordinate ourToCoodinate = new GameCoordinate(to);
 		
 		exceptionMessage = "";
@@ -166,14 +168,14 @@ public class HantoBoard {
 	 */
 	public MoveResult getGameStatus() {
 		MoveResult gameResult = previousGameStatus;
-		if(previousGameStatus == MoveResult.OK){
+		if(gameResult == MoveResult.OK){
 			gameResult = hasAPlayerWon();
 			
 			if(areTurnsOver() && gameResult == MoveResult.OK){
 				gameResult = MoveResult.DRAW;
 			} 
 		}
-		
+		previousGameStatus = gameResult;
 		return gameResult;
 	}
 
@@ -300,7 +302,7 @@ public class HantoBoard {
 	 * @param currentColor the piece color to check for
 	 * @throws HantoException 
 	 */
-	public void isPieceHere(HantoCoordinate fromCoordinate,
+	public void checkPieceHere(HantoCoordinate fromCoordinate,
 			HantoPieceType pieceType, HantoPlayerColor currentColor) throws HantoException {
 		
 		HantoPiece piece = getPieceAt(fromCoordinate);
@@ -323,7 +325,8 @@ public class HantoBoard {
 	 * @param ruleExceptionTurns the number of turns (starting from 1) where this rule does not apply
 	 * @throws HantoException
 	 */
-	public void checkPieceAddedNextToOwnColorRule(HantoCoordinate coord, HantoPlayerColor currentColor, int ruleExceptionTurns) throws HantoException {
+	public void checkPieceAddedNextToOwnColorRule(HantoCoordinate coord, 
+			HantoPlayerColor currentColor, int ruleExceptionTurns) throws HantoException {
 		GameCoordinate toCoord = new GameCoordinate(coord);
 		List<GameCoordinate> neighbors = toCoord.getAdjacentCoordinates();
 		boolean isNextToOnlyThisColor = true;
@@ -349,7 +352,7 @@ public class HantoBoard {
 		List<GameCoordinate> foundCoords = new ArrayList<GameCoordinate>();
 		GameCoordinate startingCoord = (GameCoordinate) board.keySet().toArray()[0];
 		
-		getAllConnectedCoords(startingCoord, foundCoords);
+		findAllConnectedCoords(startingCoord, foundCoords);
 		
 		if(foundCoords.size() != board.size()){
 			throw new HantoException("The board is no longer contiguous.");
@@ -361,7 +364,7 @@ public class HantoBoard {
 	 * @param startingCoord the location to start from
 	 * @param foundCoords the list to store the connected coordinates in
 	 */
-	private void getAllConnectedCoords(GameCoordinate startingCoord,
+	private void findAllConnectedCoords(GameCoordinate startingCoord,
 			List<GameCoordinate> foundCoords) {
 		foundCoords.add(startingCoord);
 		
@@ -376,7 +379,7 @@ public class HantoBoard {
 		
 		for(GameCoordinate neighbor : foundNeighbors){
 			if(!foundCoords.contains(neighbor)){
-				getAllConnectedCoords(neighbor, foundCoords);
+				findAllConnectedCoords(neighbor, foundCoords);
 			}
 		}
 		
@@ -394,9 +397,10 @@ public class HantoBoard {
 	 * Checks the movement rules for a piece being moved on the board
 	 * @param fromCoordinate the coordinate the piece is moving from
 	 * @param toCoordinate the coordinate the piece is moving to
+	 * @param type the hanto piece type used to get the movement type for the piece
 	 * @throws HantoException
 	 */
-	public void checkMovement(HantoCoordinate fromCoordinate,HantoCoordinate toCoordinate, 
+	public void checkMovement(HantoCoordinate fromCoordinate, HantoCoordinate toCoordinate, 
 			HantoPieceType type) throws HantoException {
 		
 		GameCoordinate from = new GameCoordinate(fromCoordinate);
@@ -411,8 +415,19 @@ public class HantoBoard {
 	 * @param currentColor the player who is resigning
 	 */
 	public void setResigning(HantoPlayerColor currentColor) {
-		MoveResult winning = currentColor == HantoPlayerColor.RED ? MoveResult.BLUE_WINS : MoveResult.RED_WINS;
+		MoveResult winning = currentColor == HantoPlayerColor.RED ? 
+				MoveResult.BLUE_WINS : MoveResult.RED_WINS;
 		previousGameStatus = winning;
+	}
+
+	/**
+	 * Clears the board of all pieces
+	 */
+	public void clear() {
+		board.clear();
+		redButterflyCoord = null;
+		blueButterflyCoord = null;
+		turnCount = 0;
 	}
 	
 }

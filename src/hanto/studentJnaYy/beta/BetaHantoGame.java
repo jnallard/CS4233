@@ -25,13 +25,13 @@ import hanto.studentJnaYy.common.BaseHantoGame;
  */
 public class BetaHantoGame extends BaseHantoGame
 {
-	private final static int MAX_TURN_COUNT = 6;
+	private static final int MAX_TURN_COUNT = 6;
 	
 	// Moves where the butterfly doesn't have to be placed on the board.
-	private final static int OPTIONAL_BUTTERFLY_TURNS = 3;
+	private static final int OPTIONAL_BUTTERFLY_TURNS = 3;
 	
-	private final static int MAX_BUTTERFLY_COUNT = 1;
-	private final static int MAX_SPARROW_COUNT = 5;
+	private static final int MAX_BUTTERFLY_COUNT = 1;
+	private static final int MAX_SPARROW_COUNT = 5;
 	
 	
 	/**

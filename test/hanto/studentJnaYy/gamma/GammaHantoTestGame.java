@@ -25,6 +25,7 @@ public class GammaHantoTestGame extends GammaHantoGame implements HantoTestGame{
 	 */
 	@Override
 	public void initializeBoard(PieceLocationPair[] initialPieces) {
+		board.clear();
 		for(PieceLocationPair piece : initialPieces){
 			try{
 				getBoardAsTestBoard().forcePiecePlacement(piece.location, 

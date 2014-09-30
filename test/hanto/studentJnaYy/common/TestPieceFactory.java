@@ -7,8 +7,7 @@
  *******************************************************************************/
 package hanto.studentJnaYy.common;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
@@ -52,4 +51,9 @@ public class TestPieceFactory {
 		assertTrue(doesColorMatch && doesTypeMatch);
 	}
 
+	@Test
+	public void testMakeNull(){
+		HantoPiece piece = factory.makeGamePiece(HantoPieceType.HORSE, HantoPlayerColor.RED);
+		assertNull(piece);
+	}
 }

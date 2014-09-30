@@ -20,8 +20,7 @@ import hanto.studentJnaYy.gamma.GammaHantoGame;
  * This is a singleton class that provides a factory to create an instance of any version
  * of a Hanto game.
  * 
- * @author gpollice
- * @version Feb 5, 2013
+ * @author Joshua and Yan (Started by gpollice)
  */
 public class HantoGameFactory
 {

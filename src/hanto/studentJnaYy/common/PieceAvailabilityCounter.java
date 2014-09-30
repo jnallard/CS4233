@@ -44,7 +44,8 @@ public class PieceAvailabilityCounter {
 	 * @param color - the player to check for
 	 * @throws HantoException 
 	 */
-	public void checkPieceAvailability(HantoPieceType pieceType, HantoPlayerColor color) throws HantoException {
+	public void checkPieceAvailability(HantoPieceType pieceType, HantoPlayerColor color) 
+			throws HantoException {
 		boolean isValid = isValidPiece(pieceType);
 		if(isValid){
 			isValid = isPieceCountNotZero(pieceType, color);

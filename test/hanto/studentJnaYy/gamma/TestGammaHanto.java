@@ -12,6 +12,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import hanto.common.HantoCoordinate;
 import hanto.common.HantoException;
+import hanto.common.HantoGame;
 import hanto.common.HantoGameID;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
@@ -28,17 +29,21 @@ import common.HantoTestGameFactory;
 public class TestGammaHanto {
 	private static final HantoPlayerColor RED = HantoPlayerColor.RED;
 	private static final HantoPlayerColor BLUE = HantoPlayerColor.BLUE;
-	private HantoTestGame redFirstGame;
-	private HantoTestGame blueFirstGame;
+	private HantoTestGame redFirstTestGame;
+	private HantoTestGame blueFirstTestGame;
+	private HantoGame redFirstGame;
+	private HantoGame blueFirstGame;
 	private static final HantoPieceType SPARROW = HantoPieceType.SPARROW;
 	private static final HantoPieceType BUTTERFLY = HantoPieceType.BUTTERFLY;
 	private final GameCoordinate GAME_COORDINATE_ORIGIN = new GameCoordinate(0, 0);
 	
 	@Before
 	public void setUp() throws Exception {
-		redFirstGame = HantoTestGameFactory.getInstance().makeHantoTestGame(HantoGameID.GAMMA_HANTO, 
+		redFirstTestGame = HantoTestGameFactory.getInstance().makeHantoTestGame(HantoGameID.GAMMA_HANTO, 
 				RED);
-		blueFirstGame = HantoTestGameFactory.getInstance().makeHantoTestGame(HantoGameID.GAMMA_HANTO);
+		redFirstGame = redFirstTestGame;
+		blueFirstTestGame = HantoTestGameFactory.getInstance().makeHantoTestGame(HantoGameID.GAMMA_HANTO);
+		blueFirstGame = blueFirstTestGame;
 	}
 
 	@Test
@@ -138,9 +143,9 @@ public class TestGammaHanto {
 				new PieceLocationPair(RED, BUTTERFLY, new GameCoordinate(0, 1)),
 		};
 		
-		blueFirstGame.initializeBoard(pieces);
-		blueFirstGame.setTurnNumber(1);
-		blueFirstGame.setPlayerMoving(BLUE);
+		blueFirstTestGame.initializeBoard(pieces);
+		blueFirstTestGame.setTurnNumber(1);
+		blueFirstTestGame.setPlayerMoving(BLUE);
 		blueFirstGame.makeMove(SPARROW, null, new GameCoordinate(0, 2));
 	}
 	
@@ -152,9 +157,9 @@ public class TestGammaHanto {
 				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
 		};
 		
-		blueFirstGame.initializeBoard(pieces);
-		blueFirstGame.setTurnNumber(2);
-		blueFirstGame.setPlayerMoving(RED);
+		blueFirstTestGame.initializeBoard(pieces);
+		blueFirstTestGame.setTurnNumber(2);
+		blueFirstTestGame.setPlayerMoving(RED);
 		blueFirstGame.makeMove(BUTTERFLY, null, new GameCoordinate(0, 2));
 	}
 	
@@ -190,9 +195,9 @@ public class TestGammaHanto {
 				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(0, 5))
 		};
 		
-		blueFirstGame.initializeBoard(pieces);
-		blueFirstGame.setTurnNumber(4);
-		blueFirstGame.setPlayerMoving(RED);
+		blueFirstTestGame.initializeBoard(pieces);
+		blueFirstTestGame.setTurnNumber(4);
+		blueFirstTestGame.setPlayerMoving(RED);
 		blueFirstGame.makeMove(BUTTERFLY, null, new GameCoordinate(0, 6));
 	}
 	
@@ -204,9 +209,9 @@ public class TestGammaHanto {
 				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
 		};
 		
-		blueFirstGame.initializeBoard(pieces);
-		blueFirstGame.setTurnNumber(2);
-		blueFirstGame.setPlayerMoving(RED);
+		blueFirstTestGame.initializeBoard(pieces);
+		blueFirstTestGame.setTurnNumber(2);
+		blueFirstTestGame.setPlayerMoving(RED);
 		blueFirstGame.makeMove(BUTTERFLY, null, new GameCoordinate(0, -1));
 	}
 	
@@ -215,9 +220,9 @@ public class TestGammaHanto {
 
 		PieceLocationPair[] pieces = generateTestGameInALine();
 		
-		blueFirstGame.initializeBoard(pieces);
-		blueFirstGame.setTurnNumber(4);
-		blueFirstGame.setPlayerMoving(RED);
+		blueFirstTestGame.initializeBoard(pieces);
+		blueFirstTestGame.setTurnNumber(4);
+		blueFirstTestGame.setPlayerMoving(RED);
 		blueFirstGame.makeMove(SPARROW, null, new GameCoordinate(0, -6));
 	}
 	
@@ -231,9 +236,9 @@ public class TestGammaHanto {
 				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
 		};
 		
-		blueFirstGame.initializeBoard(pieces);
-		blueFirstGame.setTurnNumber(2);
-		blueFirstGame.setPlayerMoving(RED);
+		blueFirstTestGame.initializeBoard(pieces);
+		blueFirstTestGame.setTurnNumber(2);
+		blueFirstTestGame.setPlayerMoving(RED);
 		MoveResult result = blueFirstGame.makeMove(BUTTERFLY, 
 				GAME_COORDINATE_ORIGIN, new GameCoordinate(1, 0));
 		assertEquals(MoveResult.OK, result);
@@ -247,9 +252,9 @@ public class TestGammaHanto {
 				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
 		};
 		
-		blueFirstGame.initializeBoard(pieces);
-		blueFirstGame.setTurnNumber(2);
-		blueFirstGame.setPlayerMoving(RED);
+		blueFirstTestGame.initializeBoard(pieces);
+		blueFirstTestGame.setTurnNumber(2);
+		blueFirstTestGame.setPlayerMoving(RED);
 		blueFirstGame.makeMove(BUTTERFLY, GAME_COORDINATE_ORIGIN, new GameCoordinate(1, 1));
 	}
 
@@ -262,9 +267,9 @@ public class TestGammaHanto {
 				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
 		};
 		
-		blueFirstGame.initializeBoard(pieces);
-		blueFirstGame.setTurnNumber(2);
-		blueFirstGame.setPlayerMoving(RED);
+		blueFirstTestGame.initializeBoard(pieces);
+		blueFirstTestGame.setTurnNumber(2);
+		blueFirstTestGame.setPlayerMoving(RED);
 		MoveResult result = blueFirstGame.makeMove(SPARROW, 
 				GAME_COORDINATE_ORIGIN, new GameCoordinate(1, 0));
 		assertEquals(MoveResult.OK, result);
@@ -278,9 +283,9 @@ public class TestGammaHanto {
 				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
 		};
 		
-		blueFirstGame.initializeBoard(pieces);
-		blueFirstGame.setTurnNumber(2);
-		blueFirstGame.setPlayerMoving(RED);
+		blueFirstTestGame.initializeBoard(pieces);
+		blueFirstTestGame.setTurnNumber(2);
+		blueFirstTestGame.setPlayerMoving(RED);
 		blueFirstGame.makeMove(SPARROW, GAME_COORDINATE_ORIGIN, new GameCoordinate(1, 1));
 	}
 	
@@ -294,9 +299,9 @@ public class TestGammaHanto {
 				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
 		};
 		
-		blueFirstGame.initializeBoard(pieces);
-		blueFirstGame.setTurnNumber(2);
-		blueFirstGame.setPlayerMoving(RED);
+		blueFirstTestGame.initializeBoard(pieces);
+		blueFirstTestGame.setTurnNumber(2);
+		blueFirstTestGame.setPlayerMoving(RED);
 		blueFirstGame.makeMove(SPARROW, new GameCoordinate(0, 5), new GameCoordinate(0, 6));
 	}
 	
@@ -308,9 +313,9 @@ public class TestGammaHanto {
 				new PieceLocationPair(BLUE, BUTTERFLY, new GameCoordinate(0, 1)),
 		};
 		
-		blueFirstGame.initializeBoard(pieces);
-		blueFirstGame.setTurnNumber(2);
-		blueFirstGame.setPlayerMoving(RED);
+		blueFirstTestGame.initializeBoard(pieces);
+		blueFirstTestGame.setTurnNumber(2);
+		blueFirstTestGame.setPlayerMoving(RED);
 		blueFirstGame.makeMove(BUTTERFLY, GAME_COORDINATE_ORIGIN, new GameCoordinate(1, 0));
 	}
 	
@@ -325,9 +330,9 @@ public class TestGammaHanto {
 				
 		};
 		
-		blueFirstGame.initializeBoard(pieces);
-		blueFirstGame.setTurnNumber(3);
-		blueFirstGame.setPlayerMoving(BLUE);
+		blueFirstTestGame.initializeBoard(pieces);
+		blueFirstTestGame.setTurnNumber(3);
+		blueFirstTestGame.setPlayerMoving(BLUE);
 		blueFirstGame.makeMove(BUTTERFLY, GAME_COORDINATE_ORIGIN, new GameCoordinate(-1, 1));
 	}
 	
@@ -344,9 +349,9 @@ public class TestGammaHanto {
 				
 		};
 		
-		blueFirstGame.initializeBoard(pieces);
-		blueFirstGame.setTurnNumber(3);
-		blueFirstGame.setPlayerMoving(BLUE);
+		blueFirstTestGame.initializeBoard(pieces);
+		blueFirstTestGame.setTurnNumber(3);
+		blueFirstTestGame.setPlayerMoving(BLUE);
 		blueFirstGame.makeMove(BUTTERFLY, GAME_COORDINATE_ORIGIN, new GameCoordinate(0, -1));
 	}
 	
@@ -356,9 +361,9 @@ public class TestGammaHanto {
 
 		PieceLocationPair[] pieces = generateTestGameInALine();
 		
-		redFirstGame.initializeBoard(pieces);
-		redFirstGame.setTurnNumber(19);
-		redFirstGame.setPlayerMoving(RED);
+		redFirstTestGame.initializeBoard(pieces);
+		redFirstTestGame.setTurnNumber(19);
+		redFirstTestGame.setPlayerMoving(RED);
 		MoveResult result = redFirstGame.makeMove(SPARROW, new GameCoordinate(0, -5), new GameCoordinate(1, -5));
 		assertEquals(MoveResult.OK, result);
 	}
@@ -368,9 +373,9 @@ public class TestGammaHanto {
 
 		PieceLocationPair[] pieces = generateTestGameInALine();
 		
-		redFirstGame.initializeBoard(pieces);
-		redFirstGame.setTurnNumber(20);
-		redFirstGame.setPlayerMoving(BLUE);
+		redFirstTestGame.initializeBoard(pieces);
+		redFirstTestGame.setTurnNumber(20);
+		redFirstTestGame.setPlayerMoving(BLUE);
 		MoveResult result = redFirstGame.makeMove(SPARROW, new GameCoordinate(0, 6), new GameCoordinate(1, 5));
 		assertEquals(MoveResult.DRAW, result);
 	}
@@ -389,9 +394,9 @@ public class TestGammaHanto {
 				
 		};
 		
-		redFirstGame.initializeBoard(pieces);
-		redFirstGame.setTurnNumber(10);
-		redFirstGame.setPlayerMoving(BLUE);
+		redFirstTestGame.initializeBoard(pieces);
+		redFirstTestGame.setTurnNumber(10);
+		redFirstTestGame.setPlayerMoving(BLUE);
 		MoveResult result = redFirstGame.makeMove(SPARROW, new GameCoordinate(-1, -1), new GameCoordinate(-1, 0));
 		assertEquals(MoveResult.RED_WINS, result);
 	}

@@ -19,21 +19,21 @@ import hanto.studentJnaYy.common.moveControllers.MovementType;
 
 
 /**
- * This is the implementation of the BetaHantoGame, where each player 
- * can only place 1 butterfly and 5 sparrows.
+ * This is the implementation of the DeltaHantoGame, where each player 
+ * can only place 1 butterfly, 4 crabs,  4 sparrows, and also move them.
  * 
  * @author Joshua and Yan
  */
 public class DeltaHantoGame extends BaseHantoGame
 {
-	protected final static int MAX_TURN_COUNT = Integer.MAX_VALUE;
+	protected static final int MAX_TURN_COUNT = Integer.MAX_VALUE;
 	
 	// Moves where the butterfly doesn't have to be placed on the board.
-	protected final static int OPTIONAL_BUTTERFLY_TURNS = 3;
+	protected static final int OPTIONAL_BUTTERFLY_TURNS = 3;
 	
-	private final static int MAX_BUTTERFLY_COUNT = 1;
-	private final static int MAX_SPARROW_COUNT = 4;
-	private final static int MAX_CRAB_COUNT = 4;
+	private static final int MAX_BUTTERFLY_COUNT = 1;
+	private static final int MAX_SPARROW_COUNT = 4;
+	private static final int MAX_CRAB_COUNT = 4;
 	
 	
 	/**
@@ -45,7 +45,8 @@ public class DeltaHantoGame extends BaseHantoGame
 	}
 
 	@Override
-	protected boolean checkSpecialConditions(HantoPieceType pieceType, HantoCoordinate from, HantoCoordinate to) {
+	protected boolean checkSpecialConditions(HantoPieceType pieceType, 
+			HantoCoordinate from, HantoCoordinate to) {
 		return !isResigned(pieceType, from, to);
 	}
 	
@@ -69,7 +70,8 @@ public class DeltaHantoGame extends BaseHantoGame
 	 * @throws HantoException 
 	 */
 	@Override
-	protected void checkMoveValidityPrior(HantoPieceType pieceType, HantoCoordinate fromCoordinate, HantoCoordinate toCoordinate) throws HantoException {
+	protected void checkMoveValidityPrior(HantoPieceType pieceType, HantoCoordinate fromCoordinate, 
+			HantoCoordinate toCoordinate) throws HantoException {
 		if(isFromOffTheBoard(fromCoordinate)){
 			board.checkPieceAddedNextToOwnColorRule(toCoordinate, currentColor, 1);
 		}
