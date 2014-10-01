@@ -139,4 +139,12 @@ public class GameCoordinate implements HantoCoordinate {
 		hash |= (yCoordinate & HASH_CODE_BIT_MASK);
 		return hash;
 	}
+	
+	/**
+	 * Converts the GameCoordinate into a string-representable value
+	 */
+	@Override
+	public String toString(){
+		return "(" + xCoordinate + ", " + yCoordinate + ") ";
+	}
 }

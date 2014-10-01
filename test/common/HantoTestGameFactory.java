@@ -64,6 +64,8 @@ public class HantoTestGameFactory
 			case DELTA_HANTO:
 				game = new DeltaHantoTestGame(movesFirst);
 				break;
+			default:
+				break;
 		}
 		return game;
 	}

@@ -18,7 +18,6 @@ import hanto.studentJnaYy.common.moveControllers.MoveHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -284,13 +283,10 @@ public class HantoBoard {
 	 */
 	public String getPrintableBoard(){
 		String printedBoard = "";
-		Iterator<Entry<GameCoordinate, HantoPiece>> it = board.entrySet().iterator();
-		while(it.hasNext()){
-			Entry<GameCoordinate, HantoPiece> entry = it.next();
+		for(Entry<GameCoordinate, HantoPiece> entry : board.entrySet()){
 			GameCoordinate coord = entry.getKey();
 			HantoPiece piece = entry.getValue();
-			printedBoard += "(" + coord.getX() + "," + coord.getY() + ") " 
-					+ piece.getColor() + " " + piece.getType() + "\n";
+			printedBoard += coord.toString() + piece.getColor() + " " + piece.getType() + "\n";
 		}
 		return printedBoard;
 	}

@@ -44,12 +44,23 @@ public class DeltaHantoGame extends BaseHantoGame
 		super(movesFirst, MAX_TURN_COUNT, OPTIONAL_BUTTERFLY_TURNS);
 	}
 
+	/**
+	 * Checks to see if the special condition (resignation) is met
+	 * in order to justify breaking the normal template process
+	 */
 	@Override
 	protected boolean checkSpecialConditions(HantoPieceType pieceType, 
 			HantoCoordinate from, HantoCoordinate to) {
 		return !isResigned(pieceType, from, to);
 	}
 	
+	/**
+	 * Checks to see if a move was a resignation move
+	 * @param pieceType the type of the piece, (null to resign)
+	 * @param from the location of the piece, (null to resign)
+	 * @param to the destination of the piece, (null to resign)
+	 * @return true if all the conditions are met to resign
+	 */
 	private boolean isResigned(HantoPieceType pieceType, HantoCoordinate from,
 			HantoCoordinate to) {
 		boolean isPieceNull = pieceType == null;

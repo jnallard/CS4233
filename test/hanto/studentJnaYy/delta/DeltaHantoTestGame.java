@@ -55,6 +55,10 @@ public class DeltaHantoTestGame extends DeltaHantoGame implements HantoTestGame{
 		currentColor = player;
 	}
 
+	/**
+	 * Returns our HantoBoard as a test board, which we set in the constructor
+	 * @return
+	 */
 	private HantoTestBoard getBoardAsTestBoard(){
 		return ((HantoTestBoard)board);
 	}

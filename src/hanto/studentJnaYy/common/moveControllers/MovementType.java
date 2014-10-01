@@ -13,7 +13,6 @@ package hanto.studentJnaYy.common.moveControllers;
 /**
  * This enumeration identifies the movements in Hanto.
  * 
- * @version Jan 12, 2013
  */
 public enum MovementType
 {
