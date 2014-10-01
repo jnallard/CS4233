@@ -43,7 +43,7 @@ public class HantoTestBoard extends HantoBoard {
 		GameCoordinate toCoord = new GameCoordinate(to);
 		board.put(toCoord, piece);
 		if(piece.getType() == HantoPieceType.BUTTERFLY){
-			assignButterflyCoord(toCoord, piece.getColor());
+			butterflyManager.setButterflyCoord(piece.getColor(), toCoord);
 		}
 	}
 

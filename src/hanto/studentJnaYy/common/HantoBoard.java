@@ -28,14 +28,14 @@ import java.util.Map.Entry;
  */
 public class HantoBoard {
 
-	private final GameCoordinate GAME_COORDINATE_ORIGIN = new GameCoordinate(0, 0);
+	
 	protected Map<GameCoordinate, HantoPiece> board = new HashMap<GameCoordinate, HantoPiece>();
 	protected int turnCount = 1;
+	protected HantoBoardButterflyManager butterflyManager;
+	
+	private final GameCoordinate GAME_COORDINATE_ORIGIN = new GameCoordinate(0, 0);
 	private String exceptionMessage = "";
 	private int maxTurnCount;
-	private GameCoordinate redButterflyCoord = null;
-	private GameCoordinate blueButterflyCoord = null;
-	private int butterflyOptionalTurns;
 	private final int MaxNumNeighbors = 6;
 	private HantoPlayerColor movesFirst;
 	private MoveResult previousGameStatus = MoveResult.OK;
@@ -51,9 +51,9 @@ public class HantoBoard {
 	public HantoBoard(int maxTurnCount, int butterflyOptionalTurns, HantoPlayerColor movesFirst, 
 			MoveHandler moveController){
 		this.maxTurnCount = maxTurnCount;
-		this.butterflyOptionalTurns = butterflyOptionalTurns;
 		this.movesFirst = movesFirst;
 		this.moveController = moveController;
+		butterflyManager = new HantoBoardButterflyManager(butterflyOptionalTurns);
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class HantoBoard {
 		GameCoordinate ourToCoodinate = new GameCoordinate(to);
 		
 		exceptionMessage = "";
-		boolean isValid = areButterflyConditionsMet(type, color);
+		boolean isValid = butterflyManager.areButterflyConditionsMet(turnCount, type, color);
 		
 		isValid &= !isCoordinateTaken(ourToCoodinate);
 		if(turnCount == 1 && color == movesFirst){
@@ -82,43 +82,6 @@ public class HantoBoard {
 		if(!isValid){
 			throw new HantoException(exceptionMessage);
 		}
-	}
-
-	/**
-	 * Checks to see if the conditions for a butterfly placement have been met.
-	 * @param type the piece type
-	 * @param color the piece color
-	 * @return true if the piece passes the conditions set for butterflies.
-	 */
-	private boolean areButterflyConditionsMet(HantoPieceType type, HantoPlayerColor color) {
-		
-		boolean isButterflyCoordSet = getButterflyCoordByColor(color) != null;
-		boolean isPieceButterfly = type.equals(HantoPieceType.BUTTERFLY);
-		
-		boolean areConditionsMet = true;
-		if(turnCount > butterflyOptionalTurns){
-			areConditionsMet = isButterflyCoordSet || isPieceButterfly;
-		}
-		
-		return areConditionsMet;
-	}
-	
-	/**
-	 * Gets the butterfly coordinate based upon the player color
-	 * @param color the player color to filter by
-	 * @return A GameCoordinate for the color's butterfly, null if not set.
-	 */
-	private GameCoordinate getButterflyCoordByColor(HantoPlayerColor color){
-		GameCoordinate butterflyCoord = null;
-		switch(color){
-			case RED:
-				butterflyCoord = redButterflyCoord;
-				break;
-			case BLUE:
-				butterflyCoord = blueButterflyCoord;
-				break;
-		}
-		return butterflyCoord;
 	}
 	
 	/**
@@ -149,7 +112,7 @@ public class HantoBoard {
 		checkMoveValidity(coordinate, piece.getType(), piece.getColor());
 		
 		if(piece.getType() == HantoPieceType.BUTTERFLY){
-			assignButterflyCoord(coordinate, piece.getColor());
+			butterflyManager.setButterflyCoord(piece.getColor(), coordinate);
 		}
 		
 		board.put(coordinate, piece);
@@ -185,6 +148,11 @@ public class HantoBoard {
 	private MoveResult hasAPlayerWon() {
 		MoveResult moveResult = MoveResult.OK;
 		
+		GameCoordinate blueButterflyCoord = butterflyManager.getButterflyCoord(
+				HantoPlayerColor.BLUE);
+		GameCoordinate redButterflyCoord = butterflyManager.getButterflyCoord(
+				HantoPlayerColor.RED);
+		
 		boolean didRedWin = isAdjacentToNOrMorePieces(blueButterflyCoord, MaxNumNeighbors);
 		boolean didBlueWin = isAdjacentToNOrMorePieces(redButterflyCoord, MaxNumNeighbors);
 		
@@ -208,7 +176,7 @@ public class HantoBoard {
 	private boolean isAdjacentToNOrMorePieces(GameCoordinate coordinate, int numAdajcentTo) {
 		int numberOfOccupiedNeighbors = 0;
 		if(coordinate != null){
-			numberOfOccupiedNeighbors = getNumberOfNeighbors(coordinate);
+			numberOfOccupiedNeighbors = getNumberOfNeighborPieces(coordinate);
 		}
 		
 		boolean hasNNeighbors = numberOfOccupiedNeighbors >= numAdajcentTo;
@@ -223,7 +191,7 @@ public class HantoBoard {
 	 * @param coordinate the coordinate on the board to check for
 	 * @return the number of neighbor pieces
 	 */
-	private int getNumberOfNeighbors(GameCoordinate coordinate) {
+	private int getNumberOfNeighborPieces(GameCoordinate coordinate) {
 		int numberOfOccupiedNeighbors = 0;
 		List<GameCoordinate> neighbors = coordinate.getAdjacentCoordinates();
 		for(int i = 0; i < neighbors.size(); i++){
@@ -233,22 +201,6 @@ public class HantoBoard {
 			}
 		}
 		return numberOfOccupiedNeighbors;
-	}
-
-	/**
-	 * Assigns the coordinate to the specific butterfly location of the player color.
-	 * @param coordinate the location of the butterfly
-	 * @param color the player color for the butterfly
-	 */
-	protected void assignButterflyCoord(GameCoordinate coordinate, HantoPlayerColor color) {
-		switch(color){
-			case RED:
-				redButterflyCoord = coordinate;
-				break;
-			case BLUE:
-				blueButterflyCoord = coordinate;
-				break;
-		}
 	}
 
 	/**
@@ -421,8 +373,8 @@ public class HantoBoard {
 	 */
 	public void clear() {
 		board.clear();
-		redButterflyCoord = null;
-		blueButterflyCoord = null;
+		butterflyManager.setButterflyCoord(HantoPlayerColor.RED, null);
+		butterflyManager.setButterflyCoord(HantoPlayerColor.BLUE, null);
 		turnCount = 0;
 	}
 	
