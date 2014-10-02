@@ -7,21 +7,17 @@
  *******************************************************************************/
 package hanto.studentJnaYy.common;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import hanto.common.HantoException;
 import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.studentJnaYy.common.moveControllers.MoveHandler;
 import hanto.studentJnaYy.common.moveControllers.MovementType;
-import hanto.studentJnaYy.common.moveControllers.Walking;
 import hanto.studentJnaYy.common.pieces.ButterflyPiece;
-import hanto.studentJnaYy.common.pieces.PieceFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -60,6 +56,15 @@ public class TestMovementHandler {
 		
 		handler.checkMovement(new GameCoordinate(0, 0), new GameCoordinate(2, 0), board, HantoPieceType.BUTTERFLY);
 		assertTrue(true);
+	}
+	
+	@Test(expected = HantoException.class)
+	public void testSetMovementTypeNoMovement() throws HantoException{
+		handler.setMovementForType(HantoPieceType.BUTTERFLY, MovementType.NO_MOVEMENT);
+		board.put(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
+		board.put(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
+		
+		handler.checkMovement(new GameCoordinate(0, 0), new GameCoordinate(2, 0), board, HantoPieceType.BUTTERFLY);
 	}
 
 	@Test(expected = HantoException.class)

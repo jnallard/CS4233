@@ -46,5 +46,19 @@ public class TestPieces {
 		boolean isBlue = sparrowPiece.getColor() == HantoPlayerColor.BLUE;
 		assertTrue(isRed && isBlue);
 	}
+	
+	@Test
+	public void testGetPrintableName() {
+		boolean isButterfly = butterflyPiece.getType().getPrintableName() == "Butterfly";
+		boolean isSparrow = sparrowPiece.getType().getPrintableName() == "Sparrow";
+		assertTrue(isButterfly && isSparrow);
+	}
+	
+	@Test
+	public void testGetSymbol() {
+		boolean isButterfly = butterflyPiece.getType().getSymbol() == "B";
+		boolean isSparrow = sparrowPiece.getType().getSymbol() == "S";
+		assertTrue(isButterfly && isSparrow);
+	}
 
 }

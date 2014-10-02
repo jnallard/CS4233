@@ -54,12 +54,24 @@ public class MoveHandler {
 			case FLY:
 				moveMaker = new Flying();
 				break;
+			case NO_MOVEMENT:
+				moveMaker = new NoMovement();
+				break;
 			default:
 				break;
 		}
 		setMovementForType(pieceType, moveMaker);
 	}
-
+	
+	/**
+	 * Sets the movement for the piece type, given the actual movement object
+	 * @param type the piece type to set the movement for
+	 * @param moveMaker the movement object for the piece
+	 */
+	private void setMovementForType(HantoPieceType type, Movement moveMaker){
+		movements.put(type, moveMaker);
+	}
+	
 	/**
 	 * Gets the movement specified for each piece
 	 * @param type the piece type to search for
@@ -72,14 +84,5 @@ public class MoveHandler {
 			throw new HantoException("There is no movement defined for this piece.");
 		}
 		return moveMaker;
-	}
-	
-	/**
-	 * Sets the movement for the piece type, given the actual movement object
-	 * @param type the piece type to set the movement for
-	 * @param moveMaker the movement object for the piece
-	 */
-	private void setMovementForType(HantoPieceType type, Movement moveMaker){
-		movements.put(type, moveMaker);
 	}
 }

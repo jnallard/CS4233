@@ -16,5 +16,5 @@ package hanto.studentJnaYy.common.moveControllers;
  */
 public enum MovementType
 {
-	WALK, FLY;
+	WALK, FLY, NO_MOVEMENT;
 }

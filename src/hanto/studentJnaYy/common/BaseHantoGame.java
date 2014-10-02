@@ -28,6 +28,7 @@ import hanto.studentJnaYy.common.pieces.PieceFactory;
  */
 public abstract class BaseHantoGame implements HantoGame {
 
+	
 	protected PieceFactory pieceFactory = PieceFactory.getInstance();
 	protected PieceAvailabilityCounter pieceCounter = new PieceAvailabilityCounter();
 	
@@ -38,6 +39,7 @@ public abstract class BaseHantoGame implements HantoGame {
 	protected MoveHandler moveController = new MoveHandler();
 	
 	protected static final HantoCoordinate OFF_BOARD_LOCATION = null;
+	protected int PiecePlacementOwnColorExceptionTurns = 1;
 	
 	/**
 	 * Creates an abstract version of a Hanto Game
@@ -75,7 +77,7 @@ public abstract class BaseHantoGame implements HantoGame {
 	public MoveResult makeMove(HantoPieceType pieceType, HantoCoordinate from,
 			HantoCoordinate to) throws HantoException {
 		
-		if(checkSpecialConditions(pieceType, from, to)){
+		if(checkSpecialMoves(pieceType, from, to)){
 			checkMoveValidityPrior(pieceType, from, to);
 			
 			finalizeMove(pieceType, from, to);
@@ -95,7 +97,7 @@ public abstract class BaseHantoGame implements HantoGame {
 	 * @param to the location to place the piece
 	 * @return true if not overridden, otherwise it will be based upon the special rules
 	 */
-	protected boolean checkSpecialConditions(HantoPieceType pieceType,
+	protected boolean checkSpecialMoves(HantoPieceType pieceType,
 			HantoCoordinate from, HantoCoordinate to) {
 		return true;
 	}
@@ -121,6 +123,8 @@ public abstract class BaseHantoGame implements HantoGame {
 			HantoCoordinate toCoordinate) throws HantoException {
 		if(isFromOffTheBoard(fromCoordinate)){
 			pieceCounter.checkPieceAvailability(pieceType, currentColor);
+			board.checkPieceAddedNextToOwnColorRule(toCoordinate, currentColor, 
+					PiecePlacementOwnColorExceptionTurns);
 		}
 		else{
 			board.checkPieceHere(fromCoordinate, pieceType, currentColor);
@@ -176,6 +180,25 @@ public abstract class BaseHantoGame implements HantoGame {
 				currentColor = HantoPlayerColor.BLUE;
 				break;
 		}
+	}
+	
+	/**
+	 * Checks to see if a move was a resignation move
+	 * @param pieceType the type of the piece, (null to resign)
+	 * @param from the location of the piece, (null to resign)
+	 * @param to the destination of the piece, (null to resign)
+	 * @return true if all the conditions are met to resign
+	 */
+	protected boolean isResigned(HantoPieceType pieceType, HantoCoordinate from,
+			HantoCoordinate to) {
+		boolean isPieceNull = pieceType == null;
+		boolean isFromNull = from == null;
+		boolean isToNull = to == null;
+		boolean isResigning = isPieceNull && isFromNull && isToNull;
+		if(isResigning){
+			board.setResigning(currentColor);
+		}
+		return isResigning;
 	}
 
 	/**

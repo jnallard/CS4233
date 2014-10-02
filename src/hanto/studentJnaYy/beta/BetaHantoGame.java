@@ -10,11 +10,10 @@
 
 package hanto.studentJnaYy.beta;
 
-import hanto.common.HantoCoordinate;
-import hanto.common.HantoException;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.studentJnaYy.common.BaseHantoGame;
+import hanto.studentJnaYy.common.moveControllers.MovementType;
 
 
 /**
@@ -40,31 +39,16 @@ public class BetaHantoGame extends BaseHantoGame
 	 */
 	public BetaHantoGame(HantoPlayerColor movesFirst){
 		super(movesFirst, MAX_TURN_COUNT, OPTIONAL_BUTTERFLY_TURNS);
-	}
-
-	/**
-	 * Checks to see if the suggested move is valid.
-	 * @param pieceType - the HantoPieceType of the given piece.
-	 * @param toCoordinate - the desired HantoCoordinate for the given piece.
-	 * @return true if the move can be done
-	 * @throws HantoException 
-	 */
-	@Override
-	protected void checkMoveValidityPrior(HantoPieceType pieceType, HantoCoordinate fromCoordinate, 
-			HantoCoordinate toCoordinate) throws HantoException {
-		
-		if(!isFromOffTheBoard(fromCoordinate)){
-			throw new HantoException("Movement of pieces is not supported.");
-		}
-		
-		super.checkMoveValidityPrior(pieceType, fromCoordinate, toCoordinate);
+		PiecePlacementOwnColorExceptionTurns = MAX_TURN_COUNT;
 	}
 	
 	/**
-	 * Initializes the amount of pieces that each player can place.
+	 * Initializes the amount of pieces that each player can place and their movement styles.
 	 */
 	protected void initializePieceSet(){
 		pieceCounter.initializePieceCount(HantoPieceType.BUTTERFLY, MAX_BUTTERFLY_COUNT);
 		pieceCounter.initializePieceCount(HantoPieceType.SPARROW, MAX_SPARROW_COUNT);
+		moveController.setMovementForType(HantoPieceType.BUTTERFLY, MovementType.NO_MOVEMENT);
+		moveController.setMovementForType(HantoPieceType.SPARROW, MovementType.NO_MOVEMENT);
 	}
 }

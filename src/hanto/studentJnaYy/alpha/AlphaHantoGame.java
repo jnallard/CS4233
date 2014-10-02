@@ -10,9 +10,10 @@
 
 package hanto.studentJnaYy.alpha;
 
-import hanto.common.*;
-import hanto.studentJnaYy.common.HantoBoard;
-import hanto.studentJnaYy.common.pieces.ButterflyPiece;
+import hanto.common.HantoPieceType;
+import hanto.common.HantoPlayerColor;
+import hanto.studentJnaYy.common.BaseHantoGame;
+import hanto.studentJnaYy.common.moveControllers.MovementType;
 
 
 /**
@@ -21,119 +22,26 @@ import hanto.studentJnaYy.common.pieces.ButterflyPiece;
  * 
  * @author Joshua and Yan
  */
-public class AlphaHantoGame implements HantoGame
+public class AlphaHantoGame extends BaseHantoGame
 {
 	private static final int MAX_TURN_COUNT = 1;
 	private static final int OPTIONAL_BUTTERFLY_TURNS = 0;
-	private HantoPlayerColor currentColor = HantoPlayerColor.BLUE;
-	HantoBoard board = new HantoBoard(MAX_TURN_COUNT, OPTIONAL_BUTTERFLY_TURNS, currentColor, null);
-	private String exceptionMessage;
+	private static final int MAX_BUTTERFLY_COUNT = 1;
 	
 	/**
-	 * This method executes a move in the game. It is called for every move that must be
-	 * made.
-	 * 
-	 * @param pieceType
-	 *            the piece type that is being moved
-	 * @param from
-	 *            the coordinate where the piece begins. If the coordinate is null, then
-	 *            the piece begins off the board (that is, it is placed on the board in
-	 *            this move).
-	 * @param to
-	 *            the coordinated where the piece is after the move has been made.
-	 * @return the result of the move
-	 * @throws HantoException
-	 *             if there are any problems in making the move (such as specifying a
-	 *             coordinate that does not have the appropriate piece, or the color of
-	 *             the piece is not the color of the player who is moving.
+	 * Creates a new instance of an AlphaHantoGame
 	 */
-	public MoveResult makeMove(HantoPieceType pieceType, HantoCoordinate from,
-			HantoCoordinate to) throws HantoException{
-		
-		if(from != null){
-			exceptionMessage = "Movement of pieces is not supported.";
-			throw new HantoException(exceptionMessage);
-		}
-		
-		checkValidity(pieceType, to);
-			
-		MoveResult moveResult = finalizeMove(to);
-		return moveResult;
-	}
-
-	/**
-	 * Checks to see if the piece and move are valid
-	 * @param pieceType the piece to check for
-	 * @param to the coordinate to check for
-	 * @return true if the piece and move are valid, false otherwise
-	 * @throws HantoException 
-	 */
-	private void checkValidity(HantoPieceType pieceType, HantoCoordinate to) throws HantoException {
-		
-		checkValidPiece(pieceType);
-		board.checkMoveValidity(to, pieceType, currentColor);
-	}
-
-	/**
-	 * finishes the verified move - put the piece and coordinate onto the board, 
-	 * increments the move count, and switches the current color.
-	 * @param toCoordinate The coordinate to place the butterfly at
-	 * @throws HantoException 
-	 */
-	private MoveResult finalizeMove(HantoCoordinate toCoordinate) throws HantoException {
-		MoveResult result = board.addPiece(toCoordinate, new ButterflyPiece(currentColor));
-		switchCurrentColor();
-
-		board.checkPieceConnectivity();
-		return result;
+	public AlphaHantoGame() {
+		super(HantoPlayerColor.BLUE, MAX_TURN_COUNT, OPTIONAL_BUTTERFLY_TURNS);
+		PiecePlacementOwnColorExceptionTurns = MAX_TURN_COUNT;
 	}
 	
 	/**
-	 * Checks to see if the given piece is valid for the game.
-	 * @param pieceType the type to check for
-	 * @return true if the piece type is BUTTERFLY
-	 * @throws HantoException 
+	 * Initializes the amount of pieces that each player can place and their movement styles.
 	 */
-	private void checkValidPiece(HantoPieceType pieceType) throws HantoException {
-		
-		boolean isValid = pieceType == HantoPieceType.BUTTERFLY;
-		
-		if(!isValid){
-			throw new HantoException("The particular piece (" + pieceType + ") is not valid.");
-		}
-	}
-
-	/**
-	 * Switches the current player color to the next available one.
-	 */
-	private void switchCurrentColor() {
-		switch(currentColor){
-			case BLUE: 
-				currentColor = HantoPlayerColor.RED;
-				break;
-			case RED: 
-				currentColor = HantoPlayerColor.BLUE;
-				break;
-		}
-	}
-
-	/**
-	 * @param where the coordinate to query
-	 * @return the piece at the specified coordinate or null if there is no 
-	 * 	piece at that position
-	 */
-	public HantoPiece getPieceAt(HantoCoordinate where){
-		return board.getPieceAt(where);
-	}
-
-	/**
-	 * Returns the board in this format: 
-	 * "(x1, y1) Color1 Piece1
-	 * (x2, y2) Color2 Piece2"
-	 * (There is no particular order when printing)
-	 * @return a printable representation of the board.
-	 */
-	public String getPrintableBoard(){
-		return board.getPrintableBoard();
+	@Override
+	protected void initializePieceSet() {
+		pieceCounter.initializePieceCount(HantoPieceType.BUTTERFLY, MAX_BUTTERFLY_COUNT);
+		moveController.setMovementForType(HantoPieceType.BUTTERFLY, MovementType.NO_MOVEMENT);
 	}
 }

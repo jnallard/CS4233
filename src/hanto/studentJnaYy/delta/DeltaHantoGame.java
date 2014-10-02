@@ -11,7 +11,6 @@
 package hanto.studentJnaYy.delta;
 
 import hanto.common.HantoCoordinate;
-import hanto.common.HantoException;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.studentJnaYy.common.BaseHantoGame;
@@ -49,49 +48,13 @@ public class DeltaHantoGame extends BaseHantoGame
 	 * in order to justify breaking the normal template process
 	 */
 	@Override
-	protected boolean checkSpecialConditions(HantoPieceType pieceType, 
+	protected boolean checkSpecialMoves(HantoPieceType pieceType, 
 			HantoCoordinate from, HantoCoordinate to) {
 		return !isResigned(pieceType, from, to);
 	}
 	
 	/**
-	 * Checks to see if a move was a resignation move
-	 * @param pieceType the type of the piece, (null to resign)
-	 * @param from the location of the piece, (null to resign)
-	 * @param to the destination of the piece, (null to resign)
-	 * @return true if all the conditions are met to resign
-	 */
-	private boolean isResigned(HantoPieceType pieceType, HantoCoordinate from,
-			HantoCoordinate to) {
-		boolean isPieceNull = pieceType == null;
-		boolean isFromNull = from == null;
-		boolean isToNull = to == null;
-		boolean isResigning = isPieceNull && isFromNull && isToNull;
-		if(isResigning){
-			board.setResigning(currentColor);
-		}
-		return isResigning;
-	}
-
-	/**
-	 * Checks to see if the suggested move is valid.
-	 * @param pieceType - the HantoPieceType of the given piece.
-	 * @param toCoordinate - the desired HantoCoordinate for the given piece.
-	 * @return true if the move can be done
-	 * @throws HantoException 
-	 */
-	@Override
-	protected void checkMoveValidityPrior(HantoPieceType pieceType, HantoCoordinate fromCoordinate, 
-			HantoCoordinate toCoordinate) throws HantoException {
-		if(isFromOffTheBoard(fromCoordinate)){
-			board.checkPieceAddedNextToOwnColorRule(toCoordinate, currentColor, 1);
-		}
-		super.checkMoveValidityPrior(pieceType, fromCoordinate, toCoordinate);
-	}
-
-	
-	/**
-	 * Initializes the amount of pieces that each player can place.
+	 * Initializes the amount of pieces that each player can place and their movement styles.
 	 */
 	protected void initializePieceSet(){
 		pieceCounter.initializePieceCount(HantoPieceType.BUTTERFLY, MAX_BUTTERFLY_COUNT);
