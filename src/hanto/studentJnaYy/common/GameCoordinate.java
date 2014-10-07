@@ -65,7 +65,7 @@ public class GameCoordinate implements HantoCoordinate {
 	 * @param secondCoordinate the second coordinate to check for
 	 * @return true if the second piece is considered adjacent to the first piece.
 	 */
-	public boolean isAdjacent(HantoCoordinate secondCoordinate) {
+	public boolean isAdjacent(GameCoordinate secondCoordinate) {
 		boolean areCoordsAdjacent;
 		int xDifference = this.getX() - secondCoordinate.getX();
 		int yDifference = this.getY() - secondCoordinate.getY();
@@ -84,6 +84,52 @@ public class GameCoordinate implements HantoCoordinate {
 				break;
 		}
 		return areCoordsAdjacent;
+	}
+	
+	public boolean isStraightLine(GameCoordinate secondCoordinate) {
+		int xDifference = xCoordinate - secondCoordinate.xCoordinate;
+		int yDifference = yCoordinate - secondCoordinate.yCoordinate;
+		
+		boolean isXEqual = xDifference == 0;
+		boolean isYEqual = yDifference == 0;
+		
+		boolean areValuesOpposite = xDifference == -yDifference;
+		
+		
+		return isXEqual || isYEqual || areValuesOpposite;
+		
+	}
+	
+	public List<GameCoordinate> getStraightLineCoordsBetween(GameCoordinate secondCoordinate) {
+		
+		List<GameCoordinate> coords = new ArrayList<GameCoordinate>();
+		if(isStraightLine(secondCoordinate)){
+
+			int xDifference = xCoordinate - secondCoordinate.xCoordinate;
+			int yDifference = yCoordinate - secondCoordinate.yCoordinate;
+			
+			int xAdd = 0;
+			int yAdd = 0;
+			
+			if(xDifference != 0){
+				xAdd = xDifference / Math.abs(xDifference);
+			}
+			
+			if(yDifference != 0){
+				yAdd = yDifference / Math.abs(yDifference);
+			}
+			
+			GameCoordinate newCoord = new GameCoordinate(secondCoordinate.xCoordinate + xAdd, 
+					secondCoordinate.yCoordinate + yAdd);
+			
+			while(!newCoord.equals(this)){
+				coords.add(newCoord);
+				newCoord = new GameCoordinate(newCoord.xCoordinate + xAdd, 
+						newCoord.yCoordinate + yAdd);
+			}
+		}
+		return coords;
+		
 	}
 
 	/**
@@ -116,6 +162,39 @@ public class GameCoordinate implements HantoCoordinate {
 		return commonNeighbors;
 	}
 	
+	/**
+	 * Gets the integer distance between two coordinates
+	 * (The minimum number of moves you'd need to make to move there)
+	 * @param toCoord the coordinate to find the distance to
+	 * @return the integer distance
+	 */
+	public int getDistance(GameCoordinate toCoord){
+		int distance = getRecursiveDistance(xCoordinate - toCoord.xCoordinate, yCoordinate - toCoord.yCoordinate, 0);
+		return distance;
+	}
+	
+	/**
+	 * Gets the distance to a coordinate, recursively if needed
+	 * @param xDiff the x difference between the coords
+	 * @param yDiff the y difference between the coords
+	 * @param distanceThusFar the distance traveled thus far
+	 * @return
+	 */
+	private int getRecursiveDistance(int xDiff, int yDiff, int distanceThusFar) {
+		
+		if(xDiff < 0 &&  yDiff > 0){
+			distanceThusFar = getRecursiveDistance(xDiff + 1, yDiff - 1, distanceThusFar + 1);
+		}
+		else if(xDiff > 0 &&  yDiff < 0){
+			distanceThusFar = getRecursiveDistance(xDiff - 1, yDiff + 1, distanceThusFar + 1);
+		}
+		else{
+			distanceThusFar += Math.abs(xDiff) + Math.abs( yDiff);
+		}
+		
+		return distanceThusFar;
+	}
+
 	/**
 	 * Overrides the equals method, so that the only thing used to 
 	 * determine if coordinates are equal are the x and y coordinates.

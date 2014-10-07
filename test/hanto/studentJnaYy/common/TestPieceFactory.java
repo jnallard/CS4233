@@ -53,7 +53,7 @@ public class TestPieceFactory {
 
 	@Test
 	public void testMakeNull(){
-		HantoPiece piece = factory.makeGamePiece(HantoPieceType.HORSE, HantoPlayerColor.RED);
+		HantoPiece piece = factory.makeGamePiece(HantoPieceType.CRANE, HantoPlayerColor.RED);
 		assertNull(piece);
 	}
 }

@@ -10,10 +10,13 @@
 
 package hanto.studentJnaYy;
 
-import hanto.common.*;
+import hanto.common.HantoGame;
+import hanto.common.HantoGameID;
+import hanto.common.HantoPlayerColor;
 import hanto.studentJnaYy.alpha.AlphaHantoGame;
 import hanto.studentJnaYy.beta.BetaHantoGame;
 import hanto.studentJnaYy.delta.DeltaHantoGame;
+import hanto.studentJnaYy.epsilon.EpsilonHantoGame;
 import hanto.studentJnaYy.gamma.GammaHantoGame;
 
 /**
@@ -73,6 +76,9 @@ public class HantoGameFactory
 				break;
 			case DELTA_HANTO:
 				game = new DeltaHantoGame(movesFirst);
+				break;
+			case EPSILON_HANTO:
+				game = new EpsilonHantoGame(movesFirst);
 				break;
 			default: 
 				game = null;

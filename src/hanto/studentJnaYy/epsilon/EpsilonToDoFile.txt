@@ -1,0 +1,35 @@
+To do:
+
+
+
+Tests:
+x Create a new game
+x Make sure Blue goes first for a Blue game
+x Make sure Red goes first for a red game
+x Can place sparrow first
+x Can place butterfly first
+x Can place crab first
+Sparrow can fly <= 4
+x Butterfly can walk 1
+x Crab can walk 1
+Horse can jump
+x Walking does not let a piece move if it's blocked in that direction
+x Flying will let a piece move, so long as the pieces are still continuous after
+Jumping will let a piece move, so long as it's in a straight line, over a continuous amount of pieces
+x Everything needs to be connected after a move
+x Game can place a piece around the center piece
+x Game can place a piece not around the centerpiece, but still connected with piece of same color
+x Game cannot place a piece next to a piece of the opposing color, except for the first and second move
+x Can only place one butterfly
+x Can only place 2 sparrows
+x Can only place 6 crabs
+x Can only place 4 horses
+x Butterfly must be placed before or during the player's 4th turn
+x First move is ok
+x Game ends in victory when one butterfly is surrounded
+x Piece is Butterfly, Sparrow, Crab
+x Piece is not anything but Butterfly, Sparrow, Crab
+x Test placing pieces on the same location
+A player needs to be able to resign, only if there are no moves
+x Cannot move a piece without a matching color
+

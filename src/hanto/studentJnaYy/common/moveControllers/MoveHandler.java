@@ -46,21 +46,33 @@ public class MoveHandler {
 	 * @param movementType the enumeration representing the movement wanted
 	 */
 	public void setMovementForType(HantoPieceType pieceType, MovementType movementType){
+		setMovementForType(pieceType, movementType, Integer.MAX_VALUE);
+	}
+	
+	/**
+	 * Sets the movement type for the piece.
+	 * @param pieceType the piece type to define a movement for
+	 * @param movementType the enumeration representing the movement wanted
+	 */
+	public void setMovementForType(HantoPieceType pieceType, MovementType movementType, int max){
 		Movement moveMaker = null;
 		switch(movementType){
 			case WALK: 
 				moveMaker = new Walking();
 				break;
 			case FLY:
-				moveMaker = new Flying();
+				moveMaker = new Flying(max);
 				break;
 			case NO_MOVEMENT:
 				moveMaker = new NoMovement();
 				break;
+			case JUMP:
+				moveMaker = new Jumping();
+				break;
 			default:
 				break;
 		}
-		setMovementForType(pieceType, moveMaker);
+		setMovementObjectForType(pieceType, moveMaker);
 	}
 	
 	/**
@@ -68,7 +80,7 @@ public class MoveHandler {
 	 * @param type the piece type to set the movement for
 	 * @param moveMaker the movement object for the piece
 	 */
-	private void setMovementForType(HantoPieceType type, Movement moveMaker){
+	private void setMovementObjectForType(HantoPieceType type, Movement moveMaker){
 		movements.put(type, moveMaker);
 	}
 	

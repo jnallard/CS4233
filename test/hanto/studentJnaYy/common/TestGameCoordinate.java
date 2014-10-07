@@ -106,6 +106,56 @@ public class TestGameCoordinate {
 	}
 	
 	@Test
+	public void testGetStraightLineVertical() {
+		
+		assertTrue(coordinateOrigin.isStraightLine(new GameCoordinate(0, 5)));
+	}
+	
+	@Test
+	public void testGetStraightLineUpDiagonal() {
+		
+		assertTrue(coordinateOrigin.isStraightLine(new GameCoordinate(-5, 0)));
+	}
+	
+	@Test
+	public void testGetStraightDownDiagonal() {
+		
+		assertTrue(coordinateOrigin.isStraightLine(new GameCoordinate(-2, 2)));
+	}
+	
+	@Test
+	public void testGetStraightLineFail() {
+		
+		assertFalse(coordinateOrigin.isStraightLine(new GameCoordinate(5, 4)));
+	}
+	
+
+	
+	@Test
+	public void testGetStraightLineCoordsVertical() {
+		
+		assertEquals(coordinateOrigin.getStraightLineCoordsBetween(new GameCoordinate(0, 5)).size(), 4);
+	}
+	
+	@Test
+	public void testGetStraightLineCoordsUpDiagonal() {
+		
+		assertEquals(coordinateOrigin.getStraightLineCoordsBetween(new GameCoordinate(-5, 0)).size(), 4);
+	}
+	
+	@Test
+	public void testGetStraightLineCoordsDownDiagonal() {
+		
+		assertEquals(coordinateOrigin.getStraightLineCoordsBetween(new GameCoordinate(-2, 2)).size(), 1);
+	}
+	
+	@Test
+	public void testGetStraightLineCoordsFail() {
+		
+		assertEquals(coordinateOrigin.getStraightLineCoordsBetween(new GameCoordinate(5, 4)).size(), 0);
+	}
+	
+	@Test
 	public void testCopy() {
 		GameCoordinate copy = new GameCoordinate(coordinateOrigin);
 		assertEquals(coordinateOrigin, copy);

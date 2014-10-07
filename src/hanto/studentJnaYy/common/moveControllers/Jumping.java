@@ -13,6 +13,7 @@ import hanto.common.HantoException;
 import hanto.common.HantoPiece;
 import hanto.studentJnaYy.common.GameCoordinate;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,16 +22,7 @@ import java.util.Map;
  * @author Joshua and Yan
  *
  */
-public class Flying implements Movement {
-	private int maxDistance;
-	
-	/**
-	 * Creates a new instance of a Flying Movement, with a max Distance
-	 * @param maxDistance the maximum amount of spaces a piece can move.
-	 */
-	public Flying(int maxDistance) {
-		this.maxDistance = maxDistance;
-	}
+public class Jumping implements Movement {
 	
 	/**
 	 * Checks to see if the move for a certain piece is valid given the state of the board.
@@ -42,9 +34,24 @@ public class Flying implements Movement {
 	@Override
 	public void checkMovement(GameCoordinate to, GameCoordinate from,
 			Map<GameCoordinate, HantoPiece> board) throws HantoException {
-		int distance = from.getDistance(to);
-		if(distance > maxDistance){
-			throw new HantoException("You flew further than the max distance set.");
+		
+		if(!to.isStraightLine(from)){
+			throw new HantoException("The piece tried to jump not in a straight line.");
+		}
+		
+		List<GameCoordinate> coordsBetween = from.getStraightLineCoordsBetween(to);
+		
+		if(coordsBetween.size() <= 0){
+			throw new HantoException("The piece did not jump over any pieces.");
+		}
+		
+		boolean isContinuous = true;
+		for(GameCoordinate coord: coordsBetween){
+			isContinuous &= board.containsKey(coord);
+		}
+		
+		if(!isContinuous){
+			throw new HantoException("The line jumped did not contain pieces in every location.");
 		}
 	}
 

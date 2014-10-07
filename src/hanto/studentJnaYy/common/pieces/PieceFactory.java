@@ -53,6 +53,9 @@ public class PieceFactory {
 			case CRAB:
 				piece = new CrabPiece(color);
 				break;
+			case HORSE:
+				piece = new HorsePiece(color);
+				break;
 			default:
 				piece = null;
 				break;
