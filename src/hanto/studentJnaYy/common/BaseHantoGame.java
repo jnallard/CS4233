@@ -96,9 +96,10 @@ public abstract class BaseHantoGame implements HantoGame {
 	 * @param from the coordinate to move the piece from
 	 * @param to the location to place the piece
 	 * @return true if not overridden, otherwise it will be based upon the special rules
+	 * @throws HantoException 
 	 */
 	protected boolean checkSpecialMoves(HantoPieceType pieceType,
-			HantoCoordinate from, HantoCoordinate to) {
+			HantoCoordinate from, HantoCoordinate to) throws HantoException {
 		return true;
 	}
 
@@ -188,9 +189,10 @@ public abstract class BaseHantoGame implements HantoGame {
 	 * @param from the location of the piece, (null to resign)
 	 * @param to the destination of the piece, (null to resign)
 	 * @return true if all the conditions are met to resign
+	 * @throws HantoException 
 	 */
 	protected boolean isResigned(HantoPieceType pieceType, HantoCoordinate from,
-			HantoCoordinate to) {
+			HantoCoordinate to) throws HantoException {
 		boolean isPieceNull = pieceType == null;
 		boolean isFromNull = from == null;
 		boolean isToNull = to == null;

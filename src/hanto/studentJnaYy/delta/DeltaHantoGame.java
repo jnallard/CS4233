@@ -11,6 +11,7 @@
 package hanto.studentJnaYy.delta;
 
 import hanto.common.HantoCoordinate;
+import hanto.common.HantoException;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.studentJnaYy.common.BaseHantoGame;
@@ -46,10 +47,11 @@ public class DeltaHantoGame extends BaseHantoGame
 	/**
 	 * Checks to see if the special condition (resignation) is met
 	 * in order to justify breaking the normal template process
+	 * @throws HantoException 
 	 */
 	@Override
 	protected boolean checkSpecialMoves(HantoPieceType pieceType, 
-			HantoCoordinate from, HantoCoordinate to) {
+			HantoCoordinate from, HantoCoordinate to) throws HantoException {
 		return !isResigned(pieceType, from, to);
 	}
 	

@@ -14,7 +14,9 @@ import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.studentJnaYy.common.GameCoordinate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -96,5 +98,22 @@ public class MoveHandler {
 			throw new HantoException("There is no movement defined for this piece.");
 		}
 		return moveMaker;
+	}
+	
+	/**
+	 * Returns the list of possible move pieces for a piece type, from a location on the board
+	 * @param type the piece type, used to find the Movement
+	 * @param from the location the piece is at
+	 * @param board the configuration of pieces already placed
+	 * @return the list of possible coordinates it can move to.
+	 */
+	public List<GameCoordinate> getPossibleCoordinates(HantoPieceType type, GameCoordinate from, 
+			Map<GameCoordinate, HantoPiece> board){
+		Movement moveMaker = movements.get(type);
+		List<GameCoordinate> possibleCoords = new ArrayList<GameCoordinate>();
+		if(moveMaker != null){
+			possibleCoords = moveMaker.getPossibleMoves(from, board);
+		}
+		return possibleCoords;
 	}
 }

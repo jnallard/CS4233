@@ -11,8 +11,10 @@
 package hanto.studentJnaYy.epsilon;
 
 import hanto.common.HantoCoordinate;
+import hanto.common.HantoException;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
+import hanto.common.HantoPrematureResignationException;
 import hanto.studentJnaYy.common.BaseHantoGame;
 import hanto.studentJnaYy.common.moveControllers.MovementType;
 
@@ -49,11 +51,35 @@ public class EpsilonHantoGame extends BaseHantoGame
 	/**
 	 * Checks to see if the special condition (resignation) is met
 	 * in order to justify breaking the normal template process
+	 * @throws HantoException 
 	 */
 	@Override
 	protected boolean checkSpecialMoves(HantoPieceType pieceType, 
-			HantoCoordinate from, HantoCoordinate to) {
+			HantoCoordinate from, HantoCoordinate to) throws HantoException {
 		return !isResigned(pieceType, from, to);
+	}
+	
+	/**
+	 * Checks to see if a move was a resignation move
+	 * @param pieceType the type of the piece, (null to resign)
+	 * @param from the location of the piece, (null to resign)
+	 * @param to the destination of the piece, (null to resign)
+	 * @return true if all the conditions are met to resign
+	 * @throws HantoException 
+	 */
+	protected boolean isResigned(HantoPieceType pieceType, HantoCoordinate from,
+			HantoCoordinate to) throws HantoException {
+		boolean result = false;
+		if(super.isResigned(pieceType, from, to)){
+			boolean areMovesAvailable = board.getPossibleMovesForPlayer(currentColor).size() != 0;
+			boolean arePlacementsAvailable = board.canAPieceBePlacedByPlayer(currentColor, PiecePlacementOwnColorExceptionTurns);
+			boolean arePiecesAvailable = pieceCounter.getPiecesAvailableCount(currentColor) != 0;
+			if(areMovesAvailable || (arePlacementsAvailable && arePiecesAvailable)){
+				throw new HantoPrematureResignationException();
+			}
+			result = true;
+		}
+		return result;
 	}
 	
 	/**

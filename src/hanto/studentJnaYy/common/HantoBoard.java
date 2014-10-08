@@ -16,7 +16,6 @@ import hanto.common.HantoPlayerColor;
 import hanto.common.MoveResult;
 import hanto.studentJnaYy.common.moveControllers.MoveHandler;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -297,41 +296,10 @@ public class HantoBoard {
 	 * @throws HantoException
 	 */
 	public void checkPieceConnectivity() throws HantoException{
-		List<GameCoordinate> foundCoords = new ArrayList<GameCoordinate>();
-		GameCoordinate startingCoord = (GameCoordinate) board.keySet().toArray()[0];
-		
-		findAllConnectedCoords(startingCoord, foundCoords);
-		
-		if(foundCoords.size() != board.size()){
-			throw new HantoException("The board is no longer contiguous.");
-		}
+		BoardHelperClass.checkPieceConnectivity(board);
 	}
-
-	/**
-	 * Gets all of the connected coordinates from a given coordinate (recursive)
-	 * @param startingCoord the location to start from
-	 * @param foundCoords the list to store the connected coordinates in
-	 */
-	private void findAllConnectedCoords(GameCoordinate startingCoord,
-			List<GameCoordinate> foundCoords) {
-		foundCoords.add(startingCoord);
-		
-		List<GameCoordinate> allNeighbors = startingCoord.getAdjacentCoordinates();
-		List<GameCoordinate> foundNeighbors = new ArrayList<GameCoordinate>();
-		
-		for(GameCoordinate neighbor : allNeighbors){
-			if(board.containsKey(neighbor)){
-				foundNeighbors.add(neighbor);
-			}
-		}
-		
-		for(GameCoordinate neighbor : foundNeighbors){
-			if(!foundCoords.contains(neighbor)){
-				findAllConnectedCoords(neighbor, foundCoords);
-			}
-		}
-		
-	}
+	
+	
 
 	/**
 	 * Removes the piece at the location from the board
@@ -378,4 +346,38 @@ public class HantoBoard {
 		turnCount = 0;
 	}
 	
+	public Map<GameCoordinate, List<GameCoordinate>> getPossibleMovesForPlayer(HantoPlayerColor color){
+		Map<GameCoordinate, List<GameCoordinate>> moves = new HashMap<GameCoordinate, List<GameCoordinate>>();
+		for(GameCoordinate coord: board.keySet()){
+			HantoPiece piece = getPieceAt(coord);
+			if(piece.getColor() == color){
+				List<GameCoordinate> possibleMoves = moveController.getPossibleCoordinates(piece.getType(), coord, board);
+				if(!possibleMoves.isEmpty()){
+					moves.put(coord, possibleMoves);
+				}
+			}
+		}
+		return moves;
+	}
+
+	
+	public boolean canAPieceBePlacedByPlayer(HantoPlayerColor color, int ruleExceptionTurns){
+		boolean isSpotAvailable = false;
+		for(GameCoordinate coord: BoardHelperClass.getAllOpenCoordinates(board)){
+			try{
+				checkPieceAddedNextToOwnColorRule(coord, color, ruleExceptionTurns);
+				isSpotAvailable = true;
+				break;
+			}
+			catch(HantoException e){
+				//The check failed, but it's fine.
+			}
+		}
+		
+		if(turnCount <= ruleExceptionTurns){
+			isSpotAvailable = true;
+		}
+		
+		return isSpotAvailable;
+	}
 }

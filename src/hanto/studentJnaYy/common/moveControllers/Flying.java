@@ -21,7 +21,7 @@ import java.util.Map;
  * @author Joshua and Yan
  *
  */
-public class Flying implements Movement {
+public class Flying extends AbsMovement implements Movement {
 	private int maxDistance;
 	
 	/**
@@ -47,5 +47,29 @@ public class Flying implements Movement {
 			throw new HantoException("You flew further than the max distance set.");
 		}
 	}
+
+//	@Override
+//	public List<GameCoordinate> getPossibleMoves(GameCoordinate from,
+//			Map<GameCoordinate, HantoPiece> board) {
+//		List<GameCoordinate> newCoords = BoardHelperClass.getAllOpenCoordinates(board);
+//		List<GameCoordinate> moves = new ArrayList<GameCoordinate>();
+//		for (GameCoordinate coord : newCoords) {
+//			try {
+//				Map<GameCoordinate, HantoPiece> newBoard = new HashMap<GameCoordinate, HantoPiece>(
+//						board);
+//				HantoPiece piece = newBoard.get(from);
+//				checkMovement(coord, from, newBoard);
+//				newBoard.remove(from);
+//				newBoard.put(coord, piece);
+//				BoardHelperClass.checkPieceConnectivity(newBoard);
+//				moves.add(coord);
+//			} catch (HantoException e) {
+//				//The piece/move is not valid.
+//			}
+//			
+//		}
+//		return moves;
+//	}
+
 
 }

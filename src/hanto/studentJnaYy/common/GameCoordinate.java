@@ -169,7 +169,8 @@ public class GameCoordinate implements HantoCoordinate {
 	 * @return the integer distance
 	 */
 	public int getDistance(GameCoordinate toCoord){
-		int distance = getRecursiveDistance(xCoordinate - toCoord.xCoordinate, yCoordinate - toCoord.yCoordinate, 0);
+		int distance = getRecursiveDistance(xCoordinate - toCoord.xCoordinate, 
+				yCoordinate - toCoord.yCoordinate);
 		return distance;
 	}
 	
@@ -180,13 +181,14 @@ public class GameCoordinate implements HantoCoordinate {
 	 * @param distanceThusFar the distance traveled thus far
 	 * @return
 	 */
-	private int getRecursiveDistance(int xDiff, int yDiff, int distanceThusFar) {
+	private int getRecursiveDistance(int xDiff, int yDiff) {
 		
+		int distanceThusFar = 0;
 		if(xDiff < 0 &&  yDiff > 0){
-			distanceThusFar = getRecursiveDistance(xDiff + 1, yDiff - 1, distanceThusFar + 1);
+			distanceThusFar = 1 + getRecursiveDistance(xDiff + 1, yDiff - 1);
 		}
 		else if(xDiff > 0 &&  yDiff < 0){
-			distanceThusFar = getRecursiveDistance(xDiff - 1, yDiff + 1, distanceThusFar + 1);
+			distanceThusFar = 1 + getRecursiveDistance(xDiff - 1, yDiff + 1);
 		}
 		else{
 			distanceThusFar += Math.abs(xDiff) + Math.abs( yDiff);

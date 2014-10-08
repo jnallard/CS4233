@@ -15,39 +15,47 @@ import hanto.studentJnaYy.common.GameCoordinate;
 
 import java.util.Map;
 
-
 /**
- * This class is used for represent a walking movement, which checks to
- * see if a walking move is valid.
+ * This class is used for represent a walking movement, which checks to see if a
+ * walking move is valid.
+ * 
  * @author Joshua and Yan
  *
  */
-public class Walking implements Movement {
+public class Walking extends AbsMovement implements Movement {
 
 	/**
-	 * Checks to see if the move for a certain piece is valid given the state of the board.
-	 * @param from the start coordinate of the piece
-	 * @param to the destination of the piece
-	 * @param board the current hashmap representing the pieces on the board.
-	 * @throws HantoException if the move is not valid
+	 * Checks to see if the move for a certain piece is valid given the state of
+	 * the board.
+	 * 
+	 * @param from
+	 *            the start coordinate of the piece
+	 * @param to
+	 *            the destination of the piece
+	 * @param board
+	 *            the current hashmap representing the pieces on the board.
+	 * @throws HantoException
+	 *             if the move is not valid
 	 */
 	@Override
 	public void checkMovement(GameCoordinate to, GameCoordinate from,
 			Map<GameCoordinate, HantoPiece> board) throws HantoException {
-		
-		//Assuming walking is only one step for now - darn TDD~
-		if(!from.isAdjacent(to)){
+
+		// Assuming walking is only one step for now - darn TDD~
+		if (!from.isAdjacent(to)) {
 			throw new HantoException("The piece was walking more than one hex.");
 		}
-		
+
 		boolean arePiecesInNeigboringCoordinates = true;
-		for(GameCoordinate commonNeighbor : from.getCommonAdjacentCoordinates(to)){
-			if(!board.containsKey(commonNeighbor)){
+		for (GameCoordinate commonNeighbor : from
+				.getCommonAdjacentCoordinates(to)) {
+			if (!board.containsKey(commonNeighbor)) {
 				arePiecesInNeigboringCoordinates = false;
 			}
 		}
-		if(arePiecesInNeigboringCoordinates){
-			throw new HantoException("The piece cannot walk, because slding is prohibited.");
+		if (arePiecesInNeigboringCoordinates) {
+			throw new HantoException(
+					"The piece cannot walk, because slding is prohibited.");
 		}
 	}
 

@@ -15,6 +15,7 @@ import hanto.common.HantoException;
 import hanto.common.HantoGameID;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
+import hanto.common.HantoPrematureResignationException;
 import hanto.common.MoveResult;
 import hanto.studentJnaYy.common.GameCoordinate;
 
@@ -632,19 +633,47 @@ public class TestEpsilonHanto {
 		redFirstGame.makeMove(null, new GameCoordinate(0, 0), null);
 	}
 	
-	@Test
+	@Test(expected = HantoPrematureResignationException.class)
 	public void testResignNewGame() throws HantoException{
 
-		MoveResult result = redFirstGame.makeMove(null, null, null);
-		assertEquals(MoveResult.BLUE_WINS, result);
+		redFirstGame.makeMove(null, null, null);
 	}
 	
-	@Test
+	@Test(expected = HantoPrematureResignationException.class)
 	public void testResignMidGame() throws HantoException{
 
 		redFirstGame.makeMove(BUTTERFLY, null, GAME_COORDINATE_ORIGIN);
 		redFirstGame.makeMove(BUTTERFLY, null, new GameCoordinate(0, 1));
 		redFirstGame.makeMove(SPARROW, null, new GameCoordinate(0, -1));
+		redFirstGame.makeMove(null, null, null);
+	}
+	
+	@Test
+	public void testGameResignAfterNoMoves() throws HantoException{
+
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(BLUE, BUTTERFLY, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(0, 1)),
+				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(0, 2)),
+				new PieceLocationPair(BLUE, CRAB, new GameCoordinate(0, 3)),
+				new PieceLocationPair(BLUE, CRAB, new GameCoordinate(0, 4)),
+				new PieceLocationPair(BLUE, CRAB, new GameCoordinate(0, 5)),
+				new PieceLocationPair(BLUE, CRAB, new GameCoordinate(0, 6)),
+				new PieceLocationPair(BLUE, CRAB, new GameCoordinate(0, 7)),
+				new PieceLocationPair(BLUE, CRAB, new GameCoordinate(0, 8)),
+				new PieceLocationPair(BLUE, HORSE, new GameCoordinate(0, 9)),
+				new PieceLocationPair(BLUE, HORSE, new GameCoordinate(0, 10)),
+				new PieceLocationPair(BLUE, HORSE, new GameCoordinate(0, 11)),
+				new PieceLocationPair(BLUE, HORSE, new GameCoordinate(0, 12)),
+				new PieceLocationPair(RED, BUTTERFLY, new GameCoordinate(0, 13)),
+				new PieceLocationPair(RED, SPARROW, new GameCoordinate(0, -1))
+				
+				
+		};
+		
+		redFirstGame.initializeBoard(pieces);
+		redFirstGame.setTurnNumber(10);
+		redFirstGame.setPlayerMoving(BLUE);
 		MoveResult result = redFirstGame.makeMove(null, null, null);
 		assertEquals(MoveResult.RED_WINS, result);
 	}
@@ -652,11 +681,31 @@ public class TestEpsilonHanto {
 	@Test(expected = HantoException.class)
 	public void testResignMidGameThenMakeMove() throws HantoException{
 
-		redFirstGame.makeMove(BUTTERFLY, null, GAME_COORDINATE_ORIGIN);
-		redFirstGame.makeMove(BUTTERFLY, null, new GameCoordinate(0, 1));
-		redFirstGame.makeMove(SPARROW, null, new GameCoordinate(0, -1));
+		PieceLocationPair[] pieces = {
+				new PieceLocationPair(BLUE, BUTTERFLY, GAME_COORDINATE_ORIGIN),
+				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(0, 1)),
+				new PieceLocationPair(BLUE, SPARROW, new GameCoordinate(0, 2)),
+				new PieceLocationPair(BLUE, CRAB, new GameCoordinate(0, 3)),
+				new PieceLocationPair(BLUE, CRAB, new GameCoordinate(0, 4)),
+				new PieceLocationPair(BLUE, CRAB, new GameCoordinate(0, 5)),
+				new PieceLocationPair(BLUE, CRAB, new GameCoordinate(0, 6)),
+				new PieceLocationPair(BLUE, CRAB, new GameCoordinate(0, 7)),
+				new PieceLocationPair(BLUE, CRAB, new GameCoordinate(0, 8)),
+				new PieceLocationPair(BLUE, HORSE, new GameCoordinate(0, 9)),
+				new PieceLocationPair(BLUE, HORSE, new GameCoordinate(0, 10)),
+				new PieceLocationPair(BLUE, HORSE, new GameCoordinate(0, 11)),
+				new PieceLocationPair(BLUE, HORSE, new GameCoordinate(0, 12)),
+				new PieceLocationPair(RED, BUTTERFLY, new GameCoordinate(0, 13)),
+				new PieceLocationPair(RED, HORSE, new GameCoordinate(0, -1))
+				
+				
+		};
+		
+		redFirstGame.initializeBoard(pieces);
+		redFirstGame.setTurnNumber(10);
+		redFirstGame.setPlayerMoving(BLUE);
 		redFirstGame.makeMove(null, null, null);
-		redFirstGame.makeMove(SPARROW, null, new GameCoordinate(0, -2));
+		redFirstGame.makeMove(HORSE, new GameCoordinate(0, -1), new GameCoordinate(0, 14));
 	}
 	
 

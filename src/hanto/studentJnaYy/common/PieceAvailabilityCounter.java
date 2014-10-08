@@ -83,6 +83,15 @@ public class PieceAvailabilityCounter {
 		getPieceCounterByColor(color).put(type, --value);
 	}
 	
+	public int getPiecesAvailableCount(HantoPlayerColor color){
+		int count = 0;
+		Map<HantoPieceType, Integer> colorPieceCounter = getPieceCounterByColor(color);
+		for(HantoPieceType type: colorPieceCounter.keySet()){
+			count += colorPieceCounter.get(type);
+		}
+		return count;
+	}
+	
 	/**
 	 * Checks to see if the given piece is valid for the game.
 	 * @param pieceType the type to check for

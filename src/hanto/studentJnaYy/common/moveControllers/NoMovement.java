@@ -20,7 +20,7 @@ import java.util.Map;
  * @author Joshua and Yan
  *
  */
-public class NoMovement implements Movement {
+public class NoMovement extends AbsMovement implements Movement {
 	
 	/**
 	 * Checks to see if the move for a certain piece is valid given the state of the board.

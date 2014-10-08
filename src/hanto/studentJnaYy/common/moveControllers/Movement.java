@@ -9,11 +9,12 @@
  *******************************************************************************/
 package hanto.studentJnaYy.common.moveControllers;
 
-import java.util.Map;
-
 import hanto.common.HantoException;
 import hanto.common.HantoPiece;
 import hanto.studentJnaYy.common.GameCoordinate;
+
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -33,4 +34,7 @@ public interface Movement {
 	 */
 	void checkMovement(GameCoordinate to, GameCoordinate from, 
 			Map<GameCoordinate, HantoPiece> board) throws HantoException;
+	
+	List<GameCoordinate> getPossibleMoves(GameCoordinate from, 
+			Map<GameCoordinate, HantoPiece> board);
 }
