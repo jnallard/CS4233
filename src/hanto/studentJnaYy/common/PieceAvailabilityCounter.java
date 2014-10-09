@@ -83,6 +83,11 @@ public class PieceAvailabilityCounter {
 		getPieceCounterByColor(color).put(type, --value);
 	}
 	
+	/**
+	 * Checks to see how many pieces are available for a given player.
+	 * @param color the player to check for
+	 * @return the number of pieces available
+	 */
 	public int getPiecesAvailableCount(HantoPlayerColor color){
 		int count = 0;
 		Map<HantoPieceType, Integer> colorPieceCounter = getPieceCounterByColor(color);

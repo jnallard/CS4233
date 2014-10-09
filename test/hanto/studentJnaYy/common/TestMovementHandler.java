@@ -7,18 +7,16 @@
  *******************************************************************************/
 package hanto.studentJnaYy.common;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import hanto.common.HantoException;
-import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.studentJnaYy.common.moveControllers.MoveHandler;
 import hanto.studentJnaYy.common.moveControllers.MovementType;
 import hanto.studentJnaYy.common.pieces.ButterflyPiece;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,12 +29,12 @@ import org.junit.Test;
 public class TestMovementHandler {
 
 	private MoveHandler handler;
-	private Map<GameCoordinate, HantoPiece> board;
+	private HantoPieceHashMap board;
 	
 	@Before
 	public void setUp() {
 		handler = new MoveHandler();
-		board = new HashMap<GameCoordinate, HantoPiece>();
+		board = new HantoPieceHashMap();
 	}
 	
 	@Test

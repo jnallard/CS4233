@@ -10,11 +10,10 @@
 package hanto.studentJnaYy.common.moveControllers;
 
 import hanto.common.HantoException;
-import hanto.common.HantoPiece;
 import hanto.studentJnaYy.common.GameCoordinate;
+import hanto.studentJnaYy.common.HantoPieceMap;
 
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -33,8 +32,14 @@ public interface Movement {
 	 * @throws HantoException if the move is not valid
 	 */
 	void checkMovement(GameCoordinate to, GameCoordinate from, 
-			Map<GameCoordinate, HantoPiece> board) throws HantoException;
+			HantoPieceMap board) throws HantoException;
 	
+	/**
+	 * Gets a list of all possible moves that a movement can make from a certain position.
+	 * @param from the location to make movements from
+	 * @param board the board containing the current piece configuration
+	 * @return the list of all possible moves
+	 */
 	List<GameCoordinate> getPossibleMoves(GameCoordinate from, 
-			Map<GameCoordinate, HantoPiece> board);
+			HantoPieceMap board);
 }

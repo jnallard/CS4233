@@ -10,10 +10,8 @@
 package hanto.studentJnaYy.common.moveControllers;
 
 import hanto.common.HantoException;
-import hanto.common.HantoPiece;
 import hanto.studentJnaYy.common.GameCoordinate;
-
-import java.util.Map;
+import hanto.studentJnaYy.common.HantoPieceMap;
 
 /**
  * This class is used for represent a flying movement, which checks to
@@ -41,35 +39,12 @@ public class Flying extends AbsMovement implements Movement {
 	 */
 	@Override
 	public void checkMovement(GameCoordinate to, GameCoordinate from,
-			Map<GameCoordinate, HantoPiece> board) throws HantoException {
+			HantoPieceMap board) throws HantoException {
 		int distance = from.getDistance(to);
 		if(distance > maxDistance){
 			throw new HantoException("You flew further than the max distance set.");
 		}
 	}
-
-//	@Override
-//	public List<GameCoordinate> getPossibleMoves(GameCoordinate from,
-//			Map<GameCoordinate, HantoPiece> board) {
-//		List<GameCoordinate> newCoords = BoardHelperClass.getAllOpenCoordinates(board);
-//		List<GameCoordinate> moves = new ArrayList<GameCoordinate>();
-//		for (GameCoordinate coord : newCoords) {
-//			try {
-//				Map<GameCoordinate, HantoPiece> newBoard = new HashMap<GameCoordinate, HantoPiece>(
-//						board);
-//				HantoPiece piece = newBoard.get(from);
-//				checkMovement(coord, from, newBoard);
-//				newBoard.remove(from);
-//				newBoard.put(coord, piece);
-//				BoardHelperClass.checkPieceConnectivity(newBoard);
-//				moves.add(coord);
-//			} catch (HantoException e) {
-//				//The piece/move is not valid.
-//			}
-//			
-//		}
-//		return moves;
-//	}
 
 
 }

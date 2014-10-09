@@ -67,6 +67,7 @@ public class EpsilonHantoGame extends BaseHantoGame
 	 * @return true if all the conditions are met to resign
 	 * @throws HantoException 
 	 */
+	@Override
 	protected boolean isResigned(HantoPieceType pieceType, HantoCoordinate from,
 			HantoCoordinate to) throws HantoException {
 		boolean result = false;

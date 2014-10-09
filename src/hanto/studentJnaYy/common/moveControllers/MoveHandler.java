@@ -10,9 +10,9 @@
 package hanto.studentJnaYy.common.moveControllers;
 
 import hanto.common.HantoException;
-import hanto.common.HantoPiece;
 import hanto.common.HantoPieceType;
 import hanto.studentJnaYy.common.GameCoordinate;
+import hanto.studentJnaYy.common.HantoPieceMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,8 +36,8 @@ public class MoveHandler {
 	 * @param type the piece type, used to find the movement associated.
 	 * @throws HantoException
 	 */
-	public void checkMovement(GameCoordinate from, GameCoordinate to, Map<GameCoordinate, 
-			HantoPiece> board, HantoPieceType type) throws HantoException{
+	public void checkMovement(GameCoordinate from, GameCoordinate to, HantoPieceMap board,
+			HantoPieceType type) throws HantoException{
 		Movement movement = getMovementForType(type);
 		movement.checkMovement(from, to, board);
 	}
@@ -55,6 +55,7 @@ public class MoveHandler {
 	 * Sets the movement type for the piece.
 	 * @param pieceType the piece type to define a movement for
 	 * @param movementType the enumeration representing the movement wanted
+	 * @param max the maximum distance to be applied for the movement
 	 */
 	public void setMovementForType(HantoPieceType pieceType, MovementType movementType, int max){
 		Movement moveMaker = null;
@@ -108,7 +109,7 @@ public class MoveHandler {
 	 * @return the list of possible coordinates it can move to.
 	 */
 	public List<GameCoordinate> getPossibleCoordinates(HantoPieceType type, GameCoordinate from, 
-			Map<GameCoordinate, HantoPiece> board){
+			HantoPieceMap board){
 		Movement moveMaker = movements.get(type);
 		List<GameCoordinate> possibleCoords = new ArrayList<GameCoordinate>();
 		if(moveMaker != null){

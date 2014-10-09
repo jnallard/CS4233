@@ -10,11 +10,10 @@
 package hanto.studentJnaYy.common.moveControllers;
 
 import hanto.common.HantoException;
-import hanto.common.HantoPiece;
 import hanto.studentJnaYy.common.GameCoordinate;
+import hanto.studentJnaYy.common.HantoPieceMap;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class is used for represent a flying movement, which checks to
@@ -33,7 +32,7 @@ public class Jumping extends AbsMovement implements Movement {
 	 */
 	@Override
 	public void checkMovement(GameCoordinate to, GameCoordinate from,
-			Map<GameCoordinate, HantoPiece> board) throws HantoException {
+			HantoPieceMap board) throws HantoException {
 		
 		if(!to.isStraightLine(from)){
 			throw new HantoException("The piece tried to jump not in a straight line.");
@@ -54,53 +53,5 @@ public class Jumping extends AbsMovement implements Movement {
 			throw new HantoException("The line jumped did not contain pieces in every location.");
 		}
 	}
-//
-//	@Override
-//	public List<GameCoordinate> getPossibleMoves(GameCoordinate from,
-//			Map<GameCoordinate, HantoPiece> board) {
-//		List<GameCoordinate> newCoords = getStraightLineMoves(from, board);
-//		List<GameCoordinate> moves = new ArrayList<GameCoordinate>();
-//		for (GameCoordinate coord : newCoords) {
-//			try {
-//				Map<GameCoordinate, HantoPiece> newBoard = new HashMap<GameCoordinate, HantoPiece>(
-//						board);
-//				HantoPiece piece = newBoard.get(from);
-//				checkMovement(coord, from, newBoard);
-//				newBoard.remove(from);
-//				newBoard.put(coord, piece);
-//				BoardHelperClass.checkPieceConnectivity(newBoard);
-//				moves.add(coord);
-//			} catch (HantoException e) {
-//				//The piece/move is not valid.
-//			}
-//			
-//		}
-//		return moves;
-//	}
-//	
-//	private List<GameCoordinate> getStraightLineMoves(GameCoordinate from, 
-//			Map<GameCoordinate, HantoPiece> board){
-//		List<GameCoordinate> adjacentCoords = from.getAdjacentCoordinates();
-//		List<GameCoordinate> moves = new ArrayList<GameCoordinate>();
-//		for(GameCoordinate coord: adjacentCoords){
-//			if(board.containsKey(coord)){
-//				GameCoordinate newCoord = getNextCoordAvailableInLine(from, coord, board);
-//				moves.add(newCoord);
-//			}
-//		}
-//		return moves;
-//	}
-//
-//	private GameCoordinate getNextCoordAvailableInLine(GameCoordinate from,
-//			GameCoordinate coord, Map<GameCoordinate, HantoPiece> board) {
-//		int addX = coord.getX() - from.getX();
-//		int addY = coord.getY() - from.getY();
-//		GameCoordinate newCoord = coord;
-//		if(board.containsKey(coord)){
-//			newCoord = getNextCoordAvailableInLine(coord, 
-//					new GameCoordinate(coord.getX() + addX, coord.getY() + addY), board);
-//		}
-//		return newCoord;
-//	}
 
 }

@@ -10,10 +10,8 @@
 package hanto.studentJnaYy.common.moveControllers;
 
 import hanto.common.HantoException;
-import hanto.common.HantoPiece;
 import hanto.studentJnaYy.common.GameCoordinate;
-
-import java.util.Map;
+import hanto.studentJnaYy.common.HantoPieceMap;
 
 /**
  * This class is used for represent a walking movement, which checks to see if a
@@ -39,7 +37,7 @@ public class Walking extends AbsMovement implements Movement {
 	 */
 	@Override
 	public void checkMovement(GameCoordinate to, GameCoordinate from,
-			Map<GameCoordinate, HantoPiece> board) throws HantoException {
+			HantoPieceMap board) throws HantoException {
 
 		// Assuming walking is only one step for now - darn TDD~
 		if (!from.isAdjacent(to)) {

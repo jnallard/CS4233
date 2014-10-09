@@ -86,6 +86,11 @@ public class GameCoordinate implements HantoCoordinate {
 		return areCoordsAdjacent;
 	}
 	
+	/**
+	 * Checks to see if two coordinates are in a straight line
+	 * @param secondCoordinate the coord to compare to
+	 * @return true if they are in a straight line
+	 */
 	public boolean isStraightLine(GameCoordinate secondCoordinate) {
 		int xDifference = xCoordinate - secondCoordinate.xCoordinate;
 		int yDifference = yCoordinate - secondCoordinate.yCoordinate;
@@ -100,6 +105,12 @@ public class GameCoordinate implements HantoCoordinate {
 		
 	}
 	
+	/**
+	 * Returns a list of coordinates between two coordinates in a straight line
+	 * @param secondCoordinate the end coordinate
+	 * @return an empty list if the coordinates are not straight, 
+	 * otherwise the coordinates in between
+	 */
 	public List<GameCoordinate> getStraightLineCoordsBetween(GameCoordinate secondCoordinate) {
 		
 		List<GameCoordinate> coords = new ArrayList<GameCoordinate>();

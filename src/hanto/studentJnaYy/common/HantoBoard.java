@@ -19,7 +19,6 @@ import hanto.studentJnaYy.common.moveControllers.MoveHandler;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * @author Joshua and Yan
@@ -28,7 +27,7 @@ import java.util.Map.Entry;
 public class HantoBoard {
 
 	
-	protected Map<GameCoordinate, HantoPiece> board = new HashMap<GameCoordinate, HantoPiece>();
+	protected final HantoPieceMap board = new HantoPieceHashMap();
 	protected int turnCount = 1;
 	protected HantoBoardButterflyManager butterflyManager;
 	
@@ -175,7 +174,7 @@ public class HantoBoard {
 	private boolean isAdjacentToNOrMorePieces(GameCoordinate coordinate, int numAdajcentTo) {
 		int numberOfOccupiedNeighbors = 0;
 		if(coordinate != null){
-			numberOfOccupiedNeighbors = getNumberOfNeighborPieces(coordinate);
+			numberOfOccupiedNeighbors = board.getNumberOfNeighborPieces(coordinate);
 		}
 		
 		boolean hasNNeighbors = numberOfOccupiedNeighbors >= numAdajcentTo;
@@ -185,22 +184,7 @@ public class HantoBoard {
 		return numberOfOccupiedNeighbors >= numAdajcentTo;
 	}
 
-	/**
-	 * Returns the number of neighbor pieces to a certain coordinate
-	 * @param coordinate the coordinate on the board to check for
-	 * @return the number of neighbor pieces
-	 */
-	private int getNumberOfNeighborPieces(GameCoordinate coordinate) {
-		int numberOfOccupiedNeighbors = 0;
-		List<GameCoordinate> neighbors = coordinate.getAdjacentCoordinates();
-		for(int i = 0; i < neighbors.size(); i++){
-			GameCoordinate neighbor = neighbors.get(i);
-			if(board.containsKey(neighbor)){
-				numberOfOccupiedNeighbors++;
-			}
-		}
-		return numberOfOccupiedNeighbors;
-	}
+	
 
 	/**
 	 * Checks to see if the game is over, by the move count being
@@ -222,7 +206,7 @@ public class HantoBoard {
 	 */
 	public HantoPiece getPieceAt(HantoCoordinate coordinate){
 		
-		return board.get(new GameCoordinate(coordinate));
+		return board.getPieceAt(coordinate);
 	}
 	
 	/**
@@ -233,13 +217,7 @@ public class HantoBoard {
 	 * @return a printable representation of the board.
 	 */
 	public String getPrintableBoard(){
-		String printedBoard = "";
-		for(Entry<GameCoordinate, HantoPiece> entry : board.entrySet()){
-			GameCoordinate coord = entry.getKey();
-			HantoPiece piece = entry.getValue();
-			printedBoard += coord.toString() + piece.getColor() + " " + piece.getType() + "\n";
-		}
-		return printedBoard;
+		return board.getPrintableBoard();
 	}
 
 	/**
@@ -252,15 +230,9 @@ public class HantoBoard {
 	public void checkPieceHere(HantoCoordinate fromCoordinate,
 			HantoPieceType pieceType, HantoPlayerColor currentColor) throws HantoException {
 		
-		HantoPiece piece = getPieceAt(fromCoordinate);
+		boolean isPieceHere = board.isPieceHere(fromCoordinate, pieceType, currentColor);
 		
-		boolean isPieceHereResult = false;
-		if(piece != null){
-			isPieceHereResult = piece.getColor() == currentColor;
-			isPieceHereResult &= piece.getType() == pieceType;
-		}
-		
-		if(!isPieceHereResult){
+		if(!isPieceHere){
 			throw new HantoException("The piece wanted is not at this location.");
 		}
 	}
@@ -274,29 +246,26 @@ public class HantoBoard {
 	 */
 	public void checkPieceAddedNextToOwnColorRule(HantoCoordinate coord, 
 			HantoPlayerColor currentColor, int ruleExceptionTurns) throws HantoException {
-		GameCoordinate toCoord = new GameCoordinate(coord);
-		List<GameCoordinate> neighbors = toCoord.getAdjacentCoordinates();
-		boolean isNextToOnlyThisColor = true;
-		
-		for(GameCoordinate neighbor : neighbors){
-			HantoPiece piece = board.get(neighbor);
-			if(piece != null){
-				isNextToOnlyThisColor &= piece.getColor() == currentColor;
-			}
-		}
+		boolean isNextToOnlyThisColor = board.isPieceOnlyNextToColor(coord,
+				currentColor);
 		
 		if(!isNextToOnlyThisColor && turnCount > ruleExceptionTurns){
 			throw new HantoException( "The given coordinate has at least one "
 					+ "piece that does not belong to " + currentColor);
 		}
 	}
+
+	
 	
 	/**
 	 * Checks to see if every piece on the board is connected
 	 * @throws HantoException
 	 */
 	public void checkPieceConnectivity() throws HantoException{
-		BoardHelperClass.checkPieceConnectivity(board);
+
+		if(!board.arePiecesConnected()){
+			throw new HantoException("The board is no longer contiguous.");
+		}
 	}
 	
 	
@@ -346,6 +315,11 @@ public class HantoBoard {
 		turnCount = 0;
 	}
 	
+	/**
+	 * Gets all the possible moves that a player can make
+	 * @param color the player to check for
+	 * @return a Map of a piece's location to the list of locations it can go.
+	 */
 	public Map<GameCoordinate, List<GameCoordinate>> getPossibleMovesForPlayer(HantoPlayerColor color){
 		Map<GameCoordinate, List<GameCoordinate>> moves = new HashMap<GameCoordinate, List<GameCoordinate>>();
 		for(GameCoordinate coord: board.keySet()){
@@ -360,17 +334,23 @@ public class HantoBoard {
 		return moves;
 	}
 
-	
+	/**
+	 * Checks to see if a piece can be placed anywhere on the board for a player
+	 * @param color the player to check for
+	 * @param ruleExceptionTurns the number of turns where the rule of opposite player
+	 * restrictions doesn't apply
+	 * @return true if there is a spot where a piece can be placed
+	 */
 	public boolean canAPieceBePlacedByPlayer(HantoPlayerColor color, int ruleExceptionTurns){
 		boolean isSpotAvailable = false;
-		for(GameCoordinate coord: BoardHelperClass.getAllOpenCoordinates(board)){
+		for(GameCoordinate coord: board.getAllOpenCoordinates()){
 			try{
 				checkPieceAddedNextToOwnColorRule(coord, color, ruleExceptionTurns);
 				isSpotAvailable = true;
 				break;
 			}
 			catch(HantoException e){
-				//The check failed, but it's fine.
+				continue;
 			}
 		}
 		
