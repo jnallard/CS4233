@@ -16,6 +16,7 @@ import hanto.common.HantoPlayerColor;
 import hanto.common.MoveResult;
 import hanto.studentJnaYy.common.moveControllers.MoveHandler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ import java.util.Map;
 public class HantoBoard {
 
 	
-	protected final HantoPieceMap board = new HantoPieceHashMap();
+	protected final HantoPieceLocationController board = new HantoPieceHashMap();
 	protected int turnCount = 1;
 	protected HantoBoardButterflyManager butterflyManager;
 	
@@ -88,7 +89,7 @@ public class HantoBoard {
 	 * @return true if the coordinate exists already on the board.
 	 */
 	private boolean isCoordinateTaken(GameCoordinate to){
-		boolean isTaken = board.containsKey(to);
+		boolean isTaken = board.containsCoordinate(to);
 		if(isTaken){
 			exceptionMessage = to + " is already occupied by another piece.";
 		}
@@ -113,7 +114,7 @@ public class HantoBoard {
 			butterflyManager.setButterflyCoord(piece.getColor(), coordinate);
 		}
 		
-		board.put(coordinate, piece);
+		board.addPiece(coordinate, piece);
 		
 		if(piece.getColor() != movesFirst){
 			turnCount++;
@@ -275,7 +276,7 @@ public class HantoBoard {
 	 * @param fromCoordinate the coordinate to remove a piece
 	 */
 	public void removePiece(HantoCoordinate fromCoordinate) {
-		board.remove(new GameCoordinate(fromCoordinate));
+		board.removePiece(new GameCoordinate(fromCoordinate));
 	}
 
 	/**
@@ -309,7 +310,7 @@ public class HantoBoard {
 	 * Clears the board of all pieces
 	 */
 	public void clear() {
-		board.clear();
+		board.clearBoard();
 		butterflyManager.setButterflyCoord(HantoPlayerColor.RED, null);
 		butterflyManager.setButterflyCoord(HantoPlayerColor.BLUE, null);
 		turnCount = 0;
@@ -322,7 +323,7 @@ public class HantoBoard {
 	 */
 	public Map<GameCoordinate, List<GameCoordinate>> getPossibleMovesForPlayer(HantoPlayerColor color){
 		Map<GameCoordinate, List<GameCoordinate>> moves = new HashMap<GameCoordinate, List<GameCoordinate>>();
-		for(GameCoordinate coord: board.keySet()){
+		for(GameCoordinate coord: board.getAllCoordinates()){
 			HantoPiece piece = getPieceAt(coord);
 			if(piece.getColor() == color){
 				List<GameCoordinate> possibleMoves = moveController.getPossibleCoordinates(piece.getType(), coord, board);
@@ -341,23 +342,39 @@ public class HantoBoard {
 	 * restrictions doesn't apply
 	 * @return true if there is a spot where a piece can be placed
 	 */
-	public boolean canAPieceBePlacedByPlayer(HantoPlayerColor color, int ruleExceptionTurns){
-		boolean isSpotAvailable = false;
-		for(GameCoordinate coord: board.getAllOpenCoordinates()){
-			try{
-				checkPieceAddedNextToOwnColorRule(coord, color, ruleExceptionTurns);
-				isSpotAvailable = true;
-				break;
-			}
-			catch(HantoException e){
-				continue;
+	public List<GameCoordinate> getPlacementsAvailable(HantoPlayerColor color, int ruleExceptionTurns){
+		
+		List<GameCoordinate> available = new ArrayList<GameCoordinate>();
+		
+		if(turnCount == 1 && color == movesFirst){
+			available.add(GAME_COORDINATE_ORIGIN);
+		}
+		else if(turnCount <= ruleExceptionTurns){
+			available = board.getAllOpenCoordinates();
+		}
+		else{
+			for(GameCoordinate coord: board.getAllOpenCoordinates()){
+				try{
+					checkPieceAddedNextToOwnColorRule(coord, color, ruleExceptionTurns);
+					available.add(coord);
+				}
+				catch(HantoException e){
+					continue;
+				}
 			}
 		}
 		
-		if(turnCount <= ruleExceptionTurns){
-			isSpotAvailable = true;
-		}
-		
-		return isSpotAvailable;
+		return available;
 	}
+	
+//	/**
+//	 * Checks to see if a piece can be placed anywhere on the board for a player
+//	 * @param color the player to check for
+//	 * @param ruleExceptionTurns the number of turns where the rule of opposite player
+//	 * restrictions doesn't apply
+//	 * @return true if there is a spot where a piece can be placed
+//	 */
+//	public boolean canAPieceBePlacedByPlayer(HantoPlayerColor color, int ruleExceptionTurns){
+//		return isSpotAvailable;
+//	}
 }

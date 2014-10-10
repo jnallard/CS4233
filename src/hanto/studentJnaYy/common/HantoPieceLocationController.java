@@ -15,14 +15,15 @@ import hanto.common.HantoPlayerColor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
- * This creates a HashMap specifically for GameCoordinates to Pieces,
+ * This creates a PieceLocationController specifically for GameCoordinates to Pieces,
  * with all of the respective functions included.
  * @author Joshua and Yan
  *
  */
-public interface HantoPieceMap extends Map<GameCoordinate, HantoPiece>{
+public interface HantoPieceLocationController{
 	
 	/**
 	 * Checks to see if the pieces on the board are all connected
@@ -79,5 +80,42 @@ public interface HantoPieceMap extends Map<GameCoordinate, HantoPiece>{
 	 * @return a printable representation of the board.
 	 */
 	String getPrintableBoard();
+	
+	/**
+	 * Returns the board that the map contains, so it can be copied when needed
+	 * @return the map inside this piece location holder
+	 */
+	Map<GameCoordinate, HantoPiece> getUnderlyingBoard();
+
+	/**
+	 * Checks to see if the board contains the coordinate
+	 * @param to the location to check for
+	 * @return true if the board contains it
+	 */
+	boolean containsCoordinate(GameCoordinate to);
+
+	/**
+	 * Adds a piece to the board, at the given coordinate
+	 * @param coordinate the location of the piece
+	 * @param piece the piece to add
+	 */
+	void addPiece(GameCoordinate coordinate, HantoPiece piece);
+
+	/**
+	 * Removes a piece/location from the board
+	 * @param gameCoordinate the location to clear
+	 */
+	void removePiece(GameCoordinate gameCoordinate);
+
+	/**
+	 * Removes all pieces from the board
+	 */
+	void clearBoard();
+
+	/**
+	 * Returns a list of all the coordinates set for the board.
+	 * @return the list of all coordinates
+	 */
+	Set<GameCoordinate> getAllCoordinates();
 
 }

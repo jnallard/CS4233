@@ -11,7 +11,7 @@ package hanto.studentJnaYy.common.moveControllers;
 
 import hanto.common.HantoException;
 import hanto.studentJnaYy.common.GameCoordinate;
-import hanto.studentJnaYy.common.HantoPieceMap;
+import hanto.studentJnaYy.common.HantoPieceLocationController;
 
 /**
  * This class is used for represent a flying movement, which checks to
@@ -39,7 +39,7 @@ public class Flying extends AbsMovement implements Movement {
 	 */
 	@Override
 	public void checkMovement(GameCoordinate to, GameCoordinate from,
-			HantoPieceMap board) throws HantoException {
+			HantoPieceLocationController board) throws HantoException {
 		int distance = from.getDistance(to);
 		if(distance > maxDistance){
 			throw new HantoException("You flew further than the max distance set.");

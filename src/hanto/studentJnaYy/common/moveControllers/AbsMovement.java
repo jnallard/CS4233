@@ -11,7 +11,7 @@ import hanto.common.HantoException;
 import hanto.common.HantoPiece;
 import hanto.studentJnaYy.common.GameCoordinate;
 import hanto.studentJnaYy.common.HantoPieceHashMap;
-import hanto.studentJnaYy.common.HantoPieceMap;
+import hanto.studentJnaYy.common.HantoPieceLocationController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public abstract class AbsMovement implements Movement {
 	 * @throws HantoException if the move is not valid
 	 */
 	public abstract void checkMovement(GameCoordinate to, GameCoordinate from,
-			HantoPieceMap board) throws HantoException;
+			HantoPieceLocationController board) throws HantoException;
 
 	/**
 	 * Gets a list of all possible moves that a movement can make from a certain position.
@@ -43,17 +43,17 @@ public abstract class AbsMovement implements Movement {
 	 * @return the list of all possible moves
 	 */
 	public List<GameCoordinate> getPossibleMoves(GameCoordinate from,
-			HantoPieceMap board) {
+			HantoPieceLocationController board) {
 		List<GameCoordinate> newCoords = board.getAllOpenCoordinates();
 		List<GameCoordinate> moves = new ArrayList<GameCoordinate>();
 		for (GameCoordinate coord : newCoords) {
 			try {
-				HantoPieceMap newBoard = new HantoPieceHashMap(
+				HantoPieceLocationController newBoard = new HantoPieceHashMap(
 						board);
-				HantoPiece piece = newBoard.get(from);
+				HantoPiece piece = newBoard.getPieceAt(from);
 				checkMovement(coord, from, newBoard);
-				newBoard.remove(from);
-				newBoard.put(coord, piece);
+				newBoard.removePiece(from);
+				newBoard.addPiece(coord, piece);
 				if(newBoard.arePiecesConnected()){
 					moves.add(coord);
 				}

@@ -11,7 +11,7 @@ package hanto.studentJnaYy.common.moveControllers;
 
 import hanto.common.HantoException;
 import hanto.studentJnaYy.common.GameCoordinate;
-import hanto.studentJnaYy.common.HantoPieceMap;
+import hanto.studentJnaYy.common.HantoPieceLocationController;
 
 /**
  * This class is used for represent a piece that has no movement.
@@ -29,7 +29,7 @@ public class NoMovement extends AbsMovement implements Movement {
 	 */
 	@Override
 	public void checkMovement(GameCoordinate to, GameCoordinate from,
-			HantoPieceMap board) throws HantoException {
+			HantoPieceLocationController board) throws HantoException {
 		throw new HantoException("This piece is not allowed to move.");
 	}
 

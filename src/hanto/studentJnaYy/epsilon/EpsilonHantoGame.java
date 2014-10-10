@@ -73,7 +73,8 @@ public class EpsilonHantoGame extends BaseHantoGame
 		boolean result = false;
 		if(super.isResigned(pieceType, from, to)){
 			boolean areMovesAvailable = board.getPossibleMovesForPlayer(currentColor).size() != 0;
-			boolean arePlacementsAvailable = board.canAPieceBePlacedByPlayer(currentColor, PiecePlacementOwnColorExceptionTurns);
+			boolean arePlacementsAvailable = board.getPlacementsAvailable(currentColor, 
+												PiecePlacementOwnColorExceptionTurns).size() != 0;
 			boolean arePiecesAvailable = pieceCounter.getPiecesAvailableCount(currentColor) != 0;
 			if(areMovesAvailable || (arePlacementsAvailable && arePiecesAvailable)){
 				throw new HantoPrematureResignationException();

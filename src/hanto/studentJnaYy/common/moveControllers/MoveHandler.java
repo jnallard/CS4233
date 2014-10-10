@@ -12,7 +12,7 @@ package hanto.studentJnaYy.common.moveControllers;
 import hanto.common.HantoException;
 import hanto.common.HantoPieceType;
 import hanto.studentJnaYy.common.GameCoordinate;
-import hanto.studentJnaYy.common.HantoPieceMap;
+import hanto.studentJnaYy.common.HantoPieceLocationController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +36,7 @@ public class MoveHandler {
 	 * @param type the piece type, used to find the movement associated.
 	 * @throws HantoException
 	 */
-	public void checkMovement(GameCoordinate from, GameCoordinate to, HantoPieceMap board,
+	public void checkMovement(GameCoordinate from, GameCoordinate to, HantoPieceLocationController board,
 			HantoPieceType type) throws HantoException{
 		Movement movement = getMovementForType(type);
 		movement.checkMovement(from, to, board);
@@ -109,7 +109,7 @@ public class MoveHandler {
 	 * @return the list of possible coordinates it can move to.
 	 */
 	public List<GameCoordinate> getPossibleCoordinates(HantoPieceType type, GameCoordinate from, 
-			HantoPieceMap board){
+			HantoPieceLocationController board){
 		Movement moveMaker = movements.get(type);
 		List<GameCoordinate> possibleCoords = new ArrayList<GameCoordinate>();
 		if(moveMaker != null){

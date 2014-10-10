@@ -11,7 +11,7 @@ package hanto.studentJnaYy.common.moveControllers;
 
 import hanto.common.HantoException;
 import hanto.studentJnaYy.common.GameCoordinate;
-import hanto.studentJnaYy.common.HantoPieceMap;
+import hanto.studentJnaYy.common.HantoPieceLocationController;
 
 /**
  * This class is used for represent a walking movement, which checks to see if a
@@ -37,7 +37,7 @@ public class Walking extends AbsMovement implements Movement {
 	 */
 	@Override
 	public void checkMovement(GameCoordinate to, GameCoordinate from,
-			HantoPieceMap board) throws HantoException {
+			HantoPieceLocationController board) throws HantoException {
 
 		// Assuming walking is only one step for now - darn TDD~
 		if (!from.isAdjacent(to)) {
@@ -47,7 +47,7 @@ public class Walking extends AbsMovement implements Movement {
 		boolean arePiecesInNeigboringCoordinates = true;
 		for (GameCoordinate commonNeighbor : from
 				.getCommonAdjacentCoordinates(to)) {
-			if (!board.containsKey(commonNeighbor)) {
+			if (!board.containsCoordinate(commonNeighbor)) {
 				arePiecesInNeigboringCoordinates = false;
 			}
 		}

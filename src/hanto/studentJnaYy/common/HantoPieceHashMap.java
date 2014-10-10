@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * This creates a HashMap specifically for GameCoordinates to Pieces,
@@ -25,12 +26,15 @@ import java.util.Map.Entry;
  * @author Joshua and Yan
  *
  */
-public class HantoPieceHashMap extends HashMap<GameCoordinate, HantoPiece> implements HantoPieceMap{
+public class HantoPieceHashMap implements HantoPieceLocationController {
+	
+	Map<GameCoordinate, HantoPiece> thePieceMap;
 	
 	/**
 	 * Creates a new empty Map
 	 */
 	public HantoPieceHashMap() {
+		thePieceMap = new HashMap<GameCoordinate, HantoPiece>();
 	}
 	
 	/**
@@ -38,7 +42,15 @@ public class HantoPieceHashMap extends HashMap<GameCoordinate, HantoPiece> imple
 	 * @param copy the map to copy
 	 */
 	public HantoPieceHashMap(Map<GameCoordinate, HantoPiece> copy) {
-		super(copy);
+		thePieceMap = new HashMap<GameCoordinate, HantoPiece>(copy);
+	}
+	
+	/**
+	 * Creates a copy of a previous map
+	 * @param copy the map to copy
+	 */
+	public HantoPieceHashMap(HantoPieceLocationController copy) {
+		thePieceMap = new HashMap<GameCoordinate, HantoPiece>(copy.getUnderlyingBoard());
 	}
 	
 	/**
@@ -47,12 +59,12 @@ public class HantoPieceHashMap extends HashMap<GameCoordinate, HantoPiece> imple
 	 */
 	public boolean arePiecesConnected(){
 		List<GameCoordinate> foundCoords = new ArrayList<GameCoordinate>();
-		GameCoordinate startingCoord = (GameCoordinate) keySet().toArray()[0];
+		GameCoordinate startingCoord = (GameCoordinate) thePieceMap.keySet().toArray()[0];
 		
 		findAllConnectedCoords(startingCoord, foundCoords);
 		
 		
-		return foundCoords.size() == size();
+		return foundCoords.size() == thePieceMap.size();
 	}
 
 	/**
@@ -68,7 +80,7 @@ public class HantoPieceHashMap extends HashMap<GameCoordinate, HantoPiece> imple
 		List<GameCoordinate> foundNeighbors = new ArrayList<GameCoordinate>();
 		
 		for(GameCoordinate neighbor : allNeighbors){
-			if(containsKey(neighbor)){
+			if(thePieceMap.containsKey(neighbor)){
 				foundNeighbors.add(neighbor);
 			}
 		}
@@ -87,10 +99,10 @@ public class HantoPieceHashMap extends HashMap<GameCoordinate, HantoPiece> imple
 	 */
 	public List<GameCoordinate> getAllOpenCoordinates(){
 		List<GameCoordinate> openCoords = new ArrayList<GameCoordinate>();
-		for(GameCoordinate coord: keySet()){
+		for(GameCoordinate coord: thePieceMap.keySet()){
 			List<GameCoordinate> neighbors = coord.getAdjacentCoordinates();
 			for(GameCoordinate neighbor: neighbors){
-				if(!containsKey(neighbor) && !openCoords.contains(neighbor)){
+				if(!thePieceMap.containsKey(neighbor) && !openCoords.contains(neighbor)){
 					openCoords.add(neighbor);
 				}
 			}
@@ -108,7 +120,7 @@ public class HantoPieceHashMap extends HashMap<GameCoordinate, HantoPiece> imple
 		List<GameCoordinate> neighbors = coordinate.getAdjacentCoordinates();
 		for(int i = 0; i < neighbors.size(); i++){
 			GameCoordinate neighbor = neighbors.get(i);
-			if(containsKey(neighbor)){
+			if(thePieceMap.containsKey(neighbor)){
 				numberOfOccupiedNeighbors++;
 			}
 		}
@@ -128,7 +140,7 @@ public class HantoPieceHashMap extends HashMap<GameCoordinate, HantoPiece> imple
 		boolean isNextToOnlyThisColor = true;
 		
 		for(GameCoordinate neighbor : neighbors){
-			HantoPiece piece = get(neighbor);
+			HantoPiece piece = thePieceMap.get(neighbor);
 			if(piece != null){
 				isNextToOnlyThisColor &= piece.getColor() == currentColor;
 			}
@@ -163,7 +175,7 @@ public class HantoPieceHashMap extends HashMap<GameCoordinate, HantoPiece> imple
 	 */
 	public HantoPiece getPieceAt(HantoCoordinate coordinate){
 		
-		return get(new GameCoordinate(coordinate));
+		return thePieceMap.get(new GameCoordinate(coordinate));
 	}
 	
 	/**
@@ -175,17 +187,63 @@ public class HantoPieceHashMap extends HashMap<GameCoordinate, HantoPiece> imple
 	 */
 	public String getPrintableBoard(){
 		String printedBoard = "";
-		for(Entry<GameCoordinate, HantoPiece> entry : entrySet()){
+		for(Entry<GameCoordinate, HantoPiece> entry : thePieceMap.entrySet()){
 			GameCoordinate coord = entry.getKey();
 			HantoPiece piece = entry.getValue();
 			printedBoard += coord.toString() + piece.getColor() + " " + piece.getType() + "\n";
 		}
 		return printedBoard;
 	}
-	
-	public Object clone(){
-		super.clone();
-		return new HantoPieceHashMap(this);
+
+
+	/**
+	 * Returns the board that the map contains, so it can be copied when needed
+	 * @return the map inside this piece location holder
+	 */
+	public Map<GameCoordinate, HantoPiece> getUnderlyingBoard() {
+		return thePieceMap;
 	}
 
+	/**
+	 * Checks to see if the board contains the coordinate
+	 * @param to the location to check for
+	 * @return true if the board contains it
+	 */
+	public boolean containsCoordinate(GameCoordinate to) {
+		return thePieceMap.containsKey(to);
+	}
+
+	/**
+	 * Adds a piece to the board, at the given coordinate
+	 * @param coordinate the location of the piece
+	 * @param piece the piece to add
+	 */
+	public void addPiece(GameCoordinate coordinate, HantoPiece piece) {
+		thePieceMap.put(coordinate, piece);
+	}
+
+	/**
+	 * Removes a piece/location from the board
+	 * @param gameCoordinate the location to clear
+	 */
+	public void removePiece(GameCoordinate coordinate) {
+		thePieceMap.remove(coordinate);
+	}
+
+	/**
+	 * Removes all pieces from the board
+	 */
+	public void clearBoard() {
+		thePieceMap.clear();
+	}
+
+	/**
+	 * Returns a list of all the coordinates set for the board.
+	 * @return the list of all coordinates
+	 */
+	public Set<GameCoordinate> getAllCoordinates() {
+		return thePieceMap.keySet();
+	}
+
+	
 }

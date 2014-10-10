@@ -11,7 +11,7 @@ package hanto.studentJnaYy.common.moveControllers;
 
 import hanto.common.HantoException;
 import hanto.studentJnaYy.common.GameCoordinate;
-import hanto.studentJnaYy.common.HantoPieceMap;
+import hanto.studentJnaYy.common.HantoPieceLocationController;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class Jumping extends AbsMovement implements Movement {
 	 */
 	@Override
 	public void checkMovement(GameCoordinate to, GameCoordinate from,
-			HantoPieceMap board) throws HantoException {
+			HantoPieceLocationController board) throws HantoException {
 		
 		if(!to.isStraightLine(from)){
 			throw new HantoException("The piece tried to jump not in a straight line.");
@@ -46,7 +46,7 @@ public class Jumping extends AbsMovement implements Movement {
 		
 		boolean isContinuous = true;
 		for(GameCoordinate coord: coordsBetween){
-			isContinuous &= board.containsKey(coord);
+			isContinuous &= board.containsCoordinate(coord);
 		}
 		
 		if(!isContinuous){

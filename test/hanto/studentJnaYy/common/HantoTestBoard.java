@@ -41,7 +41,7 @@ public class HantoTestBoard extends HantoBoard {
 	 */
 	public void forcePiecePlacement(HantoCoordinate to, HantoPiece piece){
 		GameCoordinate toCoord = new GameCoordinate(to);
-		board.put(toCoord, piece);
+		board.addPiece(toCoord, piece);
 		if(piece.getType() == HantoPieceType.BUTTERFLY){
 			butterflyManager.setButterflyCoord(piece.getColor(), toCoord);
 		}

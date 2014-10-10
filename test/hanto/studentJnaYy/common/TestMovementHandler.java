@@ -40,8 +40,8 @@ public class TestMovementHandler {
 	@Test
 	public void testSetMovementTypeWalking() throws HantoException{
 		handler.setMovementForType(HantoPieceType.BUTTERFLY, MovementType.WALK);
-		board.put(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
-		board.put(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
+		board.addPiece(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
 		
 		handler.checkMovement(new GameCoordinate(0, 0), new GameCoordinate(0, 1), board, HantoPieceType.BUTTERFLY);
 		assertTrue(true);
@@ -50,8 +50,8 @@ public class TestMovementHandler {
 	@Test
 	public void testSetMovementTypeFlying() throws HantoException{
 		handler.setMovementForType(HantoPieceType.BUTTERFLY, MovementType.FLY);
-		board.put(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
-		board.put(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
+		board.addPiece(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
 		
 		handler.checkMovement(new GameCoordinate(0, 0), new GameCoordinate(2, 0), board, HantoPieceType.BUTTERFLY);
 		assertTrue(true);
@@ -60,16 +60,16 @@ public class TestMovementHandler {
 	@Test(expected = HantoException.class)
 	public void testSetMovementTypeNoMovement() throws HantoException{
 		handler.setMovementForType(HantoPieceType.BUTTERFLY, MovementType.NO_MOVEMENT);
-		board.put(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
-		board.put(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
+		board.addPiece(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
 		
 		handler.checkMovement(new GameCoordinate(0, 0), new GameCoordinate(2, 0), board, HantoPieceType.BUTTERFLY);
 	}
 
 	@Test(expected = HantoException.class)
 	public void testSetMovementTypeNull() throws HantoException{
-		board.put(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
-		board.put(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
+		board.addPiece(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
 		
 		handler.checkMovement(new GameCoordinate(0, 0), new GameCoordinate(2, 0), board, HantoPieceType.BUTTERFLY);
 	}
@@ -77,8 +77,8 @@ public class TestMovementHandler {
 	@Test
 	public void testGetWalkingMoves() throws HantoException{
 		handler.setMovementForType(HantoPieceType.BUTTERFLY, MovementType.WALK);
-		board.put(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
-		board.put(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
+		board.addPiece(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
 		
 		List<GameCoordinate> coords = handler.getPossibleCoordinates(HantoPieceType.BUTTERFLY, 
 				new GameCoordinate(0,0), board);
@@ -90,9 +90,9 @@ public class TestMovementHandler {
 	@Test
 	public void testGetWalkingMovesSliding() throws HantoException{
 		handler.setMovementForType(HantoPieceType.BUTTERFLY, MovementType.WALK);
-		board.put(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
-		board.put(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
-		board.put(new GameCoordinate(-1, 1), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
+		board.addPiece(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(-1, 1), new ButterflyPiece(HantoPlayerColor.RED));
 		
 		List<GameCoordinate> coords = handler.getPossibleCoordinates(HantoPieceType.BUTTERFLY, 
 				new GameCoordinate(0,0), board);
@@ -102,9 +102,9 @@ public class TestMovementHandler {
 	@Test
 	public void testGetJumpingMoves() throws HantoException{
 		handler.setMovementForType(HantoPieceType.BUTTERFLY, MovementType.JUMP);
-		board.put(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
-		board.put(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
-		board.put(new GameCoordinate(0, 1), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
+		board.addPiece(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(0, 1), new ButterflyPiece(HantoPlayerColor.RED));
 		
 		List<GameCoordinate> coords = handler.getPossibleCoordinates(HantoPieceType.BUTTERFLY, 
 				new GameCoordinate(0,0), board);
@@ -117,9 +117,9 @@ public class TestMovementHandler {
 	@Test
 	public void testGetJumpingMovesNotContinuous() throws HantoException{
 		handler.setMovementForType(HantoPieceType.BUTTERFLY, MovementType.JUMP);
-		board.put(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
-		board.put(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
-		board.put(new GameCoordinate(-1, 1), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
+		board.addPiece(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(-1, 1), new ButterflyPiece(HantoPlayerColor.RED));
 		
 		List<GameCoordinate> coords = handler.getPossibleCoordinates(HantoPieceType.BUTTERFLY, 
 				new GameCoordinate(0,0), board);
@@ -131,9 +131,9 @@ public class TestMovementHandler {
 	@Test
 	public void testGetFlyingMoves() throws HantoException{
 		handler.setMovementForType(HantoPieceType.BUTTERFLY, MovementType.FLY);
-		board.put(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
-		board.put(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
-		board.put(new GameCoordinate(0, 1), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
+		board.addPiece(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(0, 1), new ButterflyPiece(HantoPlayerColor.RED));
 		
 		List<GameCoordinate> coords = handler.getPossibleCoordinates(HantoPieceType.BUTTERFLY, 
 				new GameCoordinate(0,0), board);
@@ -146,9 +146,9 @@ public class TestMovementHandler {
 	@Test
 	public void testGetFlyingMovesNotContinuous() throws HantoException{
 		handler.setMovementForType(HantoPieceType.BUTTERFLY, MovementType.FLY);
-		board.put(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
-		board.put(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
-		board.put(new GameCoordinate(-1, 0), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
+		board.addPiece(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(-1, 0), new ButterflyPiece(HantoPlayerColor.RED));
 		
 		List<GameCoordinate> coords = handler.getPossibleCoordinates(HantoPieceType.BUTTERFLY, 
 				new GameCoordinate(0,0), board);
@@ -158,9 +158,9 @@ public class TestMovementHandler {
 	@Test
 	public void testGetFlyingMovesLimit1() throws HantoException{
 		handler.setMovementForType(HantoPieceType.BUTTERFLY, MovementType.FLY, 1);
-		board.put(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
-		board.put(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
-		board.put(new GameCoordinate(0, 1), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(0, 0), new ButterflyPiece(HantoPlayerColor.BLUE));
+		board.addPiece(new GameCoordinate(1, 0), new ButterflyPiece(HantoPlayerColor.RED));
+		board.addPiece(new GameCoordinate(0, 1), new ButterflyPiece(HantoPlayerColor.RED));
 		
 		List<GameCoordinate> coords = handler.getPossibleCoordinates(HantoPieceType.BUTTERFLY, 
 				new GameCoordinate(0,0), board);
