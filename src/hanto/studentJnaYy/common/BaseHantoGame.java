@@ -17,7 +17,13 @@ import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.common.MoveResult;
 import hanto.studentJnaYy.common.moveControllers.MoveHandler;
+import hanto.studentJnaYy.common.pieces.ButterflyPiece;
 import hanto.studentJnaYy.common.pieces.PieceFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is the base class for all hanto games Beta+
@@ -221,6 +227,32 @@ public abstract class BaseHantoGame implements HantoGame {
 	 */
 	public String getPrintableBoard(){
 		return board.getPrintableBoard();
+	}
+	
+	public Map<GameCoordinate, List<GameCoordinate>> getAllMovesForCurrentPlayer(){
+		Map<GameCoordinate, List<GameCoordinate>> moves = new HashMap<GameCoordinate, List<GameCoordinate>>();
+		if(board.areButterflyConditionsMet(currentColor)){
+			moves = board.getPossibleMovesForPlayer(currentColor);
+		}
+		return moves;
+	}
+	
+	public Map<HantoPieceType, List<GameCoordinate>> getAllPlacementsForCurrentPlayer(){
+		List<GameCoordinate> placements = board.getPlacementsAvailable(currentColor, PiecePlacementOwnColorExceptionTurns);
+		List<HantoPieceType> piecesAvailable = pieceCounter.getPieceTypesAvailable(currentColor);
+		Map<HantoPieceType, List<GameCoordinate>> placementMap = new HashMap<HantoPieceType, List<GameCoordinate>>();
+		if(!placements.isEmpty()){
+			for(HantoPieceType piece: piecesAvailable){
+				if(board.areButterflyConditionsMet(currentColor) || piece.equals(HantoPieceType.BUTTERFLY)){
+					placementMap.put(piece, new ArrayList<GameCoordinate>(placements));
+				}
+			}
+		}
+		return placementMap;
+	}
+	
+	public GameCoordinate getButterflyCoordinate(HantoPlayerColor color){
+		return board.getButterflyPosition(color);
 	}
 	
 	/**

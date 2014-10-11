@@ -9,7 +9,9 @@
  *******************************************************************************/
 package hanto.studentJnaYy.common;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import hanto.common.HantoException;
@@ -128,6 +130,18 @@ public class PieceAvailabilityCounter {
 				break;
 		}
 		return counter;
+	}
+
+	public List<HantoPieceType> getPieceTypesAvailable(
+			HantoPlayerColor color) {
+		List<HantoPieceType> piecesAvailable = new ArrayList<HantoPieceType>();
+		Map<HantoPieceType, Integer> counter = getPieceCounterByColor(color);
+		for(HantoPieceType type: counter.keySet()){
+			if(counter.get(type) > 0){
+				piecesAvailable.add(type);
+			}
+		}
+		return piecesAvailable;
 	}
 
 }

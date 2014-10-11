@@ -57,7 +57,7 @@ public class HantoBoardButterflyManager {
 			HantoPlayerColor color) {
 		
 		boolean isButterflyCoordSet = getButterflyCoord(color) != null;
-		boolean isPieceButterfly = type.equals(HantoPieceType.BUTTERFLY);
+		boolean isPieceButterfly = HantoPieceType.BUTTERFLY.equals(type);
 		
 		boolean areConditionsMet = true;
 		if(turnCount > butterflyOptionalTurns){

@@ -69,7 +69,7 @@ public class HantoBoard {
 		GameCoordinate ourToCoodinate = new GameCoordinate(to);
 		
 		exceptionMessage = "";
-		boolean isValid = butterflyManager.areButterflyConditionsMet(turnCount, type, color);
+		boolean isValid = true;
 		
 		isValid &= !isCoordinateTaken(ourToCoodinate);
 		if(turnCount == 1 && color == movesFirst){
@@ -77,6 +77,11 @@ public class HantoBoard {
 		}
 		
 		isValid &= getGameStatus() == MoveResult.OK;
+		
+		if(!butterflyManager.areButterflyConditionsMet(turnCount, type, color)){
+			isValid = false;
+			exceptionMessage = "The butterfly was not placed during turn " + turnCount + ".";
+		}
 			
 		if(!isValid){
 			throw new HantoException(exceptionMessage);
@@ -367,14 +372,11 @@ public class HantoBoard {
 		return available;
 	}
 	
-//	/**
-//	 * Checks to see if a piece can be placed anywhere on the board for a player
-//	 * @param color the player to check for
-//	 * @param ruleExceptionTurns the number of turns where the rule of opposite player
-//	 * restrictions doesn't apply
-//	 * @return true if there is a spot where a piece can be placed
-//	 */
-//	public boolean canAPieceBePlacedByPlayer(HantoPlayerColor color, int ruleExceptionTurns){
-//		return isSpotAvailable;
-//	}
+	public boolean areButterflyConditionsMet(HantoPlayerColor color){
+		return butterflyManager.areButterflyConditionsMet(turnCount, null, color);
+	}
+	
+	public GameCoordinate getButterflyPosition(HantoPlayerColor color){
+		return butterflyManager.getButterflyCoord(color);
+	}
 }
