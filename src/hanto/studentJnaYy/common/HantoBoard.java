@@ -69,14 +69,16 @@ public class HantoBoard {
 		GameCoordinate ourToCoodinate = new GameCoordinate(to);
 		
 		exceptionMessage = "";
-		boolean isValid = true;
+		boolean isValid = getGameStatus() == MoveResult.OK;
 		
 		isValid &= !isCoordinateTaken(ourToCoodinate);
 		if(turnCount == 1 && color == movesFirst){
-			isValid &= GAME_COORDINATE_ORIGIN.equals(to);
+			boolean isFirstCoord = GAME_COORDINATE_ORIGIN.equals(to);
+			if(!isFirstCoord){
+				exceptionMessage = "The piece was not placed on the (0, 0) coordinate.";
+				isValid = false;
+			}
 		}
-		
-		isValid &= getGameStatus() == MoveResult.OK;
 		
 		if(!butterflyManager.areButterflyConditionsMet(turnCount, type, color)){
 			isValid = false;
@@ -372,11 +374,38 @@ public class HantoBoard {
 		return available;
 	}
 	
+	/**
+	 * Checks to see if a player has met the conditions for the butterfly
+	 * @param color the player to check for
+	 * @return true if the butterfly conditions have been met - if false, the butterfly must be placed
+	 * on this turn.
+	 */
 	public boolean areButterflyConditionsMet(HantoPlayerColor color){
 		return butterflyManager.areButterflyConditionsMet(turnCount, null, color);
 	}
 	
+	/**
+	 * Gets the position of the player's butterfly
+	 * @param color the butterfly's player color to search for
+	 * @return the position of the butterfly, null if not on the board.
+	 */
 	public GameCoordinate getButterflyPosition(HantoPlayerColor color){
 		return butterflyManager.getButterflyCoord(color);
+	}
+	
+	/**
+	 * Gets the number of neighbor pieces a coordinate has
+	 * @param coord the cooridnate to check for
+	 * @return the number of neighbors
+	 */
+	public int getNumberOfNeighborPieces(HantoCoordinate coord){
+		return board.getNumberOfNeighborPieces(new GameCoordinate(coord));
+	}
+
+	/**
+	 * @return the turn count for the board
+	 */
+	public int getTurnCount() {
+		return turnCount;
 	}
 }

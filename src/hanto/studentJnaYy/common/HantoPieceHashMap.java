@@ -41,14 +41,6 @@ public class HantoPieceHashMap implements HantoPieceLocationController {
 	 * Creates a copy of a previous map
 	 * @param copy the map to copy
 	 */
-	public HantoPieceHashMap(Map<GameCoordinate, HantoPiece> copy) {
-		thePieceMap = new HashMap<GameCoordinate, HantoPiece>(copy);
-	}
-	
-	/**
-	 * Creates a copy of a previous map
-	 * @param copy the map to copy
-	 */
 	public HantoPieceHashMap(HantoPieceLocationController copy) {
 		thePieceMap = new HashMap<GameCoordinate, HantoPiece>(copy.getUnderlyingBoard());
 	}

@@ -10,10 +10,13 @@ import hanto.tournament.HantoMoveRecord;
 
 public class TestTournament {
 	
+	private HantoPlayer redPlayer;
+	private HantoPlayer bluePlayer;
+
 	public boolean runGame(){
-		HantoPlayer redPlayer = new HantoPlayer();
+		redPlayer = new HantoPlayer();
 		redPlayer.startGame(HantoGameID.EPSILON_HANTO, HantoPlayerColor.RED, true);
-		HantoPlayer bluePlayer = new HantoPlayer();
+		bluePlayer = new HantoPlayer();
 		bluePlayer.startGame(HantoGameID.EPSILON_HANTO, HantoPlayerColor.BLUE, false);
 		HantoGame game = new EpsilonHantoGame(HantoPlayerColor.RED);
 		
@@ -37,6 +40,14 @@ public class TestTournament {
 		catch(HantoException e){
 			return false;
 		}
+	}
+
+	public HantoPlayer getRedPlayer() {
+		return redPlayer;
+	}
+
+	public HantoPlayer getBluePlayer() {
+		return bluePlayer;
 	}
 
 }

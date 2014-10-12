@@ -17,7 +17,6 @@ import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.common.MoveResult;
 import hanto.studentJnaYy.common.moveControllers.MoveHandler;
-import hanto.studentJnaYy.common.pieces.ButterflyPiece;
 import hanto.studentJnaYy.common.pieces.PieceFactory;
 
 import java.util.ArrayList;
@@ -128,6 +127,11 @@ public abstract class BaseHantoGame implements HantoGame {
 	 */
 	protected void checkMoveValidityPrior(HantoPieceType pieceType, HantoCoordinate fromCoordinate, 
 			HantoCoordinate toCoordinate) throws HantoException {
+		
+		if(toCoordinate == null){
+			throw new HantoException("The destination coordinate was not set.");
+		}
+		
 		if(isFromOffTheBoard(fromCoordinate)){
 			pieceCounter.checkPieceAvailability(pieceType, currentColor);
 			board.checkPieceAddedNextToOwnColorRule(toCoordinate, currentColor, 
@@ -179,14 +183,7 @@ public abstract class BaseHantoGame implements HantoGame {
 	 * Switches the current player color to the next available one.
 	 */
 	protected void switchCurrentColor() {
-		switch(currentColor){
-			case BLUE: 
-				currentColor = HantoPlayerColor.RED;
-				break;
-			case RED: 
-				currentColor = HantoPlayerColor.BLUE;
-				break;
-		}
+		currentColor = HantoColorHelper.getOppositeColor(currentColor);
 	}
 	
 	/**
@@ -229,6 +226,11 @@ public abstract class BaseHantoGame implements HantoGame {
 		return board.getPrintableBoard();
 	}
 	
+	/**
+	 * Returns all the moves that the current player can do.
+	 * Note: If the butterfly needs to be placed on the current turn, the list will return empty.
+	 * @return a map, matching a piece's coordinate to the coordinates it can move to
+	 */
 	public Map<GameCoordinate, List<GameCoordinate>> getAllMovesForCurrentPlayer(){
 		Map<GameCoordinate, List<GameCoordinate>> moves = new HashMap<GameCoordinate, List<GameCoordinate>>();
 		if(board.areButterflyConditionsMet(currentColor)){
@@ -237,6 +239,12 @@ public abstract class BaseHantoGame implements HantoGame {
 		return moves;
 	}
 	
+	/**
+	 * Returns all places that a new piece can be added for a certain player.
+	 * Note: if the butterfly needs to be placed on this round, it will be
+	 * the only HantoPieceType key returned.
+	 * @return A map, matching a piece type to the list of possible coordinates
+	 */
 	public Map<HantoPieceType, List<GameCoordinate>> getAllPlacementsForCurrentPlayer(){
 		List<GameCoordinate> placements = board.getPlacementsAvailable(currentColor, PiecePlacementOwnColorExceptionTurns);
 		List<HantoPieceType> piecesAvailable = pieceCounter.getPieceTypesAvailable(currentColor);
@@ -251,8 +259,22 @@ public abstract class BaseHantoGame implements HantoGame {
 		return placementMap;
 	}
 	
+	/**
+	 * Returns the position of the player's butterfly.
+	 * @param color the player's color for the butterfly
+	 * @return the GameCoordinate where the player's butterfly is, null if it hasn't been placed.
+	 */
 	public GameCoordinate getButterflyCoordinate(HantoPlayerColor color){
 		return board.getButterflyPosition(color);
+	}
+	
+	/**
+	 * Returns the number of pieces next to a coordinate
+	 * @param coord the coordinate to check for
+	 * @return the number of neighbors
+	 */
+	public int getNumberOfNeighbors(HantoCoordinate coord){
+		return board.getNumberOfNeighborPieces(coord);
 	}
 	
 	/**

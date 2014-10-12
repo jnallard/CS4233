@@ -132,6 +132,11 @@ public class PieceAvailabilityCounter {
 		return counter;
 	}
 
+	/**
+	 * Returns a list of piece types available for a given player
+	 * @param color the player to get the list for
+	 * @return the list of piece types
+	 */
 	public List<HantoPieceType> getPieceTypesAvailable(
 			HantoPlayerColor color) {
 		List<HantoPieceType> piecesAvailable = new ArrayList<HantoPieceType>();

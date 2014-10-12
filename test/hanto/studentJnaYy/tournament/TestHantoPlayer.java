@@ -8,11 +8,15 @@
 package hanto.studentJnaYy.tournament;
 
 import static org.junit.Assert.*;
+import hanto.common.HantoException;
 import hanto.common.HantoGameID;
 import hanto.common.HantoPieceType;
 import hanto.common.HantoPlayerColor;
 import hanto.studentJnaYy.common.GameCoordinate;
+import hanto.studentJnaYy.common.HantoColorHelper;
+import hanto.studentJnaYy.epsilon.EpsilonHantoGameController;
 import hanto.tournament.HantoGamePlayer;
+import hanto.tournament.HantoMoveRecord;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,12 +31,17 @@ public class TestHantoPlayer {
 	@Before
 	public void setUp() throws Exception {
 		hantoPlayer = new HantoPlayer();
+		hantoPlayer.startGame(HantoGameID.EPSILON_HANTO, HantoPlayerColor.RED, true);
 	}
 
 	@Test
 	public void testMakePlayer() {
 		assertNotNull(hantoPlayer);
-		hantoPlayer.startGame(HantoGameID.EPSILON_HANTO, HantoPlayerColor.RED, true);
+	}
+	
+	@Test
+	public void testSwitchColor() {
+		assertEquals(new HantoColorHelper().getOppositeColor(HantoPlayerColor.BLUE), HantoPlayerColor.RED);
 	}
 	
 	@Test
@@ -40,5 +49,64 @@ public class TestHantoPlayer {
 		assertTrue(new TestTournament().runGame());
 	}
 	
+
 	
+	@Test
+	public void testFailedOpponentsMove() {
+		HantoMoveRecord move = new HantoMoveRecord(BUTTERFLY, null, new GameCoordinate(0, 1));
+		hantoPlayer.makeMove(move);
+		assertTrue(true);
+	}
+	
+	@Test
+	public void testFailedOurMove() {
+		TestTournament tournament = new TestTournament();
+		tournament.runGame();
+		tournament.getRedPlayer().makeMove(null);
+		tournament.getBluePlayer().makeMove(null);
+		assertTrue(true);
+	}
+	
+	@Test
+	public void testEpsilonController() throws HantoException {
+		EpsilonHantoGameController controller = new EpsilonHantoGameController(HantoPlayerColor.RED, HantoPlayerColor.BLUE);
+		controller.makeMove(BUTTERFLY, null, GAME_COORDINATE_ORIGIN);
+		controller.makeMove(BUTTERFLY, null, new GameCoordinate(0, 1));
+		
+		controller.setChanceOfPickingMoveOverPlace(0);
+		controller.getBestMove();
+		controller.getLessPrimitiveGreedyBestMove();
+		controller.getPrimitiveGreedyBestMove();
+		controller.getRandomMove();
+		
+		controller.setChanceOfPickingMoveOverPlace(1);
+		controller.getBestMove();
+		controller.getLessPrimitiveGreedyBestMove();
+		controller.getPrimitiveGreedyBestMove();
+		controller.getRandomMove();
+		
+		assertNotNull(controller.getPrintableBoard());
+		assertEquals(controller.getPieceAt(GAME_COORDINATE_ORIGIN).getType(), BUTTERFLY);
+		assertTrue(true);
+	}
+	
+	@Test
+	public void testControllerResigns() throws HantoException {
+		EpsilonHantoGameController controller = new EpsilonHantoGameController(HantoPlayerColor.RED, HantoPlayerColor.BLUE);
+		controller.makeMove(BUTTERFLY, null, GAME_COORDINATE_ORIGIN);
+		controller.makeMove(BUTTERFLY, null, new GameCoordinate(0, 1));
+		controller.makeMove(BUTTERFLY, GAME_COORDINATE_ORIGIN, new GameCoordinate(1, 0));
+		controller.makeMove(SPARROW, null, new GameCoordinate(-1, 1));
+		controller.makeMove(BUTTERFLY, new GameCoordinate(1, 0), GAME_COORDINATE_ORIGIN);
+		controller.makeMove(SPARROW, new GameCoordinate(-1, 1), new GameCoordinate(0, -1));
+		
+		assertTrue(isResign(controller.getBestMove()));
+		assertTrue(isResign(controller.getLessPrimitiveGreedyBestMove()));
+		assertTrue(isResign(controller.getPrimitiveGreedyBestMove()));
+		assertTrue(isResign(controller.getRandomMove()));
+	}
+
+	private boolean isResign(HantoMoveRecord move) {
+		return move.getFrom() == null && move.getPiece() == null && move.getTo() == null;
+	}
 }

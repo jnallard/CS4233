@@ -98,6 +98,13 @@ public class EpsilonHantoGame extends BaseHantoGame
 		moveController.setMovementForType(HantoPieceType.CRAB, MovementType.WALK);
 		moveController.setMovementForType(HantoPieceType.HORSE, MovementType.JUMP);
 	}
+
+	/**
+	 * @return the turn count for the board/game.
+	 */
+	public int getTurnCount() {
+		return board.getTurnCount();
+	}
 	
 	
 }
