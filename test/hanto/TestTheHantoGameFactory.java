@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 import hanto.common.HantoGame;
 import hanto.common.HantoGameID;
 import hanto.common.HantoPlayerColor;
-import hanto.studentJnaYy.HantoGameFactory;
+import hanto.studentjnayy.HantoGameFactory;
 
 import org.junit.Before;
 import org.junit.Test;
