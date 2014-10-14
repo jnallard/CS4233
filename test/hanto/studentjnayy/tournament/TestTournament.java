@@ -25,13 +25,14 @@ public class TestTournament {
 			int turnCount = 1;
 			MoveResult result = MoveResult.OK;
 			HantoMoveRecord move = null;
-			while(result == MoveResult.OK){
+			while(result == MoveResult.OK && turnCount < 1000){
 				move = redPlayer.makeMove(move);
 				result = game.makeMove(move.getPiece(), move.getFrom(), move.getTo());
 				if(result == MoveResult.OK){
 					move = bluePlayer.makeMove(move);
 					result = game.makeMove(move.getPiece(), move.getFrom(), move.getTo());
 				}
+				turnCount++;
 			}
 			return true;
 		}
