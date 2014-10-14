@@ -31,10 +31,7 @@ public class TestTournament {
 					move = bluePlayer.makeMove(move);
 					result = game.makeMove(move.getPiece(), move.getFrom(), move.getTo());
 				}
-				System.out.println("Turn over: " + turnCount++);
 			}
-			System.out.println(result);
-			System.out.println(game.getPrintableBoard());
 			return true;
 		}
 		catch(HantoException e){

@@ -30,6 +30,6 @@ x Game ends in victory when one butterfly is surrounded
 x Piece is Butterfly, Sparrow, Crab
 x Piece is not anything but Butterfly, Sparrow, Crab
 x Test placing pieces on the same location
-A player needs to be able to resign, only if there are no moves
+x A player needs to be able to resign, only if there are no moves
 x Cannot move a piece without a matching color
 

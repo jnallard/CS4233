@@ -75,14 +75,14 @@ public class TestHantoPlayer {
 		
 		controller.setChanceOfPickingMoveOverPlace(0);
 		controller.getBestMove();
-		controller.getLessPrimitiveGreedyBestMove();
-		controller.getPrimitiveGreedyBestMove();
+		controller.getGreedyBestMoveOrProtectButterfly();
+		controller.getGreedyBestMove();
 		controller.getRandomMove();
 		
 		controller.setChanceOfPickingMoveOverPlace(1);
 		controller.getBestMove();
-		controller.getLessPrimitiveGreedyBestMove();
-		controller.getPrimitiveGreedyBestMove();
+		controller.getGreedyBestMoveOrProtectButterfly();
+		controller.getGreedyBestMove();
 		controller.getRandomMove();
 		
 		assertNotNull(controller.getPrintableBoard());
@@ -101,8 +101,8 @@ public class TestHantoPlayer {
 		controller.makeMove(SPARROW, new GameCoordinate(-1, 1), new GameCoordinate(0, -1));
 		
 		assertTrue(isResign(controller.getBestMove()));
-		assertTrue(isResign(controller.getLessPrimitiveGreedyBestMove()));
-		assertTrue(isResign(controller.getPrimitiveGreedyBestMove()));
+		assertTrue(isResign(controller.getGreedyBestMoveOrProtectButterfly()));
+		assertTrue(isResign(controller.getGreedyBestMove()));
 		assertTrue(isResign(controller.getRandomMove()));
 	}
 

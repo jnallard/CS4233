@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * This creates a PieceLocationController specifically for GameCoordinates to Pieces,
+ * This creates a PieceLocationController specifically for mapping GameCoordinates to Pieces,
  * with all of the respective functions included.
  * @author Joshua and Yan
  *

@@ -115,10 +115,10 @@ public class EpsilonHantoGameController implements HantoGameController {
 	 */
 	public HantoMoveRecord getBestMove() {
 		if(controllerColor == HantoPlayerColor.BLUE){
-			return getPrimitiveGreedyBestMove();
+			return getGreedyBestMove();
 		}
 		else{
-			return getLessPrimitiveGreedyBestMove();
+			return getGreedyBestMoveOrProtectButterfly();
 		}
 	}
 
@@ -163,7 +163,7 @@ public class EpsilonHantoGameController implements HantoGameController {
 	 * The function tries to find a move that will bring the pieces closer to the opponents piece.
 	 * @return the move that will be closest to the enemy's butterfly
 	 */
-	public HantoMoveRecord getPrimitiveGreedyBestMove() {
+	public HantoMoveRecord getGreedyBestMove() {
 		HantoMoveRecord move = null;
 
 		Map<GameCoordinate, List<GameCoordinate>> moves = game.getAllMovesForCurrentPlayer();
@@ -171,6 +171,37 @@ public class EpsilonHantoGameController implements HantoGameController {
 
 		move = getPlacementOrMove(moves, placements, true);
 		return move;
+	}
+	
+	/**
+	 * Returns a slightly less random move - use the setChanceOfPickingMoveOverPlace to
+	 * change the chance of placing versus moving
+	 * The function tries to find a move that will bring the pieces closer to the opponents piece.
+	 * @return the move that will be closest to the enemy's butterfly
+	 */
+	public HantoMoveRecord getGreedyBestMoveOrProtectButterfly() {
+		HantoMoveRecord move = null;
+		HantoMoveRecord butterflyMove = null;
+
+		Map<GameCoordinate, List<GameCoordinate>> moves = game.getAllMovesForCurrentPlayer();
+		Map<HantoPieceType, List<GameCoordinate>> placements = game.getAllPlacementsForCurrentPlayer();
+
+
+		GameCoordinate ourButterfly = game.getButterflyCoordinate(opposingColor);
+		List<GameCoordinate> openSpots = new ArrayList<GameCoordinate>();
+		if(ourButterfly == null){
+			openSpots = placements.get(HantoPieceType.BUTTERFLY);
+		}
+		else{
+			openSpots = moves.get(ourButterfly);
+		}
+
+		butterflyMove = getGreedyButterflyAction(openSpots);
+
+
+		move = getPlacementOrMove(moves, placements, false);
+		
+		return getBetterMove(move, butterflyMove);
 	}
 
 	/**
@@ -283,36 +314,7 @@ public class EpsilonHantoGameController implements HantoGameController {
 		return move;
 	}
 	
-	/**
-	 * Returns a slightly less random move - use the setChanceOfPickingMoveOverPlace to
-	 * change the chance of placing versus moving
-	 * The function tries to find a move that will bring the pieces closer to the opponents piece.
-	 * @return the move that will be closest to the enemy's butterfly
-	 */
-	public HantoMoveRecord getLessPrimitiveGreedyBestMove() {
-		HantoMoveRecord move = null;
-		HantoMoveRecord butterflyMove = null;
 
-		Map<GameCoordinate, List<GameCoordinate>> moves = game.getAllMovesForCurrentPlayer();
-		Map<HantoPieceType, List<GameCoordinate>> placements = game.getAllPlacementsForCurrentPlayer();
-
-
-		GameCoordinate ourButterfly = game.getButterflyCoordinate(opposingColor);
-		List<GameCoordinate> openSpots = new ArrayList<GameCoordinate>();
-		if(ourButterfly == null){
-			openSpots = placements.get(HantoPieceType.BUTTERFLY);
-		}
-		else{
-			openSpots = moves.get(ourButterfly);
-		}
-
-		butterflyMove = getGreedyButterflyAction(openSpots);
-
-
-		move = getPlacementOrMove(moves, placements, false);
-		
-		return getBetterMove(move, butterflyMove);
-	}
 	
 	/**
 	 * Gets the "better" move for a piece, comparing a normal move to a butterfly move.

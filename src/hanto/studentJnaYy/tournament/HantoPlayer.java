@@ -48,7 +48,12 @@ public class HantoPlayer implements HantoGamePlayer {
 		gameController = HantoGameControllerFactory.getInstance().getGameController(version, startColor, myColor);
 	}
 
-	@Override
+	/**
+	 * Make the player's next move.
+	 * @param opponentsMove this is the result of the opponent's last move, in response
+	 * 	to your last move. This will be null if you are making the first move of the game.
+	 * @return your move
+	 */
 	public HantoMoveRecord makeMove(HantoMoveRecord opponentsMove) {
 		HantoMoveRecord move = null;
 		try{
@@ -56,21 +61,18 @@ public class HantoPlayer implements HantoGamePlayer {
 				gameController.makeMove(opponentsMove.getPiece(), opponentsMove.getFrom(), opponentsMove.getTo());
 			}
 		} catch (HantoException e){
-			e.printStackTrace();
 			//This should never happen, assuming we've implemented all of the rules correctly.
-			System.out.println("The opponent's move failed in our game..");
+			move = new HantoMoveRecord(null, null, null);
 		}
 		
 		try{
 			move = gameController.getBestMove();
-			System.out.println(myColor + "'s move: " + move.getPiece() + " " + move.getFrom() + " " + move.getTo());
 
 			gameController.makeMove(move.getPiece(), move.getFrom(), move.getTo());
 		} catch (HantoException e){
 			//Assuming our controller is perfect, this should never be called, unless
 			//someone calls makeMove after a game has ended.
-			e.printStackTrace();
-			System.out.println(myColor + "'s move failed in its game..");
+			move = new HantoMoveRecord(null, null, null);
 		}
 		return move;
 	}
