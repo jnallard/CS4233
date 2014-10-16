@@ -34,7 +34,7 @@ public class GammaHantoGame extends BaseHantoGame
 	
 	
 	/**
-	 * Creates a BetaHanto Game instance
+	 * Creates a GammaHanto Game instance
 	 * @param movesFirst the color of the first piece to be played.
 	 */
 	public GammaHantoGame(HantoPlayerColor movesFirst){

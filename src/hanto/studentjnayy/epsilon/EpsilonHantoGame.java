@@ -20,8 +20,8 @@ import hanto.studentjnayy.common.moveControllers.MovementType;
 
 
 /**
- * This is the implementation of the DeltaHantoGame, where each player 
- * can only place 1 butterfly, 4 crabs,  4 sparrows, and also move them.
+ * This is the implementation of the EpsilonHantoGame, where each player 
+ * can only place 1 butterfly, 6 crabs,  2 sparrows, 4 horses, and also move them.
  * 
  * @author Joshua and Yan
  */
@@ -41,7 +41,7 @@ public class EpsilonHantoGame extends BaseHantoGame
 	
 	
 	/**
-	 * Creates a BetaHanto Game instance
+	 * Creates a EpsilonaHanto Game instance
 	 * @param movesFirst the color of the first piece to be played.
 	 */
 	public EpsilonHantoGame(HantoPlayerColor movesFirst){

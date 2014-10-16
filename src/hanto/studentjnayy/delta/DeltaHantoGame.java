@@ -37,7 +37,7 @@ public class DeltaHantoGame extends BaseHantoGame
 	
 	
 	/**
-	 * Creates a BetaHanto Game instance
+	 * Creates a DeltaHanto Game instance
 	 * @param movesFirst the color of the first piece to be played.
 	 */
 	public DeltaHantoGame(HantoPlayerColor movesFirst){
